@@ -44,14 +44,14 @@ const router = createBrowserRouter([
                     // </PrivateRoute>
                 ),
             },
-            {
-                path: "/insurance-form", // Child route for the dashboard
-                element: (
-                    <PrivateRoute>
-                        <InsuranceForm />
-                    </PrivateRoute>
-                ),
-            },
+   {
+    path: "/insurance-form/:id/:member_name", // Child route for the dashboard with id and member_name parameters
+    element: (
+        <PrivateRoute>
+            <InsuranceForm />
+        </PrivateRoute>
+    ),
+},
             {
                 path: "/member-list", // Child route for the dashboard
                 element: (

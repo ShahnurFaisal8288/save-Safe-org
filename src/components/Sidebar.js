@@ -1,4 +1,5 @@
 
+import { Link } from 'react-router-dom';
 function Sidebar() {
     return (
         <div>
@@ -48,18 +49,18 @@ function Sidebar() {
                             <i className="icon-screen-desktop menu-icon"></i>
                         </a>
                     </li>
-                    <li className="nav-item nav-category"><span className="nav-link">Layouts</span></li>
+                    <li className="nav-item nav-category"><span className="nav-link">Insurance Policy</span></li>
                     <li className="nav-item">
-                        <a className="nav-link" data-bs-toggle="collapse" href="#page-layouts" aria-expanded="false" aria-controls="page-layouts">
-                            <span className="menu-title">Page Layouts</span>
-                            <i className="icon-size-actual menu-icon"></i>
-                        </a>
-                        <div className="collapse" id="page-layouts">
+<Link to="/insurance-list" className="nav-link">
+    <span className="menu-title">Insurance List</span>
+    <i className="icon-size-actual menu-icon"></i>
+</Link>
+                        {/* <div className="collapse" id="page-layouts">
                             <ul className="nav flex-column sub-menu">
                                 <li className="nav-item"> <a className="nav-link" href="pages/layout/boxed-layout.html">Boxed</a></li>
                                 <li className="nav-item"> <a className="nav-link" href="pages/layout/rtl-layout.html">RTL</a></li>
                             </ul>
-                        </div>
+                        </div> */}
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" data-bs-toggle="collapse" href="#sidebar-layouts" aria-expanded="false" aria-controls="sidebar-layouts">

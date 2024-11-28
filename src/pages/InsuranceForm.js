@@ -1,5 +1,7 @@
 
 import React, { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
+
 import {
     Container,
     Row,
@@ -11,10 +13,12 @@ import {
 } from "react-bootstrap";
 import { Camera, CheckCircle } from "lucide-react";
 import axios from "axios";
+import reportWebVitals from './../reportWebVitals';
 
 
 
 function InsuranceForm() {
+        const { id, member_name } = useParams();
     const [frontPreview, setFrontPreview] = useState(null);
     const [backPreview, setBackPreview] = useState(null);
     const [showForm, setShowForm] = useState(false);
@@ -24,16 +28,14 @@ function InsuranceForm() {
     const [selectedSubCategory, setSelectedSubCategory] = useState([]);
     const [name, setName] = useState([]);
     const [policyName, setPolicyName] = useState([]);
-    const [idType, setidType] = useState([]);
+     const [idType, setidType] = useState([]);
     const [category, setCategory] = useState([]);
     const [relation, setRelation] = useState([]);
-    const [nomineeIDType, setNomineeIDType] = useState("");
+ const [nomineeIDType, setNomineeIDType] = useState("");
     const [showIssueDate, setShowIssueDate] = useState(false);
     const [showExpDate, setShowExpDate] = useState(false);
     const [premiumAmount, setPremiumAmount] = useState("");
-    // const [premiumAmount, setPremiumAmount] = useState("");
     const [policy_tenure, setPolicyTenure] = useState("");
-    // const [idType, setPremiumAmount] = useState("");
 
     const handleNomineeIDTypeChange = (e) => {
         const selectedValue = e.target.value;
@@ -93,7 +95,7 @@ function InsuranceForm() {
             formData.append("nomineeImageBack", event.target.nomineeImageBack.files[0]);
 
             axios
-                .post("http://localhost:3000/api/health_insurance/store", formData, {
+                .post("http://localhost:5000/api/health_insurance/store", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -127,7 +129,7 @@ function InsuranceForm() {
 
     useEffect(() => {
         const fetchPostData = async () => {
-            const response = await axios.get("http://localhost:3000/api/member");
+            const response = await axios.get("http://localhost:5000/api/member");
             setName(response.data);
         };
         fetchPostData();
@@ -135,7 +137,7 @@ function InsuranceForm() {
 
     useEffect(() => {
         const fetchPostData = async () => {
-            const response = await axios.get("http://localhost:3000/api/policy");
+            const response = await axios.get("http://localhost:5000/api/policy");
             setPolicyName(response.data);
         };
         fetchPostData();
@@ -143,15 +145,16 @@ function InsuranceForm() {
 
     useEffect(() => {
         const fetchPostData = async () => {
-            const response = await axios.get("http://localhost:3000/api/idtype");
+            const response = await axios.get("http://localhost:5000/api/idtype");
             setidType(response.data);
             console.log('checking idType', response.data);
         };
         fetchPostData();
     }, []);
+
     useEffect(() => {
         const fetchPostData = async () => {
-            const response = await axios.get("http://localhost:3000/api/category");
+            const response = await axios.get("http://localhost:5000/api/category");
             setCategory(response.data);
             console.log('checking category', response.data);
         };
@@ -160,24 +163,13 @@ function InsuranceForm() {
 
     useEffect(() => {
         const fetchPostData = async () => {
-            const response = await axios.get("http://localhost:3000/api/relationdata");
+            const response = await axios.get("http://localhost:5000/api/relationdata");
             setRelation(response.data);
         };
         fetchPostData();
     }, []);
 
-    // const handleCategoryChange = (e) => {
-    //   const categoryId = parseInt(e.target.value);
-    //   const selectedCat = category.find((cat) => cat.id === categoryId);
-
-    //   if (selectedCat) {
-    //     setSelectedCategory(categoryId);
-    //     setPremiumAmount(selectedCat.premium_ammount_total || "");
-    //   } else {
-    //     setSelectedCategory("");
-    //     setPremiumAmount("");
-    //   }
-    // };
+    
 
     const handleCategoryChange = (e) => {
         const categoryId = parseInt(e.target.value);
@@ -235,7 +227,11 @@ function InsuranceForm() {
                     <h2 className="mb-0">Insurance Application Form</h2>
                 </Card.Header>
                 <Card.Body>
-                    <Form noValidate validated={validated} onSubmit={handleSubmitForm}>
+
+
+                    <Form noValidate 
+                    // validated={validated} 
+                    onSubmit={handleSubmitForm}>
                         {/* extra field Start */}
                         <Row className="mb-4">
                             <Col md={6}>
@@ -312,43 +308,37 @@ function InsuranceForm() {
                         {/* end extra Data */}
 
                         <Row className="mb-4">
-                            <Col md={6}>
+                            <Col md={6} style={{ display: 'none' }}>
                                 <Form.Group>
-                                    <Form.Label>Member Name</Form.Label>
+                                    
                                     <Form.Control
                                         list="user_name_options"
                                         name="Member_name"
+                                        value={member_name}
+                                        type="hidden"
                                         placeholder="Select or type user name"
                                     />
-                                    <datalist id="user_name_options">
-                                        {name.map((item, index) => (
-                                            <option key={index} value={item.member_name} />
-                                        ))}
-                                    </datalist>
+                                    
                                 </Form.Group>
                             </Col>
-                            <Col md={6}>
+                            <Col md={12}>
                                 <Form.Group>
                                     <Form.Label>
                                         Are you suffering from serious health complications?
                                     </Form.Label>
                                     <div>
-                                        <Form.Check
-                                            inline
-                                            type="radio"
-                                            label="No"
-                                            name="AnyDisese"
-                                            id="inline-radio-1"
-                                            onChange={() => handleHealthStatusChange("1")}
-                                        />
-                                        <Form.Check
-                                            inline
-                                            type="radio"
-                                            label="Yes"
-                                            name="AnyDisese"
-                                            id="inline-radio-2"
-                                            onChange={() => handleHealthStatusChange("2")}
-                                        />
+                                       <Button
+                        variant="primary"
+                        onClick={() => handleHealthStatusChange("1")}
+                    >
+                        No
+                    </Button>
+                    <Button
+                        variant="danger"
+                        onClick={() => handleHealthStatusChange("2")}
+                    >
+                        Yes
+                    </Button>
                                     </div>
                                 </Form.Group>
                             </Col>
@@ -413,7 +403,7 @@ function InsuranceForm() {
                                             <Form.Control
                                                 type="text"
                                                 name="PremiumAmount"
-                                                value={premiumAmount}
+                                                 value={premiumAmount}
                                                 readOnly
                                             />
                                         </Form.Group>
@@ -424,7 +414,10 @@ function InsuranceForm() {
                                     <Col md={6}>
                                         <Form.Group>
                                             <Form.Label>Duration</Form.Label>
-                                            <Form.Control type="text" name="policy_tenure" value={policy_tenure} readOnly />
+                                            <Form.Control type="text" 
+                                            name="policy_tenure" 
+                                            value={policy_tenure} 
+                                            readOnly />
                                         </Form.Group>
                                     </Col>
                                     <Col md={6}>
@@ -496,15 +489,9 @@ function InsuranceForm() {
                                                         name="NomineeIDType"
                                                         value={nomineeIDType}
                                                         onChange={handleNomineeIDTypeChange}
-                                                    // required
+                                                    required
                                                     >
-                                                        {/* <option value="">Select ID Type</option>
-                            <option value="specificIDType">
-                              Specific ID Type
-                            </option>
-                            <option value="anotherIDType">
-                              Another ID Type
-                            </option> */}
+                                                        
                                                         {idType.map((item, index) => (
                                                             <option key={index} value="specificIDType">
                                                                 {item.data_name}
@@ -572,8 +559,8 @@ function InsuranceForm() {
                                                     >
                                                         <option value="">Select Relation</option>
                                                         {relation.map((item, index) => (
-                                                            <option key={index} value={item.data_type}>
-                                                                {item.data_type}
+                                                            <option key={index} value={item.data_name}>
+                                                                {item.data_name}
                                                             </option>
                                                         ))}
                                                     </Form.Control>

@@ -1,15 +1,17 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const MemberList = () => {
+    const navigate = useNavigate();
     const [data1, setData1] = useState([]); // Store fetched data
     const [filteredData, setFilteredData] = useState([]); // Store filtered data
     const [sortConfig, setSortConfig] = useState({
         key: null,
         direction: "ascending",
     });
+    
 
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,14 +20,18 @@ const MemberList = () => {
 
     // Fetch data from the API
     useEffect(() => {
+
+        
         const fetchPostData = async () => {
             try {
                 const response = await axios.get("http://localhost:5000/api/member");
 
+                console.log("API response:", response);
+
                 // Check if the response contains the data array
-                if (response.data && Array.isArray(response.data.data)) {
-                    setData1(response.data.data); // Use the nested 'data' array
-                    console.log("Fetched data:", response.data.data);
+                if (response.data && Array.isArray(response.data)) {
+                    setData1(response.data); // Use the nested 'data' array
+                    console.log("Fetched data:", response.data);
                 } else {
                     console.error("API response is not an array:", response.data);
                 }
@@ -81,6 +87,7 @@ const MemberList = () => {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    
 
     return (
         <div className="container mt-5">
@@ -160,8 +167,8 @@ const MemberList = () => {
                                     <td>{item.nomine_gender}</td>
                                     <td>{item.date_birthday}</td>
                                     <button
-                                        className="btn btn-success btn-sm"
-                                        
+                                        className="text-dark  btn btn-success btn-sm"
+                                        onClick={() => navigate(`/insurance-form/${item.id}/${item.member_name}`)}
                                     >
                                         Details
                                     </button>
