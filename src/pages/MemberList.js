@@ -113,7 +113,7 @@ const MemberList = () => {
                                 onClick={() => requestSort("member_name")}
                                 style={{ cursor: "pointer" }}
                             >
-                                member_name{" "}
+                                Member Name{" "}
                                 {sortConfig.key === "member_name" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                             </th>
@@ -121,7 +121,7 @@ const MemberList = () => {
                                 onClick={() => requestSort("contact_no")}
                                 style={{ cursor: "pointer" }}
                             >
-                                contact_no{" "}
+                                Contact No{" "}
                                 {sortConfig.key === "contact_no" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                             </th>
@@ -129,7 +129,7 @@ const MemberList = () => {
                                 onClick={() => requestSort("nomine_gender")}
                                 style={{ cursor: "pointer" }}
                             >
-                                nomine_gender{" "}
+                                Nomine Gender{" "}
                                 {sortConfig.key === "nomine_gender" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                             </th>
@@ -137,8 +137,16 @@ const MemberList = () => {
                                 onClick={() => requestSort("date_birthday")}
                                 style={{ cursor: "pointer" }}
                             >
-                                date_birthday{" "}
+                                Birthday Date{" "}
                                 {sortConfig.key === "date_birthday" &&
+                                    (sortConfig.direction === "ascending" ? "↑" : "↓")}
+                            </th>
+                            <th
+                                onClick={() => requestSort("action")}
+                                style={{ cursor: "pointer" }}
+                            >
+                                Action{" "}
+                                {sortConfig.key === "action" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                             </th>
                         </tr>
@@ -151,6 +159,12 @@ const MemberList = () => {
                                     <td>{item.contact_no}</td>
                                     <td>{item.nomine_gender}</td>
                                     <td>{item.date_birthday}</td>
+                                    <button
+                                        className="btn btn-success btn-sm"
+                                        
+                                    >
+                                        Details
+                                    </button>
                                 </tr>
                             ))
                         ) : (

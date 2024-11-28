@@ -47,17 +47,17 @@ const router = createBrowserRouter([
             {
                 path: "/insurance-form", // Child route for the dashboard
                 element: (
-                    // <PrivateRoute>
+                    <PrivateRoute>
                         <InsuranceForm />
-                    // </PrivateRoute>
+                    </PrivateRoute>
                 ),
             },
             {
                 path: "/member-list", // Child route for the dashboard
                 element: (
-                    // <PrivateRoute>
+                    <PrivateRoute>
                     <MemberList />
-                    // </PrivateRoute>
+                    </PrivateRoute>
                 ),
             },
            
