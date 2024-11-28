@@ -1,6 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Navbar = () => {
+    
+    //logout
+
+    const navigate = useNavigate();
+    const location = useLocation(); // Detect current page
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+
+        const token = localStorage.getItem("token");
+        setIsLoggedIn(!!token); // Set login state based on token existence // Set login state based on token existence
+    }, [location]); // Trigger re-check on page change
+    const handleLogout = () => {
+        Swal.fire({
+            icon: "success",
+            title: "Logout Successfully",
+            // text: `Welcome back`,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+        });
+        localStorage.removeItem("token"); // Remove token from storage
+        setIsLoggedIn(false); // Update state
+        navigate("/"); // Redirect to login page
+    };
+
     return (
         <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -89,11 +117,11 @@ const Navbar = () => {
                                     <p className="mb-1 mt-3">Henry Klein</p>
                                     <p className="font-weight-light text-muted mb-0">kleinhenry@gmail.com</p>
                             </div>
-                            <a className="dropdown-item"><i className="dropdown-item-icon icon-user text-primary"></i> My Profile <span className="badge badge-pill badge-danger">1</span></a>
-                            <a className="dropdown-item"><i className="dropdown-item-icon icon-speech text-primary"></i> Messages</a>
-                            <a className="dropdown-item"><i className="dropdown-item-icon icon-energy text-primary"></i> Activity</a>
-                            <a className="dropdown-item"><i className="dropdown-item-icon icon-question text-primary"></i> FAQ</a>
-                            <a className="dropdown-item"><i className="dropdown-item-icon icon-power text-primary"></i>Sign Out</a>
+                            <button className="dropdown-item"><i className="dropdown-item-icon icon-user text-primary"></i> My Profile <span className="badge badge-pill badge-danger">1</span></button>
+                            <button className="dropdown-item"><i className="dropdown-item-icon icon-speech text-primary"></i> Messages</button>
+                            <button className="dropdown-item"><i className="dropdown-item-icon icon-energy text-primary"></i> Activity</button>
+                            <button className="dropdown-item"><i className="dropdown-item-icon icon-question text-primary"></i> FAQ</button>
+                            <button onClick={handleLogout} className="dropdown-item"><i className="dropdown-item-icon icon-power text-primary"></i>Sign Out</button>
                         </div>
                     </li>
                 </ul>
