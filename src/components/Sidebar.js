@@ -23,7 +23,7 @@ function Sidebar() {
                     <li className="nav-item navbar-brand-mini-wrapper">
                         <a className="nav-link navbar-brand brand-logo-mini" href="index-2.html"><img src="https://demo.bootstrapdash.com/stellar-admin-new/themes/assets/images/logo-mini.svg" alt="logo" /></a>
                     </li>
-                    <li className="nav-item nav-profile">
+                    {/* <li className="nav-item nav-profile">
                         <a href="#" className="nav-link">
                             <div className="profile-image">
                                 <img className="img-xs rounded-circle" src="../assets/images/faces/face8.jpg" alt="profile image" />
@@ -38,7 +38,7 @@ function Sidebar() {
                                 <div className="dot-indicator bg-danger"></div>
                             </div>
                         </a>
-                    </li>
+                    </li> */}
                     <li className="nav-item nav-category">
                         <span className="nav-link">Dashboard</span>
                     </li>

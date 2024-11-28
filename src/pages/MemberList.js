@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const InsuranceList = () => {
+const MemberList = () => {
     const [data1, setData1] = useState([]); // Store fetched data
     const [filteredData, setFilteredData] = useState([]); // Store filtered data
     const [sortConfig, setSortConfig] = useState({
@@ -20,7 +20,7 @@ const InsuranceList = () => {
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/health_insurance");
+                const response = await axios.get("http://localhost:5000/api/member");
 
                 // Check if the response contains the data array
                 if (response.data && Array.isArray(response.data.data)) {
@@ -85,10 +85,10 @@ const InsuranceList = () => {
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between my-4">
-                <h3>Insurance List</h3>
-                <Link to={"/member-list"}>
+                <h3>Member List</h3>
+                {/* <Link to={"/insurance-form"}>
                     <Button variant="primary">New</Button>
-                </Link>
+                </Link> */}
             </div>
 
             {/* Search Input */}
@@ -110,27 +110,35 @@ const InsuranceList = () => {
                     <thead className="table-dark">
                         <tr>
                             <th
-                                onClick={() => requestSort("insurance_policy_id")}
+                                onClick={() => requestSort("member_name")}
                                 style={{ cursor: "pointer" }}
                             >
-                                InsurancePolicyID{" "}
-                                {sortConfig.key === "insurance_policy_id" &&
+                                member_name{" "}
+                                {sortConfig.key === "member_name" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                             </th>
                             <th
-                                onClick={() => requestSort("branchcode")}
+                                onClick={() => requestSort("contact_no")}
                                 style={{ cursor: "pointer" }}
                             >
-                                BranchCode{" "}
-                                {sortConfig.key === "branchcode" &&
+                                contact_no{" "}
+                                {sortConfig.key === "contact_no" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                             </th>
                             <th
-                                onClick={() => requestSort("category_id")}
+                                onClick={() => requestSort("nomine_gender")}
                                 style={{ cursor: "pointer" }}
                             >
-                                InsuranceType{" "}
-                                {sortConfig.key === "category_id" &&
+                                nomine_gender{" "}
+                                {sortConfig.key === "nomine_gender" &&
+                                    (sortConfig.direction === "ascending" ? "↑" : "↓")}
+                            </th>
+                            <th
+                                onClick={() => requestSort("date_birthday")}
+                                style={{ cursor: "pointer" }}
+                            >
+                                date_birthday{" "}
+                                {sortConfig.key === "date_birthday" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                             </th>
                         </tr>
@@ -139,9 +147,10 @@ const InsuranceList = () => {
                         {currentItems.length > 0 ? (
                             currentItems.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{item.insurance_policy_id}</td>
-                                    <td>{item.branchcode}</td>
-                                    <td>{item.category_id}</td>
+                                    <td>{item.member_name}</td>
+                                    <td>{item.contact_no}</td>
+                                    <td>{item.nomine_gender}</td>
+                                    <td>{item.date_birthday}</td>
                                 </tr>
                             ))
                         ) : (
@@ -226,4 +235,4 @@ const InsuranceList = () => {
     );
 };
 
-export default InsuranceList;
+export default MemberList;

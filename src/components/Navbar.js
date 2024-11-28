@@ -110,10 +110,10 @@ const Navbar = () => {
                     </li>
                     <li className="nav-item dropdown d-none d-xl-inline-flex user-dropdown">
                         <a className="nav-link dropdown-toggle" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img className="img-xs rounded-circle ms-2" src="../assets/images/faces/face8.jpg" alt="Profile image"/> <span className="font-weight-normal"> Henry Klein </span></a>
+                            <img className="img-xs rounded-circle ms-2" src="/images/face8.jpg" alt="Profile image"/> <span className="font-weight-normal"> Henry Klein </span></a>
                         <div className="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                             <div className="dropdown-header text-center">
-                                <img className="img-md rounded-circle" src="../assets/images/faces/face8.jpg" alt="Profile image"/>
+                                <img className="img-md rounded-circle" src="/images/face8.jpg" alt="Profile image"/>
                                     <p className="mb-1 mt-3">Henry Klein</p>
                                     <p className="font-weight-light text-muted mb-0">kleinhenry@gmail.com</p>
                             </div>

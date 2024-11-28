@@ -12,6 +12,7 @@ import Registraition from "../pages/authentications/Registraition";
 import PrivateRoute from "./PrivateRoutes";
 import InsuranceList from "../pages/InsuranceList";
 import InsuranceForm from "../pages/InsuranceForm";
+import MemberList from "../pages/MemberList";
 
 
 const router = createBrowserRouter([
@@ -38,17 +39,25 @@ const router = createBrowserRouter([
             {
                 path: "/insurance-list", // Child route for the dashboard
                 element: (
-                    <PrivateRoute>
+                    // <PrivateRoute>
                         <InsuranceList />
-                    </PrivateRoute>
+                    // </PrivateRoute>
                 ),
             },
             {
                 path: "/insurance-form", // Child route for the dashboard
                 element: (
-                    <PrivateRoute>
+                    // <PrivateRoute>
                         <InsuranceForm />
-                    </PrivateRoute>
+                    // </PrivateRoute>
+                ),
+            },
+            {
+                path: "/member-list", // Child route for the dashboard
+                element: (
+                    // <PrivateRoute>
+                    <MemberList />
+                    // </PrivateRoute>
                 ),
             },
            
