@@ -40,11 +40,9 @@ function InsuranceForm() {
     // const [token, setToken] = useState(null);
     const [coNo, setCollectorNumber] = useState(null);
 
-
-  const { id } = useParams(); // Destructure id and member_name from route parameters
-    const [accountNumber, setAccountNumber] = useState(null);
-    //
-    
+    const { id } = useParams();
+    const [accountNumbers, setAccountNumbers] = useState([]);
+    const [memberName, setMemberName] = useState(name);
 
 
     const handleNomineeIDTypeChange = (e) => {
@@ -184,15 +182,13 @@ useEffect(() => {
         try {
             const response = await axios.get(`http://localhost:5000/api/collector/${id}/client/information`);
             console.log('member_name:', response.data); // Log the response
-            setAccountNumber(response.data);
-
+            setAccountNumbers(response.data);
         } catch (error) {
             console.error("Error fetching account number:", error.message);
         }
     };
     fetchPostData();
 }, [id]);
-
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -301,8 +297,20 @@ useEffect(() => {
                     // validated={validated} 
                     onSubmit={handleSubmitForm}>
 
-
-    
+ <div>
+                    <label>Member Name</label>
+                    <input type="text" value={memberName} readOnly />
+                </div>
+                <div>
+                    <label>Account Numbers</label>
+                    <ul>
+                        {accountNumbers.map((account, index) => (
+                            <li key={index}>
+                                {account.account_number} - {account.name}
+                            </li>
+                        ))}
+                    </ul>
+                </div> 
 
 
                         {/* extra field Start */}
@@ -380,6 +388,38 @@ useEffect(() => {
                         </Col>
                         {/* end extra Data */}
 
+
+
+{/* 
+                        <Col md={6}>
+                            <Form.Group>
+                                <Form.Control
+                                    type="hidden"
+                                    name="ProjectCode"
+                                    value="PROJ001"
+                                    readOnly
+                                />
+                            </Form.Group>
+                        </Col>
+                        {/* end extra Data */}
+ 
+
+
+
+
+{/* account 
+
+  {accountNumbers.map((account, index) => (
+                            <li key={index}>
+                                {account.account_number} - {account.name}
+                            </li>
+                        ))}
+
+*/}
+
+
+
+
                         <Row className="mb-4">
                             <Col md={6}>
                                 <Form.Group>
@@ -389,7 +429,7 @@ useEffect(() => {
                                     
                                         list="user_name_options"
                                         name="Member_name"
-                                        // value={member_name}
+                                         value={memberName}
                                         type=""
                                         placeholder="Select or type user name"
                                     />
