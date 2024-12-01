@@ -24,9 +24,11 @@ const MemberList = () => {
         
         const fetchPostData = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/member");
+                const response = await axios.get("http://localhost:5000/api/client");
 
-                console.log("API response:", response);
+                console.log("API account no:", response.data.account_number);
+                console.log("API nameo:", response.data.account_number);
+
 
                 // Check if the response contains the data array
                 if (response.data && Array.isArray(response.data)) {
@@ -117,23 +119,23 @@ const MemberList = () => {
                     <thead className="table-dark">
                         <tr>
                             <th
-                                onClick={() => requestSort("member_name")}
+                                onClick={() => requestSort("name")}
                                 style={{ cursor: "pointer" }}
                             >
                                 Member Name{" "}
-                                {sortConfig.key === "member_name" &&
+                                {sortConfig.key === "name" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                             </th>
-                            <th
+                            {/* <th
                                 onClick={() => requestSort("contact_no")}
                                 style={{ cursor: "pointer" }}
                             >
                                 Contact No{" "}
                                 {sortConfig.key === "contact_no" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
-                            </th>
+                            </th> */}
                             <th
-                                onClick={() => requestSort("nomine_gender")}
+                                onClick={() => requestSort("sex")}
                                 style={{ cursor: "pointer" }}
                             >
                                 Nomine Gender{" "}
@@ -162,13 +164,13 @@ const MemberList = () => {
                         {currentItems.length > 0 ? (
                             currentItems.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{item.member_name}</td>
-                                    <td>{item.contact_no}</td>
-                                    <td>{item.nomine_gender}</td>
-                                    <td>{item.date_birthday}</td>
+                                    <td>{item.name}</td>
+                                    
+                                    <td>{item.sex}</td>
+                                    <td>{item.date_of_birth}</td>
                                     <button
                                         className="text-dark  btn btn-success btn-sm"
-                                        onClick={() => navigate(`/insurance-form/${item.id}/${item.member_name}`)}
+                                        onClick={() => navigate(`/insurance-form/${item.id}/${item.name}`)}
                                     >
                                         Details
                                     </button>

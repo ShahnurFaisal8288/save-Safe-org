@@ -24,11 +24,12 @@ function Login() {
                     password: data.password,
                 }
             );
-            console.log(response);
+            console.log("cono....",response.data.collector.collector_number);
 
             if (response.status === 200 && response.data.success) {
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem("email", response.data.user.email);
+                localStorage.setItem('token', response.data.token, response.data.collector.collector_number);
+                localStorage.setItem("collector_number", response.data.collector.collector_number);
+                //   localStorage.setItem("account_number", response.data.account_number);
                 Swal.fire({
                     icon: "success",
                     title: "Login Successful",

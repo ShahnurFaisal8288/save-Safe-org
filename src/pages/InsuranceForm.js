@@ -18,14 +18,14 @@ import reportWebVitals from './../reportWebVitals';
 
 
 function InsuranceForm() {
-        const { id, member_name } = useParams();
+       
     const [frontPreview, setFrontPreview] = useState(null);
     const [backPreview, setBackPreview] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [isEligible, setIsEligible] = useState(true);
     const [validated, setValidated] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("");
-    const [selectedSubCategory, setSelectedSubCategory] = useState([]);
+    // const [selectedSubCategory, setSelectedSubCategory] = useState([]);
     const [name, setName] = useState([]);
     const [policyName, setPolicyName] = useState([]);
      const [idType, setidType] = useState([]);
@@ -36,6 +36,16 @@ function InsuranceForm() {
     const [showExpDate, setShowExpDate] = useState(false);
     const [premiumAmount, setPremiumAmount] = useState("");
     const [policy_tenure, setPolicyTenure] = useState("");
+    //
+    // const [token, setToken] = useState(null);
+    const [coNo, setCollectorNumber] = useState(null);
+
+
+  const { id } = useParams(); // Destructure id and member_name from route parameters
+    const [accountNumber, setAccountNumber] = useState(null);
+    //
+    
+
 
     const handleNomineeIDTypeChange = (e) => {
         const selectedValue = e.target.value;
@@ -45,79 +55,87 @@ function InsuranceForm() {
     };
 
     const handleSubmitForm = (event) => {
-        event.preventDefault();
+    event.preventDefault();
 
-        try {
+    try {
+        const formData = new FormData();
+        formData.append("ApiKey", "api-key");
+        formData.append("BranchCode", "orangeBD600");
 
-            const formData = new FormData();
-            formData.append("ApiKey", "api-key");
-            formData.append("BranchCode", "orangeBD600");
-            formData.append("Member_name", event.target.Member_name.value);
-            formData.append(
-                "HealthInsuranceJson",
-                JSON.stringify([
-                    {
-                        CoNo: event.target.CoNo.value,
-                        OrgNo: event.target.OrgNo.value,
-                        OrgMemNo: event.target.OrgMemNo.value,
-                        EnrollId: event.target.EnrollId.value,
-                        ErpMemId: event.target.ErpMemId.value,
-                        ProjectCode: event.target.ProjectCode.value,
-
-                        // Form fields
-                        AnyDisese: event.target.AnyDisese.value,
-                        PolicyName: event.target.PolicyName.value,
-                        InsuranceType: event.target.InsuranceType.value,
-                        Category: event.target.Category.value,
-                        PremiumAmount: event.target.PremiumAmount.value,
-                        policy_tenure: event.target.policy_tenure.value,
-
-                        Phone: event.target.Phone.value,
-                        NomineeName: event.target.NomineeName.value,
-                        NomineePhone: event.target.NomineePhone.value,
-                        NomineeDOB: event.target.NomineeDOB.value,
-                        NomineeIDType: event.target.NomineeIDType.value,
-                        NomineeIDIssueDate: event.target.NomineeIDIssueDate.value,
-                        NomineeIDExpiryDate: event.target.NomineeIDExpiryDate.value,
-                        NomineeIDPlaceOfIssue: event.target.NomineeIDPlaceOfIssue.value,
-                        NomineeIDNumber: event.target.NomineeIDNumber.value,
-                        NomineeRelation: event.target.NomineeRelation.value,
-
-                    },
-                ])
-            );
-
-            console.log('test1 form data', event.target.PremiumAmount.value);
-            console.log('test12 form data', event.target.policy_tenure.value);
-
-
-            formData.append("nomineeImageFront", event.target.nomineeImageFront.files[0]);
-            formData.append("nomineeImageBack", event.target.nomineeImageBack.files[0]);
-
-            axios
-                .post("http://localhost:5000/api/health_insurance/store", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                })
-                .then((response) => {
-                    if (response.status === 201) {
-                        alert("Successfully Created");
-                    }
-
-                    console.log('inserttt data', response.data);
-                })
-                .catch((error) => {
-                    console.error("Error creating data:", error.message);
-                    alert("Failed to create data");
-                });
-
-
-        } catch (error) {
-            console.error("Error creating data:", error.message);
-            alert("Failed to create data");
+        // Ensure all form fields exist
+        if (!event.target.Member_name || !event.target.Member_name.value) {
+            throw new Error("Member_name is required");
         }
-    };
+
+        formData.append("Member_name", event.target.Member_name.value);
+        formData.append(
+            "HealthInsuranceJson",
+            JSON.stringify([
+                {
+                    CoNo: event.target.CoNo ? event.target.CoNo.value : '',
+                    OrgNo: event.target.OrgNo ? event.target.OrgNo.value : '',
+                    OrgMemNo: event.target.OrgMemNo ? event.target.OrgMemNo.value : '',
+                    EnrollId: event.target.EnrollId ? event.target.EnrollId.value : '',
+                    ErpMemId: event.target.ErpMemId ? event.target.ErpMemId.value : '',
+                    ProjectCode: event.target.ProjectCode ? event.target.ProjectCode.value : '',
+
+                    // Form fields
+                    AnyDisese: event.target.AnyDisese ? event.target.AnyDisese.value : '',
+                    PolicyName: event.target.PolicyName ? event.target.PolicyName.value : '',
+                    InsuranceType: event.target.InsuranceType ? event.target.InsuranceType.value : '',
+                    Category: event.target.Category ? event.target.Category.value : '',
+                    PremiumAmount: event.target.PremiumAmount ? event.target.PremiumAmount.value : '',
+                    policy_tenure: event.target.policy_tenure ? event.target.policy_tenure.value : '',
+
+                    Phone: event.target.Phone ? event.target.Phone.value : '',
+                    NomineeName: event.target.NomineeName ? event.target.NomineeName.value : '',
+                    NomineePhone: event.target.NomineePhone ? event.target.NomineePhone.value : '',
+                    NomineeDOB: event.target.NomineeDOB ? event.target.NomineeDOB.value : '',
+                    NomineeIDType: event.target.NomineeIDType ? event.target.NomineeIDType.value : '',
+                    NomineeIDIssueDate: event.target.NomineeIDIssueDate ? event.target.NomineeIDIssueDate.value : '',
+                    NomineeIDExpiryDate: event.target.NomineeIDExpiryDate ? event.target.NomineeIDExpiryDate.value : '',
+                    NomineeIDPlaceOfIssue: event.target.NomineeIDPlaceOfIssue ? event.target.NomineeIDPlaceOfIssue.value : '',
+                    NomineeIDNumber: event.target.NomineeIDNumber ? event.target.NomineeIDNumber.value : '',
+                    NomineeRelation: event.target.NomineeRelation ? event.target.NomineeRelation.value : '',
+                },
+            ])
+        );
+
+        // Ensure file inputs exist and have files
+        if (!event.target.policy_tenure ) {
+            throw new Error("policy_tenure is required");
+        }
+
+        if (!event.target.nomineeImageBack || !event.target.nomineeImageBack.files[0]) {
+            throw new Error("Nominee Image Back is required");
+        }
+
+        formData.append("nomineeImageFront", event.target.nomineeImageFront.files[0]);
+        formData.append("nomineeImageBack", event.target.nomineeImageBack.files[0]);
+
+        axios
+            .post("http://localhost:5000/api/health_insurance/store", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((response) => {
+                if (response.status === 201) {
+                    alert("Successfully Created");
+                }
+
+                console.log('inserttt data', response.data);
+            })
+            .catch((error) => {
+                console.error("Error creating data:", error.message);
+                alert("Failed to create data");
+            });
+
+    } catch (error) {
+        console.error("Error creating data:", error.message);
+        alert("Failed to create data");
+    }
+};
 
 
 
@@ -125,15 +143,56 @@ function InsuranceForm() {
 
 
 
+//    useEffect(() => {
+//         // Retrieve data from local storage
+//         // const storedToken = localStorage.getItem('token');
+//         const storedSetAccountNumber = localStorage.getItem('account_number');
 
+//         // Set the state with the retrieved data
+//         // setToken(storedToken);
+//         setCollectorNumber(storedSetAccountNumber);
+
+//         // Debugging statements
+//         // console.log('Token:', storedToken);
+//         console.log('setAccountNumber', storedSetAccountNumber);
+//     }, []);
+   useEffect(() => {
+        // Retrieve data from local storage
+        // const storedToken = localStorage.getItem('token');
+        const storedSetCollectorNumber = localStorage.getItem('collector_number');
+
+        // Set the state with the retrieved data
+        // setToken(storedToken);
+        setCollectorNumber(storedSetCollectorNumber);
+
+        // Debugging statements
+        // console.log('Token:', storedToken);
+        console.log('setCollectorNumber', storedSetCollectorNumber);
+    }, []);
 
     useEffect(() => {
         const fetchPostData = async () => {
-            const response = await axios.get("http://localhost:5000/api/member");
+            const response = await axios.get("http://localhost:5000/api/client");
             setName(response.data);
         };
         fetchPostData();
     }, []);
+
+    //client working
+useEffect(() => {
+    const fetchPostData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/collector/${id}/client/information`);
+            console.log('member_name:', response.data); // Log the response
+            setAccountNumber(response.data);
+
+        } catch (error) {
+            console.error("Error fetching account number:", error.message);
+        }
+    };
+    fetchPostData();
+}, [id]);
+
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -147,7 +206,7 @@ function InsuranceForm() {
         const fetchPostData = async () => {
             const response = await axios.get("http://localhost:5000/api/idtype");
             setidType(response.data);
-            console.log('checking idType', response.data);
+            // console.log('checking idType', response.data);
         };
         fetchPostData();
     }, []);
@@ -156,7 +215,7 @@ function InsuranceForm() {
         const fetchPostData = async () => {
             const response = await axios.get("http://localhost:5000/api/category");
             setCategory(response.data);
-            console.log('checking category', response.data);
+            // console.log('checking category', response.data);
         };
         fetchPostData();
     }, []);
@@ -168,6 +227,15 @@ function InsuranceForm() {
         };
         fetchPostData();
     }, []);
+
+    // useEffect(() => {
+    //     const fetchUseStateData = async () => {
+    //         const response = await axios.post("http://localhost:5000/api/auth/login");
+    //         setUserState(response.data);
+    //     };
+    //     fetchUseStateData();
+    //     console.log('checking user state', userState);
+    // }, []);
 
     
 
@@ -232,6 +300,11 @@ function InsuranceForm() {
                     <Form noValidate 
                     // validated={validated} 
                     onSubmit={handleSubmitForm}>
+
+
+    
+
+
                         {/* extra field Start */}
                         <Row className="mb-4">
                             <Col md={6}>
@@ -250,7 +323,7 @@ function InsuranceForm() {
                                 <Form.Control
                                     type="hidden"
                                     name="CoNo"
-                                    value="CO12000"
+                                    value={coNo}
                                     readOnly
                                 />
                             </Form.Group>
@@ -260,7 +333,7 @@ function InsuranceForm() {
                                 <Form.Control
                                     type="hidden"
                                     name="OrgNo"
-                                    value="ORG123456"
+                                    value="null"
                                     readOnly
                                 />
                             </Form.Group>
@@ -308,14 +381,16 @@ function InsuranceForm() {
                         {/* end extra Data */}
 
                         <Row className="mb-4">
-                            <Col md={6} style={{ display: 'none' }}>
+                            <Col md={6}>
                                 <Form.Group>
                                     
                                     <Form.Control
+
+                                    
                                         list="user_name_options"
                                         name="Member_name"
-                                        value={member_name}
-                                        type="hidden"
+                                        // value={member_name}
+                                        type=""
                                         placeholder="Select or type user name"
                                     />
                                     
@@ -482,24 +557,23 @@ function InsuranceForm() {
                                                 </Form.Group>
                                             </Col>
                                             <Col md={6}>
-                                                <Form.Group>
-                                                    <Form.Label>ID Type</Form.Label>
-                                                    <Form.Control
-                                                        as="select"
-                                                        name="NomineeIDType"
-                                                        value={nomineeIDType}
-                                                        onChange={handleNomineeIDTypeChange}
-                                                    required
-                                                    >
-                                                        
-                                                        {idType.map((item, index) => (
-                                                            <option key={index} value="specificIDType">
-                                                                {item.data_name}
-                                                            </option>
-                                                        ))}
-                                                    </Form.Control>
-                                                </Form.Group>
-                                            </Col>
+    <Form.Group>
+        <Form.Label>ID Type</Form.Label>
+        <Form.Control
+            as="select"
+            name="NomineeIDType"
+            value={nomineeIDType}
+            onChange={handleNomineeIDTypeChange}
+            required
+        >
+            {idType.map((item, index) => (
+                <option key={index} value={item.data_value}>
+                    {item.data_name}
+                </option>
+            ))}
+        </Form.Control>
+    </Form.Group>
+</Col>
                                         </Row>
                                         {showIssueDate && (
                                             <Row className="mb-4">

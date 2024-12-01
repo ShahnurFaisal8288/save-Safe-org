@@ -45,7 +45,7 @@ const router = createBrowserRouter([
                 ),
             },
    {
-    path: "/insurance-form/:id/:member_name", // Child route for the dashboard with id and member_name parameters
+    path: "/insurance-form/:id/:name", // Child route for the dashboard with id and member_name parameters
     element: (
         <PrivateRoute>
             <InsuranceForm />

@@ -62,7 +62,7 @@ function Sidebar() {
                             </ul>
                         </div> */}
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <a className="nav-link" data-bs-toggle="collapse" href="#sidebar-layouts" aria-expanded="false" aria-controls="sidebar-layouts">
                             <span className="menu-title">Sidebar Layouts</span>
                             <i className="icon-list menu-icon"></i>
@@ -76,8 +76,8 @@ function Sidebar() {
                                 <li className="nav-item"> <a className="nav-link" href="pages/layout/sidebar-fixed.html">Sidebar Fixed</a></li>
                             </ul>
                         </div>
-                    </li>
-                    <li className="nav-item nav-category"><span className="nav-link">UI Elements</span></li>
+                    </li> */}
+                    {/* <li className="nav-item nav-category"><span className="nav-link">UI Elements</span></li>
                     <li className="nav-item">
                         <a className="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                             <span className="menu-title">Basic UI Elements</span>
@@ -299,7 +299,7 @@ function Sidebar() {
                             <span className="menu-title">Documentation</span>
                             <i className="icon-folder-alt menu-icon"></i>
                         </a>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
         </div>
