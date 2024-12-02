@@ -21,7 +21,7 @@ function InsuranceForm() {
   const [isEligible, setIsEligible] = useState(true);
   const [validated, setValidated] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [name, setName] = useState([]);
+  // const [name, setName] = useState([]);
   const [policyName, setPolicyName] = useState([]);
   const [idType, setidType] = useState([]);
   const [category, setCategory] = useState([]);
@@ -33,9 +33,12 @@ function InsuranceForm() {
   const [policy_tenure, setPolicyTenure] = useState("");
   const [coNo, setCollectorNumber] = useState(null);
 
-  const { id, userName } = useParams();
-  const [accountNumber, setAccountNumber] = useState(null);
-  const [memberName, setMemberName] = useState(null);
+  const { id, name, account_number } = useParams();
+  // const [accountNumber, setAccountNumber] = useState(null);
+  // const [memberName, setMemberName] = useState(null);
+  const [phone, setPhone] = useState("");
+  const [nomineePhone, setNomineePhone] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleNomineeIDTypeChange = (e) => {
     const selectedValue = e.target.value;
@@ -55,6 +58,25 @@ function InsuranceForm() {
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
+    let valid = true;
+    let newErrors = {};
+
+    if (!/^\d{11}$/.test(phone)) {
+      valid = false;
+      newErrors.phone = "Please enter a valid 11-digit phone number.";
+    }
+
+    if (!/^\d{11}$/.test(nomineePhone)) {
+      valid = false;
+      newErrors.nomineePhone = "Please enter a valid 11-digit nominee phone number.";
+    }
+
+    setErrors(newErrors);
+
+    if (valid) {
+      alert("Form submitted successfully!");
+    }
+
 
     try {
       const formData = new FormData();
@@ -65,9 +87,9 @@ function InsuranceForm() {
 
       formData.append("BranchCode", "orangeBD600");
 
-      if (!event.target.Member_name || !event.target.Member_name.value) {
-        throw new Error("Member_name is required");
-      }
+      // if (!event.target.Member_name || !event.target.Member_name.value) {
+      //   throw new Error("Member_name is required");
+      // }
 
       formData.append("Member_name", event.target.Member_name.value);
       formData.append(
@@ -159,7 +181,7 @@ function InsuranceForm() {
       console.log(event.target.nomineeImageBack.files[0]);
 
       axios
-        .post("http://localhost:5000/api/health_insurance/store", formData, {
+        .post("http://localhost:3000/api/health_insurance/store", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -180,41 +202,41 @@ function InsuranceForm() {
       alert("Failed to create data");
     }
   };
-
+  // console.log("userName",name);
   useEffect(() => {
     const storedSetCollectorNumber = localStorage.getItem("collector_number");
 
     setCollectorNumber(storedSetCollectorNumber);
   }, []);
 
-  useEffect(() => {
-    const fetchPostData = async () => {
-      const response = await axios.get("http://localhost:5000/api/client");
-      setName(response.data);
-    };
-    fetchPostData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchPostData = async () => {
+  //     const response = await axios.get("http://localhost:3000/api/client");
+  //     setName(response.data);
+  //   };
+  //   fetchPostData();
+  // }, []);
 
   //client working
   useEffect(() => {
     const fetchPostData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/collector/${id}/client/information`
+          `http://localhost:3000/api/collector/${id}/client/information`
         );
         console.log("member_name:", response.data); // Log the response
 
-        setMemberName(response.data[0].name);
+        // setMemberName(response.data[0].name);
 
         // Filter the data to get the specific account number
-        const account = response.data.find(
-          (account) => account.id === parseInt(id)
-        );
-        if (account) {
-          setAccountNumber(account.account_number);
-        } else {
-          console.error("Account not found");
-        }
+        // const account = response.data.find(
+        //   (account) => account.id === parseInt(id)
+        // );
+        // if (account) {
+        //   setAccountNumber(account.account_number);
+        // } else {
+        //   console.error("Account not found");
+        // }
       } catch (error) {
         console.error("Error fetching account number:", error.message);
       }
@@ -224,7 +246,7 @@ function InsuranceForm() {
 
   useEffect(() => {
     const fetchPostData = async () => {
-      const response = await axios.get("http://localhost:5000/api/policy");
+      const response = await axios.get("http://localhost:3000/api/policy");
       setPolicyName(response.data);
     };
     fetchPostData();
@@ -233,7 +255,7 @@ function InsuranceForm() {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/idtype");
+        const response = await axios.get("http://localhost:3000/api/idtype");
         setidType(response.data);
       } catch (error) {
         console.error("Error fetching ID types:", error);
@@ -244,7 +266,7 @@ function InsuranceForm() {
 
   useEffect(() => {
     const fetchPostData = async () => {
-      const response = await axios.get("http://localhost:5000/api/category");
+      const response = await axios.get("http://localhost:3000/api/category");
       setCategory(response.data);
       // console.log('checking category', response.data);
     };
@@ -254,7 +276,7 @@ function InsuranceForm() {
   useEffect(() => {
     const fetchPostData = async () => {
       const response = await axios.get(
-        "http://localhost:5000/api/relationdata"
+        "http://localhost:3000/api/relationdata"
       );
       setRelation(response.data);
     };
@@ -289,7 +311,7 @@ function InsuranceForm() {
 
   const handleHealthStatusChange = (status, AnyDisese) => {
     setValidated(false);
-    setMemberName(AnyDisese); // Store the name
+    // setMemberName(AnyDisese); // Store the name
 
     if (status === "1") {
       setShowForm(true);
@@ -321,16 +343,8 @@ function InsuranceForm() {
             // validated={validated}
             onSubmit={handleSubmitForm}
           >
-            <div>
-              <label>Member Name</label>
-              <input type="text" value={memberName} readOnly />
-            </div>
-            <div>
-              <label>Account Numbers</label>
-              <ul>
-                <input type="text" value={accountNumber || ""} readOnly />
-              </ul>
-            </div>
+           
+           
 
             {/* extra field Start */}
             <Row className="mb-4">
@@ -363,9 +377,9 @@ function InsuranceForm() {
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="hidden"
+                  type="text"
                   name="OrgMemNo"
-                  value="ORG_MEM123"
+                  value={account_number}
                   readOnly
                 />
               </Form.Group>
@@ -431,8 +445,8 @@ function InsuranceForm() {
                   <Form.Control
                     list="user_name_options"
                     name="Member_name"
-                    value={memberName}
-                    type=""
+                    value={name}
+                    type="text"
                     placeholder="Select or type user name"
                   />
                 </Form.Group>
@@ -545,14 +559,17 @@ function InsuranceForm() {
                       <Form.Control
                         type="tel"
                         name="Phone"
-                        pattern="[0-9]{10}"
-                        // required
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        required
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please enter a valid 10-digit phone number
+                        Please enter a valid 11-digit phone number
                       </Form.Control.Feedback>
+                      {errors.phone && <p style={{ color: "red" }}>{errors.phone}</p>}
                     </Form.Group>
                   </Col>
+
                 </Row>
 
                 <Card className="mb-4">
@@ -567,7 +584,7 @@ function InsuranceForm() {
                           <Form.Control
                             type="text"
                             name="NomineeName"
-                            // required
+                            required
                           />
                         </Form.Group>
                       </Col>
@@ -578,12 +595,15 @@ function InsuranceForm() {
                           <Form.Control
                             type="tel"
                             name="NomineePhone"
-                            pattern="[0-9]{10}"
-                            // required
+                            pattern="[0-9]{11}"
+                            value={nomineePhone}
+                            onChange={(e) => setNomineePhone(e.target.value)}
+                            required
                           />
                           <Form.Control.Feedback type="invalid">
-                            Please enter a valid 10-digit phone number
+                            Please enter a valid 11-digit phone number
                           </Form.Control.Feedback>
+                          {errors.nomineePhone && <p style={{ color: "red" }}>{errors.phone}</p>}
                         </Form.Group>
                       </Col>
                     </Row>

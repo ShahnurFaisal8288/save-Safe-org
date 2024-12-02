@@ -17,24 +17,19 @@ function Login() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "http://localhost:3000/api/auth/login",
         {
           email: data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
           phone: !data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
           password: data.password,
         }
       );
-      console.log("response user",response.data.user);
+      console.log("response user",response);
 
       if (response.status === 200 && response.data.success) {
         localStorage.setItem(
           "token",
           response.data.token,
-          response.data.collector.collector_number
-        );
-        localStorage.setItem(
-          "collector_number",
-          response.data.collector.collector_number
         );
         
         Swal.fire({

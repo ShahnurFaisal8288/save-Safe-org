@@ -24,7 +24,7 @@ const MemberList = () => {
         
         const fetchPostData = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/client");
+                const response = await axios.get("http://localhost:3000/api/client");
 
                 
 
@@ -85,7 +85,6 @@ const MemberList = () => {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
     
-
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between my-4">
@@ -159,13 +158,13 @@ const MemberList = () => {
                         {currentItems.length > 0 ? (
                             currentItems.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{item.name}</td>
+                                    <td>{item.name}{" "}</td>
                                     
                                     <td>{item.sex}</td>
                                     <td>{item.date_of_birth}</td>
                                     <button
                                         className="text-dark  btn btn-success btn-sm"
-                                        onClick={() => navigate(`/insurance-form/${item.id}/${item.name}`)}
+                                        onClick={() => navigate(`/insurance-form/${item.id}/${item.name}/${item.account_number}`)}
                                     >
                                         Details
                                     </button>
