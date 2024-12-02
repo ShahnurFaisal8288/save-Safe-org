@@ -16,53 +16,52 @@ import MemberList from "../pages/MemberList";
 
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Login />, // Standalone Login route
-    },
-    {
-        path: "/register",
-        element: <Registraition />, // Standalone Registration route
-    },
-    {
-        path: "/",
-        element: <App />, // App is the parent layout
-        children: [
-            {
-                path: "/dashboard", // Child route for the dashboard
-                element: (
-                    // <PrivateRoute>
-                        <Dashboard />
-                    // </PrivateRoute>
-                ),
-            },
-            {
-                path: "/insurance-list", // Child route for the dashboard
-                element: (
-                    // <PrivateRoute>
-                        <InsuranceList />
-                    // </PrivateRoute>
-                ),
-            },
-   {
-    path: "/insurance-form/:id/:name", // Child route for the dashboard with id and member_name parameters
-    element: (
-        // <PrivateRoute>
+  {
+    path: "/",
+    element: <Login />, // Standalone Login route
+  },
+  {
+    path: "/register",
+    element: <Registraition />, // Standalone Registration route
+  },
+  {
+    path: "/",
+    element: <App />, // App is the parent layout
+    children: [
+      {
+        path: "/dashboard", // Child route for the dashboard
+        element: (
+          // <PrivateRoute>
+          <Dashboard />
+          // </PrivateRoute>
+        ),
+      },
+      {
+        path: "/insurance-list", // Child route for the dashboard
+        element: (
+          // <PrivateRoute>
+          <InsuranceList />
+          // </PrivateRoute>
+        ),
+      },
+      {
+        path: "/insurance-form/:id/:name", // Child route for the dashboard with id and member_name parameters
+        element: (
+          <PrivateRoute>
             <InsuranceForm />
-        // </PrivateRoute>
-    ),
-},
-            {
-                path: "/member-list", // Child route for the dashboard
-                element: (
-                    // <PrivateRoute>
-                    <MemberList />
-                    // </PrivateRoute>
-                ),
-            },
-           
-        ],
-    },
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/member-list", // Child route for the dashboard
+        element: (
+          // <PrivateRoute>
+          <MemberList />
+          // </PrivateRoute>
+        ),
+      },
+    ],
+  },
 ]);
 
 export default router;

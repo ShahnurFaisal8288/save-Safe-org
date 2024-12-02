@@ -1,0 +1,20 @@
+.fixed-size {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    /* Ensures the image covers the entire area */
+}
+.footer {
+    background-color: #f8f9fa;
+    /* Optional: Footer background color */
+    padding: 10px 0;
+    /* Optional: Footer padding */
+}
+
+.fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    /* Ensures the footer is above other elements */
+}

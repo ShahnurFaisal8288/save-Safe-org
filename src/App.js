@@ -1,3 +1,4 @@
+import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import Navbar from "./components/Navbar";
@@ -34,12 +35,13 @@ function App() {
           style={{
             flexGrow: 4, // Makes the main panel take up more space than the sidebar
             overflowY: "auto", // Enables scrolling for the main panel content
+            paddingBottom: "60px", // Ensures space for the fixed footer
           }}
         >
           <Outlet />
-          <Footer />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

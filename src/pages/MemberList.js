@@ -26,17 +26,12 @@ const MemberList = () => {
             try {
                 const response = await axios.get("http://localhost:5000/api/client");
 
-                console.log("API account no:", response.data.account_number);
-                console.log("API nameo:", response.data.account_number);
-
+                
 
                 // Check if the response contains the data array
                 if (response.data && Array.isArray(response.data)) {
                     setData1(response.data); // Use the nested 'data' array
-                    console.log("Fetched data:", response.data);
-                } else {
-                    console.error("API response is not an array:", response.data);
-                }
+                } 
             } catch (error) {
                 console.error("Error fetching data:", error.message);
             }
@@ -99,29 +94,7 @@ const MemberList = () => {
                     <Button variant="primary">New</Button>
                 </Link> */}
             </div>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
-             <h1>hiiiiiiiiiiiiiiiiiiiiiiiii</h1>
+             
             {/* Search Input */}
             <div className="row mb-3">
                 <div className="col-md-6">

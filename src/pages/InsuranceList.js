@@ -25,10 +25,8 @@ const InsuranceList = () => {
                 // Check if the response contains the data array
                 if (response.data && Array.isArray(response.data.data)) {
                     setData1(response.data.data); // Use the nested 'data' array
-                    console.log("Fetched data:", response.data.data);
-                } else {
-                    console.error("API response is not an array:", response.data);
-                }
+                    
+                } 
             } catch (error) {
                 console.error("Error fetching data:", error.message);
             }
