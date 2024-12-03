@@ -20,15 +20,15 @@ function InsuranceForm() {
   const [showForm, setShowForm] = useState(false);
   const [isEligible, setIsEligible] = useState(true);
   const [validated, setValidated] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState('');
   
   const [policyName, setPolicyName] = useState([]);
   const [idType, setidType] = useState([]);
   const [category, setCategory] = useState([]);
   const [relation, setRelation] = useState([]);
   
-  const [premiumAmount, setPremiumAmount] = useState("");
-  const [policy_tenure, setPolicyTenure] = useState("");
+  const [premiumAmount, setPremiumAmount] = useState('');
+  const [policyTenture, setPolicyTenture] = useState('');
   const [coNo, setCollectorNumber] = useState(null);
 
   //insurance form params data start
@@ -53,38 +53,41 @@ function InsuranceForm() {
   const [anyDisease, setAnyDisease] = useState('');
   const [healthStatus, setHealthStatus] = useState('');
   //anydeases end
-
+  //dynamic category start
+  const [selectedPolicy, setSelectedPolicy] = useState('');
+  const [filteredCategory, setFilteredCategory] = useState([]);
+  //dynamic category end
   const handleNomineeIDTypeChange = (e) => {
     setNomineeIDType(e.target.value);
   };
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
-    let valid = true;
-    let newErrors = {};
+   let valid = true;
+  let newErrors = {};
 
-    // Phone validation
-    if (!/^\d{11}$/.test(phone)) {
-      valid = false;
-      newErrors.phone = "Please enter a valid 11-digit phone number.";
-    }
+  // Phone validation
+  if (!/^\d{11}$/.test(phone)) {
+    valid = false;
+    newErrors.phone = "Please enter a valid 11-digit phone number.";
+  }
 
-    // Nominee phone validation
-    if (!/^\d{11}$/.test(nomineePhone)) {
-      valid = false;
-      newErrors.nomineePhone =
-        "Please enter a valid 11-digit nominee phone number.";
-    }
+  // Nominee phone validation
+  if (!/^\d{11}$/.test(nomineePhone)) {
+    valid = false;
+    newErrors.nomineePhone =
+      "Please enter a valid 11-digit nominee phone number.";
+  }
 
-    setErrors(newErrors);
+  setErrors(newErrors);
 
-    // Stop execution if the form is invalid
-    if (!valid) {
-      return; // Exit the function early if validation fails
-    }
+  // Stop execution if the form is invalid
+  if (!valid) {
+    return; // Exit the function early if validation fails
+  }
 
-    // Proceed with form submission if valid
-    alert("Form submitted successfully!");
+  // Proceed with form submission if valid
+  alert("Form submitted successfully!");
 
 
     try {
@@ -164,7 +167,7 @@ function InsuranceForm() {
           },
         ])
       );
-      // console.log("AnyDisese Value:", event.target.AnyDisese ? event.target.AnyDisese.value : "");
+     
       // Ensure file inputs exist and have files
       if (!event.target.Duration) {
         throw new Error("policy_tenure is required");
@@ -187,8 +190,8 @@ function InsuranceForm() {
       );
 
       // Log the file objects directly
-      console.log(event.target.nomineeImageFront.files[0]);
-      console.log(event.target.nomineeImageBack.files[0]);
+      // console.log(event.target.nomineeImageFront.files[0]);
+      // console.log(event.target.nomineeImageBack.files[0]);
 
       axios
         .post("http://localhost:3000/api/health_insurance/store", formData, {
@@ -264,6 +267,7 @@ function InsuranceForm() {
     const fetchPostData = async () => {
       const response = await axios.get("http://localhost:3000/api/policy");
       setPolicyName(response.data);
+      // console.log(response);
     };
     fetchPostData();
   }, []);
@@ -300,18 +304,8 @@ function InsuranceForm() {
   }, []);
 
   const handleCategoryChange = (e) => {
-    const categoryId = parseInt(e.target.value);
-    const selectedCat = category.find((cat) => cat.id === categoryId);
-
-    if (selectedCat) {
-      setSelectedCategory(categoryId);
-      setPolicyTenure(selectedCat.policy_tenure || "");
-      setPremiumAmount(selectedCat.premium_ammount_total || "");
-    } else {
-      setSelectedCategory("");
-      setPremiumAmount("");
-      setPolicyTenure("");
-    }
+    const category = e.target.value;
+    setSelectedCategory(category);
   };
 
   const handleImageChange = (e, setPreview) => {
@@ -346,7 +340,37 @@ function InsuranceForm() {
     }
     setValidated(true);
   };
+  //dynamic policy to category start
+  const handlePolicyChange = (e) => {
+    const policy = e.target.value;
+    setSelectedPolicy(policy);
 
+    // Find the matching policy
+    const selectedPolicyData = policyName.find(
+      (item) => item.product_name === policy
+    );
+
+    if (selectedPolicyData) {
+      // Update the category options
+      setFilteredCategory([selectedPolicyData.category]);
+
+      // Set premium amount and policy tenure
+      setPremiumAmount(selectedPolicyData.category.premium_ammount_total);
+      setPolicyTenture(selectedPolicyData.category.policy_tenure);
+
+      // Reset selected category
+      setSelectedCategory('');
+    } else {
+      // Reset all values if no policy is selected
+      setFilteredCategory([]);
+      setPremiumAmount('');
+      setPolicyTenture('');
+      setSelectedCategory('');
+    }
+  };
+
+  //dynamic policy to category end
+  // console.log('selected',selectedPolicy)
   return (
     <Container className="py-5">
       <Card className="shadow-lg">
@@ -496,7 +520,12 @@ function InsuranceForm() {
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>Insurance Policy Name</Form.Label>
-                      <Form.Control as="select" name="PolicyName">
+                      <Form.Control
+                        as="select"
+                        name="PolicyName"
+                        value={selectedPolicy}
+                        onChange={handlePolicyChange}
+                      >
                         <option value="">Select Insurance Policy Name</option>
                         {policyName.map((item, index) => (
                           <option key={index} value={item.product_name}>
@@ -523,18 +552,11 @@ function InsuranceForm() {
                     <Form.Group>
                       <Form.Label>Category</Form.Label>
                       <Form.Control
-                        as="select"
+                        type="text"
                         name="Category"
-                        value={selectedCategory}
-                        onChange={handleCategoryChange}
-                      >
-                        <option value="">Select Category</option>
-                        {category.map((item) => (
-                          <option key={item.id} value={item.id}>
-                            {item.title}
-                          </option>
-                        ))}
-                      </Form.Control>
+                        value={filteredCategory.length ? filteredCategory[0].title : ''}
+                        readOnly
+                      />
                     </Form.Group>
                   </Col>
                   <Col md={6}>
@@ -557,7 +579,7 @@ function InsuranceForm() {
                       <Form.Control
                         type="text"
                         name="Duration"
-                        value={policy_tenure}
+                        value={policyTenture}
                         readOnly
                       />
                     </Form.Group>
