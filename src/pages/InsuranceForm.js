@@ -46,8 +46,13 @@ function InsuranceForm() {
   //insurance form nominee iput hide show end
 
   //for branch input start
-  // const [branchCode, setBranchCode] = useState('');
+  const [branchCode, setBranchCode] = useState('null');
   //for branch input end
+
+  //anydeases start
+  const [anyDisease, setAnyDisease] = useState('');
+  const [healthStatus, setHealthStatus] = useState('');
+  //anydeases end
 
   const handleNomineeIDTypeChange = (e) => {
     setNomineeIDType(e.target.value);
@@ -58,21 +63,28 @@ function InsuranceForm() {
     let valid = true;
     let newErrors = {};
 
+    // Phone validation
     if (!/^\d{11}$/.test(phone)) {
       valid = false;
       newErrors.phone = "Please enter a valid 11-digit phone number.";
     }
 
+    // Nominee phone validation
     if (!/^\d{11}$/.test(nomineePhone)) {
       valid = false;
-      newErrors.nomineePhone = "Please enter a valid 11-digit nominee phone number.";
+      newErrors.nomineePhone =
+        "Please enter a valid 11-digit nominee phone number.";
     }
 
     setErrors(newErrors);
 
-    if (valid) {
-      alert("Form submitted successfully!");
+    // Stop execution if the form is invalid
+    if (!valid) {
+      return; // Exit the function early if validation fails
     }
+
+    // Proceed with form submission if valid
+    alert("Form submitted successfully!");
 
 
     try {
@@ -89,6 +101,7 @@ function InsuranceForm() {
       // }
 
       formData.append("Member_name", event.target.Member_name.value);
+      formData.append("BranchCode", event.target.BranchCode.value);
       formData.append(
         "HealthInsuranceJson",
         JSON.stringify([
@@ -116,7 +129,7 @@ function InsuranceForm() {
             PremiumAmount: event.target.PremiumAmount
               ? event.target.PremiumAmount.value
               : "",
-            policy_tenure: event.target.Duration
+            Duration: event.target.Duration
               ? event.target.Duration.value
               : "",
 
@@ -151,7 +164,7 @@ function InsuranceForm() {
           },
         ])
       );
-
+      // console.log("AnyDisese Value:", event.target.AnyDisese ? event.target.AnyDisese.value : "");
       // Ensure file inputs exist and have files
       if (!event.target.Duration) {
         throw new Error("policy_tenure is required");
@@ -204,6 +217,12 @@ function InsuranceForm() {
     const storedSetCollectorNumber = localStorage.getItem("collector_number");
 
     setCollectorNumber(storedSetCollectorNumber);
+  }, []);
+  //branch no
+  useEffect(() => {
+    const branch_code = localStorage.getItem("branch_code");
+
+    setBranchCode(branch_code);
   }, []);
 
   // useEffect(() => {
@@ -306,13 +325,13 @@ function InsuranceForm() {
     }
   };
 
-  const handleHealthStatusChange = (status, AnyDisese) => {
-    setValidated(false);
-    // setMemberName(AnyDisese); // Store the name
+  const handleHealthStatusChange = (status) => {
+    setHealthStatus(status);
 
     if (status === "1") {
       setShowForm(true);
       setIsEligible(true);
+      setAnyDisease(''); // Clear any previous disease input when selecting "No"
     } else if (status === "2") {
       setShowForm(false);
       setIsEligible(false);
@@ -360,9 +379,9 @@ function InsuranceForm() {
               <Col md={6}>
                 <Form.Group>
                   <Form.Control
-                    type="text"
+                    type="hidden"
                     name="BranchCode"
-                    value=""
+                    value={branchCode}
                     readOnly
                   />
                 </Form.Group>
@@ -386,7 +405,7 @@ function InsuranceForm() {
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="text"
+                  type="hidden"
                   name="OrgMemNo"
                   value={account_number}
                   readOnly
@@ -425,29 +444,6 @@ function InsuranceForm() {
             </Col>
             {/* end extra Data */}
 
-            {/* 
-                        <Col md={6}>
-                            <Form.Group>
-                                <Form.Control
-                                    type="hidden"
-                                    name="ProjectCode"
-                                    value="PROJ001"
-                                    readOnly
-                                />
-                            </Form.Group>
-                        </Col>
-                        {/* end extra Data */}
-
-            {/* account 
-
-  {accountNumbers.map((account, index) => (
-                            <li key={index}>
-                                {account.account_number} - {account.name}
-                            </li>
-                        ))}
-
-*/}
-
             <Row className="mb-4">
               <Col md={6}>
                 <Form.Group>
@@ -455,32 +451,37 @@ function InsuranceForm() {
                     list="user_name_options"
                     name="Member_name"
                     value={name}
-                    type="text"
+                    type="hidden"
                     placeholder="Select or type user name"
                   />
                 </Form.Group>
               </Col>
-              <Col md={12}>
-                <Form.Group>
-                  <Form.Label>
-                    Are you suffering from serious health complications?
-                  </Form.Label>
-                  <div>
-                    <Button
-                      variant="primary"
-                      onClick={() => handleHealthStatusChange("1")}
-                    >
-                      No
-                    </Button>
-                    <Button
-                      variant="danger"
-                      onClick={() => handleHealthStatusChange("2")}
-                    >
-                      Yes
-                    </Button>
-                  </div>
-                </Form.Group>
-              </Col>
+              <input type="hidden" name="AnyDisese" value={healthStatus} />
+
+              {healthStatus !== "1" && (
+                <Col md={12}>
+                  <Form.Group>
+                    <Form.Label>
+                      Are you suffering from serious health complications?
+                    </Form.Label>
+                    <div>
+                      <Button
+                        variant={healthStatus === "1" ? "success" : "primary"}
+                        onClick={() => handleHealthStatusChange("1")}
+                      >
+                        No
+                      </Button>
+                      <Button
+                        variant={healthStatus === "2" ? "success" : "danger"}
+                        onClick={() => handleHealthStatusChange("2")}
+                      >
+                        Yes
+                      </Button>
+                    </div>
+                  </Form.Group>
+                </Col>
+              )}
+
             </Row>
 
             {!isEligible && (

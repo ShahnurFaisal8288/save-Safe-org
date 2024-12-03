@@ -26,10 +26,18 @@ function Login() {
       );
       console.log("response user",response);
 
-      if (response.status === 200 && response.data.success) {
+      if (response.status === 200) {
         localStorage.setItem(
           "token",
           response.data.token,
+        );
+        localStorage.setItem(
+          "branch_code",
+          response.data.collector.branch.branch_code,
+        );
+        localStorage.setItem(
+          "collector_number",
+          response.data.collector.collector_number,
         );
         
         Swal.fire({
