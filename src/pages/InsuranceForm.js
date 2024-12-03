@@ -21,39 +21,36 @@ function InsuranceForm() {
   const [isEligible, setIsEligible] = useState(true);
   const [validated, setValidated] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  // const [name, setName] = useState([]);
+  
   const [policyName, setPolicyName] = useState([]);
   const [idType, setidType] = useState([]);
   const [category, setCategory] = useState([]);
   const [relation, setRelation] = useState([]);
-  const [nomineeIDType, setNomineeIDType] = useState("");
-  const [showIssueDate, setShowIssueDate] = useState(false);
-  const [showExpDate, setShowExpDate] = useState(false);
+  
   const [premiumAmount, setPremiumAmount] = useState("");
   const [policy_tenure, setPolicyTenure] = useState("");
   const [coNo, setCollectorNumber] = useState(null);
 
+  //insurance form params data start
   const { id, name, account_number } = useParams();
-  // const [accountNumber, setAccountNumber] = useState(null);
-  // const [memberName, setMemberName] = useState(null);
+  //insurance form params data end
+
+  //insurance form validation start
   const [phone, setPhone] = useState("");
   const [nomineePhone, setNomineePhone] = useState("");
   const [errors, setErrors] = useState({});
+  //insurance form validation end
+
+  //insurance form nominee iput hide show start
+  const [nomineeIDType, setNomineeIDType] = useState('');
+  //insurance form nominee iput hide show end
+
+  //for branch input start
+  // const [branchCode, setBranchCode] = useState('');
+  //for branch input end
 
   const handleNomineeIDTypeChange = (e) => {
-    const selectedValue = e.target.value;
-    setNomineeIDType(selectedValue);
-
-    // Find the selected ID type object from the API response
-    const selectedIDTypeObj = idType.find(
-      (item) => item.data_value === selectedValue
-    );
-
-    // Assuming there's a property in your API response that indicates
-    // whether this ID type requires additional date fields
-    // For example, you might have a 'requiresDateFields' property
-    setShowIssueDate(selectedIDTypeObj?.requiresDateFields === true);
-    setShowExpDate(selectedIDTypeObj?.requiresDateFields === true);
+    setNomineeIDType(e.target.value);
   };
 
   const handleSubmitForm = (event) => {
@@ -85,7 +82,7 @@ function InsuranceForm() {
         "a_secret_key_of_mission_twentty_twentty_foure_generate_by_kamrul"
       );
 
-      formData.append("BranchCode", "orangeBD600");
+      // formData.append("BranchCode", "orangeBD600");
 
       // if (!event.target.Member_name || !event.target.Member_name.value) {
       //   throw new Error("Member_name is required");
@@ -354,6 +351,18 @@ function InsuranceForm() {
                     type="hidden"
                     name="ApiKey"
                     value="api-key"
+                    readOnly
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="mb-4">
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    name="BranchCode"
+                    value=""
                     readOnly
                   />
                 </Form.Group>
@@ -640,42 +649,44 @@ function InsuranceForm() {
                       </Col>
                     </Row>
 
-                    <Row className="mb-4">
-                      <Col md={6}>
-                        <Form.Group>
-                          <Form.Label>Issue Date</Form.Label>
-                          <Form.Control
-                            type="date"
-                            name="NomineeIDIssueDate"
-                            required
-                          />
-                        </Form.Group>
-                      </Col>
+                    {nomineeIDType && (
+                      <Row className="mb-4">
+                        <Col md={6}>
+                          <Form.Group>
+                            <Form.Label>Issue Date</Form.Label>
+                            <Form.Control
+                              type="date"
+                              name="NomineeIDIssueDate"
+                              required
+                            />
+                          </Form.Group>
+                        </Col>
 
-                      <Col md={6}>
-                        <Form.Group>
-                          <Form.Label>Expiry Date</Form.Label>
-                          <Form.Control
-                            type="date"
-                            name="NomineeIDExpiryDate"
-                            required
-                          />
-                        </Form.Group>
-                      </Col>
+                        <Col md={6}>
+                          <Form.Group>
+                            <Form.Label>Expiry Date</Form.Label>
+                            <Form.Control
+                              type="date"
+                              name="NomineeIDExpiryDate"
+                              required
+                            />
+                          </Form.Group>
+                        </Col>
 
-                      <Col md={6}>
-                        <Form.Group>
-                          <Form.Label>Issue Place</Form.Label>
-                          <Form.Control
-                            type="text"
-                            name="NomineeIDPlaceOfIssue"
-                            value="Bangladesh"
-                            required
-                            readOnly
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
+                        <Col md={6}>
+                          <Form.Group>
+                            <Form.Label>Issue Place</Form.Label>
+                            <Form.Control
+                              type="text"
+                              name="NomineeIDPlaceOfIssue"
+                              value="Bangladesh"
+                              required
+                              readOnly
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                    )}
 
                     <Row className="mb-3">
                       <Col md={6}>
