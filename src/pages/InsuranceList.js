@@ -3,6 +3,11 @@ import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+const buttonStyle = {
+    color: "white",
+    backgroundColor: "#007bff",
+    borderColor: "#007bff"
+};
 const InsuranceList = () => {
     const [data1, setData1] = useState([]); // Store fetched data
     const [filteredData, setFilteredData] = useState([]); // Store filtered data
@@ -131,6 +136,14 @@ const InsuranceList = () => {
                                 {sortConfig.key === "category_id" &&
                                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                             </th>
+                            <th
+                                onClick={() => requestSort("action")}
+                                style={{ cursor: "pointer" }}
+                            >
+                                Action{" "}
+                                {sortConfig.key === "action" &&
+                                    (sortConfig.direction === "ascending" ? "↑" : "↓")}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,6 +153,13 @@ const InsuranceList = () => {
                                     <td>{item.insurance_policy_id}</td>
                                     <td>{item.branchcode}</td>
                                     <td>{item.category_id}</td>
+                                    <td>
+                                        <button style={buttonStyle}
+                                            className="btn btn-primary btn-sm"
+                                        >
+                                            Details
+                                        </button>
+                                    </td>
                                 </tr>
                             ))
                         ) : (

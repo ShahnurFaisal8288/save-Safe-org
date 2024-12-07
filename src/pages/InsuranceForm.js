@@ -20,9 +20,15 @@ function InsuranceForm() {
   const [showForm, setShowForm] = useState(false);
   const [isEligible, setIsEligible] = useState(true);
   const [validated, setValidated] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('');
-  
+  // const [selectedCategory, setSelectedCategory] = useState('');
+  //policy Name start
   const [policyName, setPolicyName] = useState([]);
+  //policy Name end
+
+  //policy <>ise Category start
+  // const [categories, setCategories] = useState([]);
+  //policy <>ise Category end
+
   const [idType, setidType] = useState([]);
   const [category, setCategory] = useState([]);
   const [relation, setRelation] = useState([]);
@@ -38,6 +44,18 @@ function InsuranceForm() {
   //insurance form validation start
   const [phone, setPhone] = useState("");
   const [nomineePhone, setNomineePhone] = useState("");
+  const [validatePolicyName, setValidatePolicyName] = useState("");
+  const [validateInsuranceType, setValidateInsuranceType] = useState("");
+  const [validateCategory, setValidateCategory] = useState("");
+  // const [validatePremiumAmount, setValidatePremiumAmount] = useState("");
+  // const [validateDuration, setValidateDuration] = useState("");
+  const [validateNomineeName, setValidateNomineeName] = useState("");
+  const [validateNomineeDOB, setValidateNomineeDOB] = useState("");
+  const [validateIDType, setValidateIDType] = useState("");
+  const [validateMainID, setValidateMainID] = useState("");
+  const [validateRelation, setValidateRelation] = useState("");
+  const [validateFrontImg, setValidateFrontImg] = useState("");
+  const [validateBackImg, setValidateBacktImg] = useState("");
   const [errors, setErrors] = useState({});
   //insurance form validation end
 
@@ -53,10 +71,12 @@ function InsuranceForm() {
   const [anyDisease, setAnyDisease] = useState('');
   const [healthStatus, setHealthStatus] = useState('');
   //anydeases end
+
   //dynamic category start
   const [selectedPolicy, setSelectedPolicy] = useState('');
-  const [filteredCategory, setFilteredCategory] = useState([]);
+  // const [filteredCategory, setFilteredCategory] = useState([]);
   //dynamic category end
+
   const handleNomineeIDTypeChange = (e) => {
     setNomineeIDType(e.target.value);
   };
@@ -66,18 +86,88 @@ function InsuranceForm() {
    let valid = true;
   let newErrors = {};
 
-  // Phone validation
-  if (!/^\d{11}$/.test(phone)) {
-    valid = false;
-    newErrors.phone = "Please enter a valid 11-digit phone number.";
-  }
+    // Phone validation
+    if (!phone || !/^\d{11}$/.test(phone)) {
+      valid = false;
+      newErrors.phone = "Please enter a valid 11-digit phone number.";
+    }
 
-  // Nominee phone validation
-  if (!/^\d{11}$/.test(nomineePhone)) {
-    valid = false;
-    newErrors.nomineePhone =
-      "Please enter a valid 11-digit nominee phone number.";
-  }
+    // Nominee phone validation
+    if (!nomineePhone || !/^\d{11}$/.test(nomineePhone)) {
+      valid = false;
+      newErrors.nomineePhone = "Please enter a valid 11-digit nominee phone number.";
+    }
+
+    // Policy Name validation
+    if (!validatePolicyName) {
+      valid = false;
+      newErrors.validatePolicyName = "Please Select Policy Name";
+    }
+
+    // Insurance Type validation
+    if (!validateInsuranceType) {
+      valid = false;
+      newErrors.validateInsuranceType = "Please Select Insurance Type";
+    }
+
+    // Category validation
+    if (!validateCategory) {
+      valid = false;
+      newErrors.validateCategory = "Please Select Category";
+    }
+
+    // Premium Amount validation
+    if (!premiumAmount || parseFloat(premiumAmount) <= 0) {
+      valid = false;
+      newErrors.validatePremiumAmount = "Please Set Premium Amount";
+    }
+
+    // Duration validation
+    if (!policyTenture || parseFloat(policyTenture) <= 0) {
+      valid = false;
+      newErrors.validateDuration = "Please Set Duration";
+    }
+    // Nominee Name validation
+    if (!validateNomineeName || validateNomineeName.trim() === '') {
+      valid = false;
+      newErrors.validateNomineeName = "Please Enter Nominee Name";
+    }
+
+    // Nominee DOB validation
+    if (!validateNomineeDOB) {
+      valid = false;
+      newErrors.validateNomineeDOB = "Please Enter Nominee DOB";
+    }
+
+    // ID Type validation
+    if (!validateIDType) {
+      valid = false;
+      newErrors.validateIDType = "Please Select an ID Type";
+    }
+
+    // Main ID validation
+    if (!validateMainID || validateMainID.trim() === '') {
+      valid = false;
+      newErrors.validateMainID = "Please Enter Main ID No";
+    }
+
+    // Relation validation
+    if (!validateRelation) {
+      valid = false;
+      newErrors.validateRelation = "Please Select Exact Relation";
+    }
+
+    // Front Image validation
+    if (!validateFrontImg) {
+      valid = false;
+      newErrors.validateFrontImg = "Please Upload Front Image";
+    }
+
+    // Back Image validation
+    if (!validateBackImg) {
+      valid = false;
+      newErrors.validateBackImg = "Please Upload Back Image";
+    }
 
   setErrors(newErrors);
 
@@ -189,10 +279,7 @@ function InsuranceForm() {
         event.target.nomineeImageBack.files[0]
       );
 
-      // Log the file objects directly
-      // console.log(event.target.nomineeImageFront.files[0]);
-      // console.log(event.target.nomineeImageBack.files[0]);
-
+      
       axios
         .post("http://localhost:3000/api/health_insurance/store", formData, {
           headers: {
@@ -228,13 +315,7 @@ function InsuranceForm() {
     setBranchCode(branch_code);
   }, []);
 
-  // useEffect(() => {
-  //   const fetchPostData = async () => {
-  //     const response = await axios.get("http://localhost:3000/api/client");
-  //     setName(response.data);
-  //   };
-  //   fetchPostData();
-  // }, []);
+ 
 
   //client working
   useEffect(() => {
@@ -245,17 +326,6 @@ function InsuranceForm() {
         );
         console.log("member_name:", response.data); // Log the response
 
-        // setMemberName(response.data[0].name);
-
-        // Filter the data to get the specific account number
-        // const account = response.data.find(
-        //   (account) => account.id === parseInt(id)
-        // );
-        // if (account) {
-        //   setAccountNumber(account.account_number);
-        // } else {
-        //   console.error("Account not found");
-        // }
       } catch (error) {
         console.error("Error fetching account number:", error.message);
       }
@@ -265,7 +335,7 @@ function InsuranceForm() {
 
   useEffect(() => {
     const fetchPostData = async () => {
-      const response = await axios.get("http://localhost:3000/api/policy");
+      const response = await axios.get("http://localhost:3000/api/product/name");
       setPolicyName(response.data);
       // console.log(response);
     };
@@ -277,6 +347,7 @@ function InsuranceForm() {
       try {
         const response = await axios.get("http://localhost:3000/api/idtype");
         setidType(response.data);
+        console.log('response_data',response.data)
       } catch (error) {
         console.error("Error fetching ID types:", error);
       }
@@ -284,14 +355,6 @@ function InsuranceForm() {
     fetchPostData();
   }, []);
 
-  useEffect(() => {
-    const fetchPostData = async () => {
-      const response = await axios.get("http://localhost:3000/api/category");
-      setCategory(response.data);
-      // console.log('checking category', response.data);
-    };
-    fetchPostData();
-  }, []);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -303,10 +366,7 @@ function InsuranceForm() {
     fetchPostData();
   }, []);
 
-  const handleCategoryChange = (e) => {
-    const category = e.target.value;
-    setSelectedCategory(category);
-  };
+ 
 
   const handleImageChange = (e, setPreview) => {
     const file = e.target.files[0];
@@ -332,45 +392,15 @@ function InsuranceForm() {
     }
   };
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValidated(true);
-  };
-  //dynamic policy to category start
-  const handlePolicyChange = (e) => {
-    const policy = e.target.value;
-    setSelectedPolicy(policy);
+  // const handleSubmit = (event) => {
+  //   const form = event.currentTarget;
+  //   if (form.checkValidity() === false) {
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //   }
+  //   setValidated(true);
+  // };
 
-    // Find the matching policy
-    const selectedPolicyData = policyName.find(
-      (item) => item.product_name === policy
-    );
-
-    if (selectedPolicyData) {
-      // Update the category options
-      setFilteredCategory([selectedPolicyData.category]);
-
-      // Set premium amount and policy tenure
-      setPremiumAmount(selectedPolicyData.category.premium_ammount_total);
-      setPolicyTenture(selectedPolicyData.category.policy_tenure);
-
-      // Reset selected category
-      setSelectedCategory('');
-    } else {
-      // Reset all values if no policy is selected
-      setFilteredCategory([]);
-      setPremiumAmount('');
-      setPolicyTenture('');
-      setSelectedCategory('');
-    }
-  };
-
-  //dynamic policy to category end
-  // console.log('selected',selectedPolicy)
   return (
     <Container className="py-5">
       <Card className="shadow-lg">
@@ -524,25 +554,36 @@ function InsuranceForm() {
                         as="select"
                         name="PolicyName"
                         value={selectedPolicy}
-                        onChange={handlePolicyChange}
+                        onChange={(e) => {
+                           // Call the first function
+                          setValidatePolicyName(e.target.value); // Call the second function
+                        }}
+                        required
                       >
                         <option value="">Select Insurance Policy Name</option>
                         {policyName.map((item, index) => (
-                          <option key={index} value={item.product_name}>
-                            {item.product_name}
+                          <option key={index} value={item.policy_name}>
+                            {item.policy_name}
                           </option>
                         ))}
                       </Form.Control>
+                      {errors.validatePolicyName && <p style={{ color: "red" }}>{errors.validatePolicyName}</p>}
                     </Form.Group>
                   </Col>
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>Insurance Type</Form.Label>
-                      <Form.Control as="select" name="InsuranceType">
+                      <Form.Control
+                        as="select"
+                        name="InsuranceType"
+                        onChange={(e) => setValidateInsuranceType(e.target.value)}
+                        required
+                      >
                         <option value="">Select Insurance Type</option>
                         <option value="1">Subscribe</option>
                         <option value="2">Re-New</option>
                       </Form.Control>
+                      {errors.validateInsuranceType && <p style={{ color: "red" }}>{errors.validateInsuranceType}</p>}
                     </Form.Group>
                   </Col>
                 </Row>
@@ -552,11 +593,26 @@ function InsuranceForm() {
                     <Form.Group>
                       <Form.Label>Category</Form.Label>
                       <Form.Control
-                        type="text"
+                        as="select"
                         name="Category"
-                        value={filteredCategory.length ? filteredCategory[0].title : ''}
-                        readOnly
-                      />
+                        
+                        
+                        onChange={(e) => {
+                          setValidateCategory(e.target.value); // Call the second function
+                        }}
+                        // disabled={!filteredCategory.length}
+                        required
+                      >
+                        <option value="">
+                          {/* {filteredCategory.length ? "Select Category" : "Select Policy First"} */}
+                        </option>
+                        {/* {filteredCategory.map((category, index) => (
+                          <option key={index} value={category.title}>
+                            {category.title}
+                          </option>
+                        ))} */}
+                      </Form.Control>
+                      {errors.validateCategory && <p style={{ color: "red" }}>{errors.validateCategory}</p>}
                     </Form.Group>
                   </Col>
                   <Col md={6}>
@@ -566,8 +622,11 @@ function InsuranceForm() {
                         type="text"
                         name="PremiumAmount"
                         value={premiumAmount}
+                        // onChange={(e) => setValidatePremiumAmount(e.target.value)}
                         readOnly
+                        required
                       />
+                      {errors.validatePremiumAmount && <p style={{ color: "red" }}>{errors.validatePremiumAmount}</p>}
                     </Form.Group>
                   </Col>
                 </Row>
@@ -580,8 +639,11 @@ function InsuranceForm() {
                         type="text"
                         name="Duration"
                         value={policyTenture}
+                        // onChange={(e) => setValidateDuration(e.target.value)}
                         readOnly
+                        required
                       />
+                      {errors.validateDuration && <p style={{ color: "red" }}>{errors.validateDuration}</p>}
                     </Form.Group>
                   </Col>
                   <Col md={6}>
@@ -599,6 +661,7 @@ function InsuranceForm() {
                         Please enter a valid 11-digit phone number
                       </Form.Control.Feedback>
                       {errors.phone && <p style={{ color: "red" }}>{errors.phone}</p>}
+
                     </Form.Group>
                   </Col>
 
@@ -616,8 +679,10 @@ function InsuranceForm() {
                           <Form.Control
                             type="text"
                             name="NomineeName"
+                            onChange={(e) => setValidateNomineeName(e.target.value)}
                             required
                           />
+                          {errors.validateNomineeName && <p style={{ color: "red" }}>{errors.validateNomineeName}</p>}
                         </Form.Group>
                       </Col>
                       <Col md={6}>
@@ -635,7 +700,7 @@ function InsuranceForm() {
                           <Form.Control.Feedback type="invalid">
                             Please enter a valid 11-digit phone number
                           </Form.Control.Feedback>
-                          {errors.nomineePhone && <p style={{ color: "red" }}>{errors.phone}</p>}
+                          {errors.nomineePhone && <p style={{ color: "red" }}>{errors.nomineePhone}</p>}
                         </Form.Group>
                       </Col>
                     </Row>
@@ -647,8 +712,10 @@ function InsuranceForm() {
                           <Form.Control
                             type="date"
                             name="NomineeDOB"
-                            // required
+                            onChange={(e) => setValidateNomineeDOB(e.target.value)}
+                            required
                           />
+                          {errors.validateNomineeDOB && <p style={{ color: "red" }}>{errors.validateNomineeDOB}</p>}
                         </Form.Group>
                       </Col>
                       <Col md={6}>
@@ -658,7 +725,10 @@ function InsuranceForm() {
                             as="select"
                             name="NomineeIDType"
                             value={nomineeIDType}
-                            onChange={handleNomineeIDTypeChange}
+                            onChange={(e) => {
+                              handleNomineeIDTypeChange(e); // Call the first function
+                              setValidateIDType(e.target.value); // Call the second function
+                            }}
                             required
                           >
                             <option value="">Select ID Type</option>
@@ -668,6 +738,7 @@ function InsuranceForm() {
                               </option>
                             ))}
                           </Form.Control>
+                          {errors.validateIDType && <p style={{ color: "red" }}>{errors.validateIDType}</p>}
                         </Form.Group>
                       </Col>
                     </Row>
@@ -680,7 +751,7 @@ function InsuranceForm() {
                             <Form.Control
                               type="date"
                               name="NomineeIDIssueDate"
-                              required
+                              // required
                             />
                           </Form.Group>
                         </Col>
@@ -691,7 +762,7 @@ function InsuranceForm() {
                             <Form.Control
                               type="date"
                               name="NomineeIDExpiryDate"
-                              required
+                              // required
                             />
                           </Form.Group>
                         </Col>
@@ -703,7 +774,7 @@ function InsuranceForm() {
                               type="text"
                               name="NomineeIDPlaceOfIssue"
                               value="Bangladesh"
-                              required
+                              // required
                               readOnly
                             />
                           </Form.Group>
@@ -718,8 +789,10 @@ function InsuranceForm() {
                           <Form.Control
                             type="text"
                             name="NomineeIDNumber"
-                            // required
+                            onChange={(e) => setValidateMainID(e.target.value)}
+                            required
                           />
+                          {errors.validateMainID && <p style={{ color: "red" }}>{errors.validateMainID}</p>}
                         </Form.Group>
                       </Col>
                       <Col md={6}>
@@ -728,7 +801,8 @@ function InsuranceForm() {
                           <Form.Control
                             as="select"
                             name="NomineeRelation"
-                            // required
+                            onChange={(e) => setValidateRelation(e.target.value)}
+                            required
                           >
                             <option value="">Select Relation</option>
                             {relation.map((item, index) => (
@@ -737,6 +811,7 @@ function InsuranceForm() {
                               </option>
                             ))}
                           </Form.Control>
+                          {errors.validateRelation && <p style={{ color: "red" }}>{errors.validateRelation}</p>}
                         </Form.Group>
                       </Col>
                     </Row>
@@ -762,13 +837,15 @@ function InsuranceForm() {
                               type="file"
                               name="nomineeImageFront"
                               accept="image/*"
-                              onChange={(e) =>
-                                handleImageChange(e, setFrontPreview)
-                              }
+                              onChange={(e) => {
+                                handleImageChange(e, setFrontPreview); // Call the first function
+                                setValidateFrontImg(e.target.value);  // Call the second function
+                              }}
                               className="mt-2"
-                              // required
+                              required
                             />
                           </div>
+                          {errors.validateFrontImg && <p style={{ color: "red" }}>{errors.validateFrontImg}</p>}
                         </Form.Group>
                       </Col>
                       <Col md={6}>
@@ -791,13 +868,16 @@ function InsuranceForm() {
                               type="file"
                               name="nomineeImageBack"
                               accept="image/*"
-                              onChange={(e) =>
-                                handleImageChange(e, setBackPreview)
-                              }
+                              onChange={(e) => {
+                                handleImageChange(e, setBackPreview); // Call the first function
+                                setValidateBacktImg(e.target.value);  // Call the second function
+                              }}
                               className="mt-2"
-                              // required
+                              required
                             />
+
                           </div>
+                          {errors.validateBackImg && <p style={{ color: "red" }}>{errors.validateBackImg}</p>}
                         </Form.Group>
                       </Col>
                     </Row>

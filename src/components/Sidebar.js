@@ -22,45 +22,36 @@ function Sidebar() {
             <nav className="sidebar sidebar-offcanvas" id="sidebar">
                 <ul className="nav">
                     <li className="nav-item navbar-brand-mini-wrapper">
-                        <a className="nav-link navbar-brand brand-logo-mini" href="index-2.html"><img src="https://demo.bootstrapdash.com/stellar-admin-new/themes/assets/images/logo-mini.svg" alt="logo" /></a>
+                        <Link className="nav-link navbar-brand brand-logo-mini" to="/insurance-list"><img src="https://demo.bootstrapdash.com/stellar-admin-new/themes/assets/images/logo-mini.svg" alt="logo" /></Link>
                     </li>
-                    {/* <li className="nav-item nav-profile">
-                        <a href="#" className="nav-link">
-                            <div className="profile-image">
-                                <img className="img-xs rounded-circle" src="../assets/images/faces/face8.jpg" alt="profile image" />
-                                <div className="dot-indicator bg-success"></div>
-                            </div>
-                            <div className="text-wrapper">
-                                <p className="profile-name">Henry Klein</p>
-                                <p className="designation">Administrator</p>
-                            </div>
-                            <div className="icon-container">
-                                <i className="icon-bubbles"></i>
-                                <div className="dot-indicator bg-danger"></div>
-                            </div>
-                        </a>
-                    </li> */}
+                    
                     <li className="nav-item nav-category">
+                        <Link to="/insurance-list" className="nav-link">
                         <span className="nav-link">Dashboard</span>
+                        </Link>
+
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="index-2.html">
+                        
+                            <Link to="/insurance-list" className="nav-link">
+
                             <span className="menu-title">Dashboard</span>
-                            <i className="icon-screen-desktop menu-icon"></i>
-                        </a>
+                                <i className="icon-screen-desktop menu-icon"></i>
+                            </Link>
+                       
                     </li>
                     <li className="nav-item nav-category"><span className="nav-link">Insurance Policy</span></li>
                     <li className="nav-item">
-<Link to="/insurance-list" className="nav-link">
-    <span className="menu-title">Insurance List</span>
-    <i className="icon-size-actual menu-icon"></i>
-</Link>
-                        {/* <div className="collapse" id="page-layouts">
-                            <ul className="nav flex-column sub-menu">
-                                <li className="nav-item"> <a className="nav-link" href="pages/layout/boxed-layout.html">Boxed</a></li>
-                                <li className="nav-item"> <a className="nav-link" href="pages/layout/rtl-layout.html">RTL</a></li>
-                            </ul>
-                        </div> */}
+                        <Link to="/insurance-list" className="nav-link">
+                            <span className="menu-title">Insurance List</span>
+                            <i className="icon-size-actual menu-icon"></i>
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/member-list" className="nav-link">
+                            <span className="menu-title">Member List</span>
+                            <i className="icon-size-actual menu-icon"></i>
+                        </Link>
                     </li>
                     {/* <li className="nav-item">
                         <a className="nav-link" data-bs-toggle="collapse" href="#sidebar-layouts" aria-expanded="false" aria-controls="sidebar-layouts">
@@ -303,7 +294,7 @@ function Sidebar() {
                 </ul>
             </nav>
         </div>
-       
+
     );
 }
 

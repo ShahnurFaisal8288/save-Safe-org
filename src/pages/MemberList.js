@@ -2,7 +2,13 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import '../index.css'
 
+const buttonStyle = {
+    color: "white",
+    backgroundColor: "#007bff",
+    borderColor: "#007bff"
+};
 const MemberList = () => {
     const navigate = useNavigate();
     const [data1, setData1] = useState([]); // Store fetched data
@@ -11,7 +17,7 @@ const MemberList = () => {
         key: null,
         direction: "ascending",
     });
-    
+
 
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,17 +27,17 @@ const MemberList = () => {
     // Fetch data from the API
     useEffect(() => {
 
-        
+
         const fetchPostData = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/client");
 
-                
+
 
                 // Check if the response contains the data array
                 if (response.data && Array.isArray(response.data)) {
                     setData1(response.data); // Use the nested 'data' array
-                } 
+                }
             } catch (error) {
                 console.error("Error fetching data:", error.message);
             }
@@ -84,7 +90,7 @@ const MemberList = () => {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-    
+
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between my-4">
@@ -93,7 +99,7 @@ const MemberList = () => {
                     <Button variant="primary">New</Button>
                 </Link> */}
             </div>
-             
+
             {/* Search Input */}
             <div className="row mb-3">
                 <div className="col-md-6">
@@ -159,15 +165,17 @@ const MemberList = () => {
                             currentItems.map((item, index) => (
                                 <tr key={index}>
                                     <td>{item.name}{" "}</td>
-                                    
+
                                     <td>{item.sex}</td>
                                     <td>{item.date_of_birth}</td>
-                                    <button
-                                        className="text-dark  btn btn-success btn-sm"
+                                    <button style={buttonStyle}
+                                        className="btn btn-primary"
+                                       
                                         onClick={() => navigate(`/insurance-form/${item.id}/${item.name}/${item.account_number}`)}
                                     >
                                         Details
                                     </button>
+
                                 </tr>
                             ))
                         ) : (
