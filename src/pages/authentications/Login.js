@@ -1,12 +1,27 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Sidebar from "../../components/Sidebar";
+
+
+
 
 function Login() {
+  // const [sidebarData, setSidebarData] = useState([]);
+  const [sidebarData, setSidebarData] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    // Log whenever sidebarData is updated
+    console.log("Updated sidebarData:", sidebarData);
+  }, [sidebarData]); // Dependency on sidebarData
+
+
+
   const {
     register,
     handleSubmit,
@@ -17,14 +32,15 @@ function Login() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        "http://localhost:5001/api/auth/login",
         {
           email: data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
           phone: !data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
           password: data.password,
         }
       );
-      console.log("response user",response);
+      console.log("login user",response);
+      console.log("Sidebar user..........", response.data.sidebar);
 
       if (response.status === 200) {
         localStorage.setItem(
@@ -39,6 +55,8 @@ function Login() {
           "collector_number",
           response.data.collector.collector_number,
         );
+        localStorage.setItem("sidebar", JSON.stringify(response.data.sidebar));
+
         
         Swal.fire({
           icon: "success",
@@ -48,7 +66,10 @@ function Login() {
           timer: 2000,
           timerProgressBar: true,
         });
+        setSidebarData(response.data.sidebar); // Pass sidebar data correctly
+        console.log("setSidebarData",sidebarData)
         navigate("/dashboard");
+        // setSidebarData(response.data.sidebar.element_url);
       } else {
         throw new Error("Unsuccessful login");
       }
@@ -67,6 +88,7 @@ function Login() {
   };
 
   return (
+    
     <div className="container-scroller">
       <div className="container-fluid page-body-wrapper full-page-wrapper">
         <div className="content-wrapper d-flex align-items-center auth">
@@ -119,6 +141,8 @@ function Login() {
           </div>
         </div>
       </div>
+      <Sidebar data={sidebarData} />
+
     </div>
   );
 }
