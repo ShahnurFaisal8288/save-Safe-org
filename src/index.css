@@ -16,3 +16,21 @@
     background-color: #007bff; /* Corrected to use hyphenated property name */
     border-color: #007bff; /* Corrected to use hyphenated property name */
 }
+/* sidebar */
+.sidebar .menu-title {
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .sidebar .menu-icon {
+    margin-left: auto;
+  }
+  
+  .sidebar .sub-menu {
+    padding-left: 20px;
+  }
+  
+  .nav-link.active {
+    color: #007bff !important;
+    font-weight: bold;
+  }

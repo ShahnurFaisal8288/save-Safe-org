@@ -75,42 +75,127 @@ function InsuranceForm() {
   const [healthStatus, setHealthStatus] = useState("");
   //anydeases end
 
+  //uuid
+  const [insuranceId,setInsuranceId] = useState("");
+
   //dynamic category start
   const [policyNameId, setpolicyNameId] = useState(null);
+  const [mainIDPlaceholder, setMainIDPlaceholder] = useState("");
+
   const [category, refetch] = useGetCategory(policyNameId);
   const policyName1 = category?.map((item) => item?.policy_name) || [];
-const policySubCategoryName =
-  category?.find((item) => item.policy_name === selectedPolicy)?.category ||
-  [];
+  const policySubCategoryName =
+    category?.find((item) => item.policy_name === selectedPolicy)?.category ||
+    [];
 
-let policyDuration;
-let policyAmount;
-if (policySubCategoryName && Array.isArray(policySubCategoryName)) {
-  const policyDurationOne = policySubCategoryName.find(
-    (item) => item?.title === validateCategory // comparing title instead of policy_tenure
-  ) || null;
-  policyDuration = policyDurationOne?.policy_tenure; // default duration if no specific match is found
+  let policyDuration;
+  let policyAmount;
+  if (policySubCategoryName && Array.isArray(policySubCategoryName)) {
+    // Find category by comparing the category.id instead of category.title
+    const policyDurationOne =
+      policySubCategoryName.find(
+        (item) => item?.insurance_policy_id === parseInt(validateCategory) // Now comparing by id
+      ) || null;
   
+    policyDuration = policyDurationOne?.policy_tenure; // Use policy_tenure from the found category
+  }
   
-}
-if (policySubCategoryName && Array.isArray(policySubCategoryName)) {
-  const setPolicyAmount= policySubCategoryName.find(
-    (item) => item?.title === validateCategory // comparing title instead of policy_tenure
-  ) || null;
-  policyAmount = setPolicyAmount?.premium_amount_total; // default duration if no specific match is found
+  if (policySubCategoryName && Array.isArray(policySubCategoryName)) {
+    // Find category by comparing the category.id instead of category.title
+    const setPolicyAmount =
+      policySubCategoryName.find(
+        (item) => item?.insurance_policy_id === parseInt(validateCategory) // Now comparing by id
+      ) || null;
   
-  
-}
+    policyAmount = setPolicyAmount?.premium_amount_total; // Use premium_amount_total from the found category
+  }
 
-console.log(validateCategory);
-console.log(policySubCategoryName);
+ 
+  console.log("policy Category",policySubCategoryName);
   // console.log(policyDuration);
 
   const [filteredCategory, setFilteredCategory] = useState([]);
   //dynamic category end
+  //SetInsuranceId
+  const handleSetInsuranceId = () =>{
+    const id = crypto.randomUUID();
+    setInsuranceId(id);
+  }
+  console.log('uuid',insuranceId);
+  const [formDatas, setFormDatas] = useState({
+    NomineeIDIssueDate: null,
+    NomineeIDExpiryDate: null,
+    NomineeIDPlaceOfIssue: "Bangladesh", // Default value as read-only
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormDatas((prevState) => ({
+      ...prevState,
+      [name]: value === "" ? null : value, // Store null if value is empty
+    }));
+  };
 
   const handleNomineeIDTypeChange = (e) => {
-    setNomineeIDType(e.target.value);
+    const selectedType = e.target.value;
+    setNomineeIDType(selectedType);
+
+    // Set Placeholder and Validation Rules Dynamically
+    switch (selectedType) {
+      case "Birth Certificate":
+      case "National ID":
+        setMainIDPlaceholder("Enter 17-digit ID");
+        break;
+      case "Passport":
+        setMainIDPlaceholder("Enter 9-character alphanumeric ID");
+        break;
+      case "Driving License":
+        setMainIDPlaceholder("Enter 15-character alphanumeric ID");
+        break;
+      case "Smart Card":
+        setMainIDPlaceholder("Enter 10-digit ID");
+        break;
+      default:
+        setMainIDPlaceholder("");
+    }
+  };
+  // Validate Main ID
+  const validateMainIDInput = () => {
+    let error = "";
+
+    switch (nomineeIDType) {
+      case "Birth Certificate":
+      case "National ID":
+        if (!/^\d{17}$/.test(validateMainID)) {
+          error = "Main ID must be exactly 17 digits.";
+        }
+        break;
+      case "Passport":
+        if (!/^[a-zA-Z0-9]{9}$/.test(validateMainID)) {
+          error = "Passport ID must be exactly 9 alphanumeric characters.";
+        }
+        break;
+      case "Driving License":
+        if (!/^[a-zA-Z0-9]{15}$/.test(validateMainID)) {
+          error = "Driving License must be exactly 15 alphanumeric characters.";
+        }
+        break;
+      case "Smart Card":
+        if (!/^\d{10}$/.test(validateMainID)) {
+          error = "Smart Card ID must be exactly 10 digits.";
+        }
+        break;
+      default:
+        error = "Please select a valid ID Type.";
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      validateMainID: error,
+    }));
+
+    return error === ""; // Return true if no errors
   };
 
   const handleSubmitForm = (event) => {
@@ -310,7 +395,7 @@ console.log(policySubCategoryName);
       );
 
       axios
-        .post("http://localhost:5000/api/health_insurance/store", formData, {
+        .post("http://localhost:5001/api/health_insurance/store", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -349,7 +434,7 @@ console.log(policySubCategoryName);
     const fetchPostData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/collector/${id}/client/information`
+          `http://localhost:5001/api/collector/${id}/client/information`
         );
         console.log("member_name:", response.data); // Log the response
       } catch (error) {
@@ -373,7 +458,7 @@ console.log(policySubCategoryName);
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/cardtype");
+        const response = await axios.get("http://localhost:5001/api/cardtype");
         setidType(response.data);
         console.log("response_data", response.data);
       } catch (error) {
@@ -382,11 +467,12 @@ console.log(policySubCategoryName);
     };
     fetchPostData();
   }, []);
+  console.log('cardType',idType)
 
   useEffect(() => {
     const fetchPostData = async () => {
       const response = await axios.get(
-        "http://localhost:5000/api/relationdata"
+        "http://localhost:5001/api/relationdata"
       );
       setRelation(response.data);
     };
@@ -462,7 +548,7 @@ console.log(policySubCategoryName);
               <Col md={6}>
                 <Form.Group>
                   <Form.Control
-                    type="hidden"
+                    type="text"
                     name="BranchCode"
                     value={branchCode}
                     readOnly
@@ -500,9 +586,11 @@ console.log(policySubCategoryName);
                 <Form.Control
                   type="hidden"
                   name="EnrollId"
-                  value="ENROL123456"
+                  onChange={handleSetInsuranceId}
+                  value={insuranceId}
                   readOnly
                 />
+                 {/* <Button onClick={handleSetInsuranceId}>Generate Insurance ID</Button> */}
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -539,7 +627,7 @@ console.log(policySubCategoryName);
                   />
                 </Form.Group>
               </Col>
-              <input type="hidden" name="AnyDisese" value={healthStatus} />
+              <input type="text" name="AnyDisese" value={healthStatus} />
 
               {healthStatus !== "1" && (
                 <Col md={12}>
@@ -550,7 +638,10 @@ console.log(policySubCategoryName);
                     <div>
                       <Button
                         variant={healthStatus === "1" ? "success" : "primary"}
-                        onClick={() => handleHealthStatusChange("1")}
+                        onClick={() => {
+                          handleHealthStatusChange("1");
+                          handleSetInsuranceId(); // Generate the UUID when the button is clicked
+                        }}
                       >
                         No
                       </Button>
@@ -583,19 +674,27 @@ console.log(policySubCategoryName);
                         name="PolicyName"
                         value={selectedPolicy}
                         onChange={(e) => {
-                          setValidatePolicyName(e.target.value); // Call the provided function
-                          setSelectedPolicy(e.target.value); // Update selected policy
+                          const selectedValue = e.target.value; // Get the selected value (ID)
+                          setValidatePolicyName(selectedValue); // Call the provided function
+                          setSelectedPolicy(selectedValue); // Update selected policy ID
                           setErrors({ ...errors, validatePolicyName: "" }); // Clear previous errors
-                          handlePolicyNameChange(e.target.value);
+                          handlePolicyNameChange(selectedValue);
                         }}
                         required
                       >
                         <option value="">Select Insurance Policy Name</option>
-                        {policyName1.map((item, index) => (
-                          <option key={index} value={item.policy_name}>
-                            {item}
-                          </option>
-                        ))}
+                        {category?.map(
+                          (
+                            item,
+                            index // Use `category` directly
+                          ) => (
+                            <option key={index} value={item.policy_name}>
+                              {" "}
+                              {/* Store `id` in value */}
+                              {item.policy_name} {/* Display `policy_name` */}
+                            </option>
+                          )
+                        )}
                       </Form.Control>
                       {errors.validatePolicyName && (
                         <p style={{ color: "red" }}>
@@ -604,6 +703,7 @@ console.log(policySubCategoryName);
                       )}
                     </Form.Group>
                   </Col>
+
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>Insurance Type</Form.Label>
@@ -647,7 +747,7 @@ console.log(policySubCategoryName);
                             : "No Categories Available"}
                         </option>
                         {policySubCategoryName.map((category, index) => (
-                          <option key={index} value={category.title}>
+                          <option key={index} value={category.insurance_policy_id}>
                             {category.title}
                           </option>
                         ))}
@@ -816,7 +916,9 @@ console.log(policySubCategoryName);
                       </Col>
                     </Row>
 
-                    {nomineeIDType && (
+                    {["Passport", "Driving License"].includes(
+                      nomineeIDType
+                    ) && (
                       <Row className="mb-4">
                         <Col md={6}>
                           <Form.Group>
@@ -824,7 +926,8 @@ console.log(policySubCategoryName);
                             <Form.Control
                               type="date"
                               name="NomineeIDIssueDate"
-                              // required
+                              value={formDatas.NomineeIDIssueDate || ""} // Default to empty string for the input
+                              onChange={handleInputChange}
                             />
                           </Form.Group>
                         </Col>
@@ -835,7 +938,8 @@ console.log(policySubCategoryName);
                             <Form.Control
                               type="date"
                               name="NomineeIDExpiryDate"
-                              // required
+                              value={formDatas.NomineeIDExpiryDate || ""} // Default to empty string for the input
+                              onChange={handleInputChange}
                             />
                           </Form.Group>
                         </Col>
@@ -846,15 +950,13 @@ console.log(policySubCategoryName);
                             <Form.Control
                               type="text"
                               name="NomineeIDPlaceOfIssue"
-                              value="Bangladesh"
-                              // required
+                              value={formDatas.NomineeIDPlaceOfIssue}
                               readOnly
                             />
                           </Form.Group>
                         </Col>
                       </Row>
                     )}
-
                     <Row className="mb-3">
                       <Col md={6}>
                         <Form.Group>
@@ -862,7 +964,10 @@ console.log(policySubCategoryName);
                           <Form.Control
                             type="text"
                             name="NomineeIDNumber"
+                            placeholder={mainIDPlaceholder}
+                            value={validateMainID}
                             onChange={(e) => setValidateMainID(e.target.value)}
+                            onBlur={validateMainIDInput}
                             required
                           />
                           {errors.validateMainID && (
