@@ -73,6 +73,7 @@ function InsuranceForm() {
   //anydeases start
   const [anyDisease, setAnyDisease] = useState("");
   const [healthStatus, setHealthStatus] = useState("");
+  
   //anydeases end
 
   //uuid
@@ -142,23 +143,25 @@ function InsuranceForm() {
 
     // Set Placeholder and Validation Rules Dynamically
     switch (selectedType) {
-      case "Birth Certificate":
-      case "National ID":
+      case "1":
+      case "2":
         setMainIDPlaceholder("Enter 17-digit ID");
         break;
-      case "Passport":
+      case "3":
         setMainIDPlaceholder("Enter 9-character alphanumeric ID");
         break;
-      case "Driving License":
+      case "4":
         setMainIDPlaceholder("Enter 15-character alphanumeric ID");
         break;
-      case "Smart Card":
+      case "5":
         setMainIDPlaceholder("Enter 10-digit ID");
         break;
       default:
         setMainIDPlaceholder("");
     }
   };
+
+  console.log('nomineeIDType',nomineeIDType);
   // Validate Main ID
   const validateMainIDInput = () => {
     let error = "";
@@ -332,10 +335,10 @@ function InsuranceForm() {
               : "",
 
             // Form fields
-            AnyDisese: event.target.AnyDisese
-              ? event.target.AnyDisese.value
+            AnyDisease: event.target.AnyDisease
+              ? event.target.AnyDisease.value
               : "",
-            PolicyName: event.target.PolicyName
+              PolicyName: event.target.PolicyName
               ? event.target.PolicyName.value
               : "",
             InsuranceType: event.target.InsuranceType
@@ -357,7 +360,7 @@ function InsuranceForm() {
             NomineeDOB: event.target.NomineeDOB
               ? event.target.NomineeDOB.value
               : "",
-            NomineeIDType: event.target.NomineeIDType
+              NomineeIDType: event.target.NomineeIDType
               ? event.target.NomineeIDType.value
               : "",
             NomineeIDIssueDate: event.target.NomineeIDIssueDate
@@ -372,7 +375,7 @@ function InsuranceForm() {
             NomineeIDNumber: event.target.NomineeIDNumber
               ? event.target.NomineeIDNumber.value
               : "",
-            NomineeRelation: event.target.NomineeRelation
+              NomineeRelation: event.target.NomineeRelation
               ? event.target.NomineeRelation.value
               : "",
           },
@@ -535,20 +538,25 @@ function InsuranceForm() {
 
   const handleHealthStatusChange = (status) => {
     setHealthStatus(status);
-    setAnyDisease(status === "1");
-  
+
     if (status === "1") {
       setShowForm(true);
       setIsEligible(true);
+      setAnyDisease(""); // Clear any previous disease input when selecting "No"
     } else if (status === "2") {
       setShowForm(false);
       setIsEligible(false);
     }
   };
   console.log('healthStatus',healthStatus);
-  const handlePolicyNameChange = (item) => {
-    console.log(item);
+  const handlePolicyNameChange = (policyId) => {
+    console.log('Selected Policy ID:', policyId);
   };
+
+
+
+
+
   const handleCategoryChange = (category) => {
     setErrors({ ...errors, validateCategory: "" }); // Clear category errors
     console.log("Selected Category:", category);
@@ -672,7 +680,7 @@ function InsuranceForm() {
                   />
                 </Form.Group>
               </Col>
-              <input type="text" name="AnyDisease" value={anyDisease} />
+              <input type="text" name="AnyDisease" value={healthStatus} />
 
               {healthStatus !== "1" && (
                 <Col md={12}>
@@ -712,45 +720,49 @@ function InsuranceForm() {
               <>
                 <Row className="mb-4">
                   <Col md={6}>
-                    <Form.Group>
-                      <Form.Label>Insurance Policy Name</Form.Label>
-                      <Form.Control
-                        as="select"
-                        name="PolicyName"
-                        value={selectedPolicy}
-                        onChange={(e) => {
-                          const selectedValue = e.target.value; // Get the selected value (ID)
-                          setValidatePolicyName(selectedValue); // Call the provided function
-                          setSelectedPolicy(selectedValue); // Update selected policy ID
-                          setErrors({ ...errors, validatePolicyName: "" }); // Clear previous errors
-                          handlePolicyNameChange(selectedValue);
-                        }}
-                        required
-                      >
-                        <option value="">Select Insurance Policy Name</option>
-                        {category?.map(
-                          (
-                            item,
-                            index // Use `category` directly
-                          ) => (
-                            <option 
-                            key={index} 
-                            value={item.id}
-                            >
-                              {" "}
-                              {/* Store `id` in value */}
-                              {item.policy_name} {/* Display `policy_name` */}
-                            </option>
-                          )
-                        )}
-                      </Form.Control>
-                      {errors.validatePolicyName && (
-                        <p style={{ color: "red" }}>
-                          {errors.validatePolicyName}
-                        </p>
-                      )}
-                    </Form.Group>
-                  </Col>
+  <Form.Group>
+    <Form.Label>Insurance Policy Name</Form.Label>
+    <Form.Control
+      as="select"
+      name="PolicyName"
+      value={selectedPolicy}
+      onChange={(e) => {
+        const selectedValue = e.target.value;
+
+
+
+
+
+  
+        // Ensure only the insurance_product_id is stored
+        setValidatePolicyName(selectedValue);
+        setSelectedPolicy(selectedValue);
+        
+        // Call handle change with the policy ID
+        handlePolicyNameChange(selectedValue);
+
+        // Clear previous errors
+        setErrors({ ...errors, validatePolicyName: "" });
+      }}
+      required
+    >
+      <option value="">Select Insurance Policy Name</option>
+      {category?.map((item) => (
+        <option 
+          key={item.insurance_product_id} 
+          value={item.insurance_product_id}
+        >
+          {item.policy_name}
+        </option>
+      ))}
+    </Form.Control>
+    {errors.validatePolicyName && (
+      <p style={{ color: "red" }}>
+        {errors.validatePolicyName}
+      </p>
+    )}
+  </Form.Group>
+</Col>
 
                   <Col md={6}>
                     <Form.Group>
@@ -953,7 +965,7 @@ function InsuranceForm() {
                           >
                             <option value="">Select ID Type</option>
                             {idType.map((item, index) => (
-                              <option key={index} value={item.data_value}>
+                              <option key={index} value={item.id}>
                                 {item.data_name}
                               </option>
                             ))}
