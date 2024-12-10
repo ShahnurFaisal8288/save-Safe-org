@@ -67,7 +67,7 @@ function InsuranceForm() {
   //insurance form nominee iput hide show end
 
   //for branch input start
-  const [branchCode, setBranchCode] = useState("null");
+  const [branchCode, setBranchCode] = useState('');
   //for branch input end
 
   //anydeases start
@@ -76,7 +76,7 @@ function InsuranceForm() {
   //anydeases end
 
   //uuid
-  const [insuranceId,setInsuranceId] = useState("");
+  const [insuranceId, setInsuranceId] = useState("");
 
   //dynamic category start
   const [policyNameId, setpolicyNameId] = useState(null);
@@ -96,32 +96,31 @@ function InsuranceForm() {
       policySubCategoryName.find(
         (item) => item?.insurance_policy_id === parseInt(validateCategory) // Now comparing by id
       ) || null;
-  
+
     policyDuration = policyDurationOne?.policy_tenure; // Use policy_tenure from the found category
   }
-  
+
   if (policySubCategoryName && Array.isArray(policySubCategoryName)) {
     // Find category by comparing the category.id instead of category.title
     const setPolicyAmount =
       policySubCategoryName.find(
         (item) => item?.insurance_policy_id === parseInt(validateCategory) // Now comparing by id
       ) || null;
-  
+
     policyAmount = setPolicyAmount?.premium_amount_total; // Use premium_amount_total from the found category
   }
 
- 
-  console.log("policy Category",policySubCategoryName);
+  console.log("policy Category", policySubCategoryName);
   // console.log(policyDuration);
 
   const [filteredCategory, setFilteredCategory] = useState([]);
   //dynamic category end
   //SetInsuranceId
-  const handleSetInsuranceId = () =>{
+  const handleSetInsuranceId = () => {
     const id = crypto.randomUUID();
     setInsuranceId(id);
-  }
-  console.log('uuid',insuranceId);
+  };
+  console.log("uuid", insuranceId);
   const [formDatas, setFormDatas] = useState({
     NomineeIDIssueDate: null,
     NomineeIDExpiryDate: null,
@@ -310,8 +309,15 @@ function InsuranceForm() {
       //   throw new Error("Member_name is required");
       // }
 
+      console.log("Event target:", event.target);
+
+
       formData.append("Member_name", event.target.Member_name.value);
       formData.append("BranchCode", event.target.BranchCode.value);
+      
+
+      
+      
       formData.append(
         "HealthInsuranceJson",
         JSON.stringify([
@@ -373,6 +379,11 @@ function InsuranceForm() {
         ])
       );
 
+      console.log("BranchCode:", event.target.BranchCode.value);
+      console.log("Member_name:", event.target.Member_name.value);
+      console.log("HealthInsuranceJson:", formData.get("HealthInsuranceJson"));
+      
+
       // Ensure file inputs exist and have files
       if (!event.target.Duration) {
         throw new Error("policy_tenure is required");
@@ -394,13 +405,28 @@ function InsuranceForm() {
         event.target.nomineeImageBack.files[0]
       );
 
+
+
+
+      console.log("FormData before Axios request:");
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
+
+      
       axios
         .post("http://localhost:5001/api/health_insurance/store", formData, {
+
+        
           headers: {
             "Content-Type": "multipart/form-data",
           },
+
+          
         })
         .then((response) => {
+
+          console.log("form data 2:",formData);
           if (response.status === 201) {
             alert("Successfully Created");
           }
@@ -416,18 +442,35 @@ function InsuranceForm() {
       alert("Failed to create data");
     }
   };
-  // console.log("userName",name);
+  
   useEffect(() => {
     const storedSetCollectorNumber = localStorage.getItem("collector_number");
 
     setCollectorNumber(storedSetCollectorNumber);
   }, []);
   //branch no
+  // useEffect(() => {
+  //   const branch_code = localStorage.getItem("branch_code");
+
+  //   setBranchCode(branch_code);
+  // }, []);
   useEffect(() => {
     const branch_code = localStorage.getItem("branch_code");
 
-    setBranchCode(branch_code);
+    // Add null/empty checks
+    if (branch_code && branch_code !== "null") {
+      setBranchCode(branch_code);
+    } else {
+      // Optional: set to empty string or a default value
+      setBranchCode("");
+    }
   }, []);
+  const handleSetBranchCode = (code) => {
+    if (code) {
+      localStorage.setItem("branch_code", code);
+      setBranchCode(code);
+    }
+  };
 
   //client working
   useEffect(() => {
@@ -467,7 +510,7 @@ function InsuranceForm() {
     };
     fetchPostData();
   }, []);
-  console.log('cardType',idType)
+  console.log("cardType", idType);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -502,6 +545,7 @@ function InsuranceForm() {
       setIsEligible(false);
     }
   };
+  console.log('healthStatus',healthStatus);
   const handlePolicyNameChange = (item) => {
     console.log(item);
   };
@@ -550,7 +594,8 @@ function InsuranceForm() {
                   <Form.Control
                     type="text"
                     name="BranchCode"
-                    value={branchCode}
+                    value={branchCode || ""} // Ensure it's never undefined
+                    onChange={(e) => handleSetBranchCode(e.target.value)}
                     readOnly
                   />
                 </Form.Group>
@@ -590,7 +635,7 @@ function InsuranceForm() {
                   value={insuranceId}
                   readOnly
                 />
-                 {/* <Button onClick={handleSetInsuranceId}>Generate Insurance ID</Button> */}
+                {/* <Button onClick={handleSetInsuranceId}>Generate Insurance ID</Button> */}
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -627,7 +672,7 @@ function InsuranceForm() {
                   />
                 </Form.Group>
               </Col>
-              <input type="text" name="AnyDisese" value={healthStatus} />
+              <input type="text" name="AnyDisease" value={healthStatus} />
 
               {healthStatus !== "1" && (
                 <Col md={12}>
@@ -688,7 +733,10 @@ function InsuranceForm() {
                             item,
                             index // Use `category` directly
                           ) => (
-                            <option key={index} value={item.policy_name}>
+                            <option 
+                            key={index} 
+                            value={item.id}
+                            >
                               {" "}
                               {/* Store `id` in value */}
                               {item.policy_name} {/* Display `policy_name` */}
@@ -747,7 +795,10 @@ function InsuranceForm() {
                             : "No Categories Available"}
                         </option>
                         {policySubCategoryName.map((category, index) => (
-                          <option key={index} value={category.insurance_policy_id}>
+                          <option
+                            key={index}
+                            value={category.insurance_policy_id}
+                          >
                             {category.title}
                           </option>
                         ))}
