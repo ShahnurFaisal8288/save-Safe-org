@@ -535,11 +535,11 @@ function InsuranceForm() {
 
   const handleHealthStatusChange = (status) => {
     setHealthStatus(status);
-
+    setAnyDisease(status === "1");
+  
     if (status === "1") {
       setShowForm(true);
       setIsEligible(true);
-      setAnyDisease(""); // Clear any previous disease input when selecting "No"
     } else if (status === "2") {
       setShowForm(false);
       setIsEligible(false);
@@ -672,7 +672,7 @@ function InsuranceForm() {
                   />
                 </Form.Group>
               </Col>
-              <input type="text" name="AnyDisease" value={healthStatus} />
+              <input type="text" name="AnyDisease" value={anyDisease} />
 
               {healthStatus !== "1" && (
                 <Col md={12}>
