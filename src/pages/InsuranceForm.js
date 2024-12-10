@@ -67,13 +67,13 @@ function InsuranceForm() {
   //insurance form nominee iput hide show end
 
   //for branch input start
-  const [branchCode, setBranchCode] = useState('');
+  const [branchCode, setBranchCode] = useState("");
   //for branch input end
 
   //anydeases start
   const [anyDisease, setAnyDisease] = useState("");
   const [healthStatus, setHealthStatus] = useState("");
-  
+
   //anydeases end
 
   //uuid
@@ -161,7 +161,7 @@ function InsuranceForm() {
     }
   };
 
-  console.log('nomineeIDType',nomineeIDType);
+  console.log("nomineeIDType", nomineeIDType);
   // Validate Main ID
   const validateMainIDInput = () => {
     let error = "";
@@ -314,13 +314,9 @@ function InsuranceForm() {
 
       console.log("Event target:", event.target);
 
-
       formData.append("Member_name", event.target.Member_name.value);
       formData.append("BranchCode", event.target.BranchCode.value);
-      
 
-      
-      
       formData.append(
         "HealthInsuranceJson",
         JSON.stringify([
@@ -338,7 +334,7 @@ function InsuranceForm() {
             AnyDisease: event.target.AnyDisease
               ? event.target.AnyDisease.value
               : "",
-              PolicyName: event.target.PolicyName
+            PolicyName: event.target.PolicyName
               ? event.target.PolicyName.value
               : "",
             InsuranceType: event.target.InsuranceType
@@ -360,7 +356,7 @@ function InsuranceForm() {
             NomineeDOB: event.target.NomineeDOB
               ? event.target.NomineeDOB.value
               : "",
-              NomineeIDType: event.target.NomineeIDType
+            NomineeIDType: event.target.NomineeIDType
               ? event.target.NomineeIDType.value
               : "",
             NomineeIDIssueDate: event.target.NomineeIDIssueDate
@@ -375,7 +371,7 @@ function InsuranceForm() {
             NomineeIDNumber: event.target.NomineeIDNumber
               ? event.target.NomineeIDNumber.value
               : "",
-              NomineeRelation: event.target.NomineeRelation
+            NomineeRelation: event.target.NomineeRelation
               ? event.target.NomineeRelation.value
               : "",
           },
@@ -385,7 +381,6 @@ function InsuranceForm() {
       console.log("BranchCode:", event.target.BranchCode.value);
       console.log("Member_name:", event.target.Member_name.value);
       console.log("HealthInsuranceJson:", formData.get("HealthInsuranceJson"));
-      
 
       // Ensure file inputs exist and have files
       if (!event.target.Duration) {
@@ -408,28 +403,19 @@ function InsuranceForm() {
         event.target.nomineeImageBack.files[0]
       );
 
-
-
-
       console.log("FormData before Axios request:");
-    for (let pair of formData.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
 
-      
       axios
         .post("http://localhost:5001/api/health_insurance/store", formData, {
-
-        
           headers: {
             "Content-Type": "multipart/form-data",
           },
-
-          
         })
         .then((response) => {
-
-          console.log("form data 2:",formData);
+          console.log("form data 2:", formData);
           if (response.status === 201) {
             alert("Successfully Created");
           }
@@ -445,7 +431,7 @@ function InsuranceForm() {
       alert("Failed to create data");
     }
   };
-  
+
   useEffect(() => {
     const storedSetCollectorNumber = localStorage.getItem("collector_number");
 
@@ -548,14 +534,10 @@ function InsuranceForm() {
       setIsEligible(false);
     }
   };
-  console.log('healthStatus',healthStatus);
+  console.log("healthStatus", healthStatus);
   const handlePolicyNameChange = (policyId) => {
-    console.log('Selected Policy ID:', policyId);
+    console.log("Selected Policy ID:", policyId);
   };
-
-
-
-
 
   const handleCategoryChange = (category) => {
     setErrors({ ...errors, validateCategory: "" }); // Clear category errors
@@ -720,49 +702,44 @@ function InsuranceForm() {
               <>
                 <Row className="mb-4">
                   <Col md={6}>
-  <Form.Group>
-    <Form.Label>Insurance Policy Name</Form.Label>
-    <Form.Control
-      as="select"
-      name="PolicyName"
-      value={selectedPolicy}
-      onChange={(e) => {
-        const selectedValue = e.target.value;
+                    <Form.Group>
+                      <Form.Label>Insurance Policy Name</Form.Label>
+                      <Form.Control
+                        as="select"
+                        name="PolicyName"
+                        value={selectedPolicy}
+                        onChange={(e) => {
+                          const selectedValue = e.target.value;
 
+                          // Ensure only the insurance_product_id is stored
+                          setValidatePolicyName(selectedValue);
+                          setSelectedPolicy(selectedValue);
 
+                          // Call handle change with the policy ID
+                          handlePolicyNameChange(selectedValue);
 
-
-
-  
-        // Ensure only the insurance_product_id is stored
-        setValidatePolicyName(selectedValue);
-        setSelectedPolicy(selectedValue);
-        
-        // Call handle change with the policy ID
-        handlePolicyNameChange(selectedValue);
-
-        // Clear previous errors
-        setErrors({ ...errors, validatePolicyName: "" });
-      }}
-      required
-    >
-      <option value="">Select Insurance Policy Name</option>
-      {category?.map((item) => (
-        <option 
-          key={item.insurance_product_id} 
-          value={item.insurance_product_id}
-        >
-          {item.policy_name}
-        </option>
-      ))}
-    </Form.Control>
-    {errors.validatePolicyName && (
-      <p style={{ color: "red" }}>
-        {errors.validatePolicyName}
-      </p>
-    )}
-  </Form.Group>
-</Col>
+                          // Clear previous errors
+                          setErrors({ ...errors, validatePolicyName: "" });
+                        }}
+                        required
+                      >
+                        <option value="">Select Insurance Policy Name</option>
+                        {category?.map((item) => (
+                          <option
+                            key={item.insurance_product_id}
+                            value={item.insurance_product_id}
+                          >
+                            {item.policy_name}
+                          </option>
+                        ))}
+                      </Form.Control>
+                      {errors.validatePolicyName && (
+                        <p style={{ color: "red" }}>
+                          {errors.validatePolicyName}
+                        </p>
+                      )}
+                    </Form.Group>
+                  </Col>
 
                   <Col md={6}>
                     <Form.Group>
@@ -1053,7 +1030,7 @@ function InsuranceForm() {
                           >
                             <option value="">Select Relation</option>
                             {relation.map((item, index) => (
-                              <option key={index} value={item.data_name}>
+                              <option key={index} value={item.id}>
                                 {item.data_name}
                               </option>
                             ))}
