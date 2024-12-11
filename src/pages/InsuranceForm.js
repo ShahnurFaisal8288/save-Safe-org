@@ -335,7 +335,7 @@ function InsuranceForm() {
               ? event.target.AnyDisease.value
               : "",
             PolicyName: event.target.PolicyName
-              ? event.target.PolicyName.value
+              ? validateCategory
               : "",
             InsuranceType: event.target.InsuranceType
               ? event.target.InsuranceType.value
