@@ -55,6 +55,10 @@ function Login() {
           "collector_number",
           response.data.collector.collector_number,
         );
+        localStorage.setItem(
+          "permissions",
+          JSON.stringify(response.data.collector.permissions),
+        );
         localStorage.setItem("sidebar", JSON.stringify(response.data.sidebar));
 
         
@@ -141,7 +145,7 @@ function Login() {
           </div>
         </div>
       </div>
-      <Sidebar data={sidebarData} />
+      {/* <Sidebar data={sidebarData} /> */}
 
     </div>
   );

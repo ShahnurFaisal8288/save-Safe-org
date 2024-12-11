@@ -82,6 +82,11 @@ function InsuranceForm() {
   //dynamic category start
   const [policyNameId, setpolicyNameId] = useState(null);
   const [mainIDPlaceholder, setMainIDPlaceholder] = useState("");
+  const [formDatas, setFormDatas] = useState({
+    NomineeIDIssueDate: null,
+    NomineeIDExpiryDate: null,
+    NomineeIDPlaceOfIssue: "Bangladesh", // Default value as read-only
+  });
 
   const [category, refetch] = useGetCategory(policyNameId);
   const policyName1 = category?.map((item) => item?.policy_name) || [];
@@ -111,7 +116,7 @@ function InsuranceForm() {
     policyAmount = setPolicyAmount?.premium_amount_total; // Use premium_amount_total from the found category
   }
 
-  console.log("policy Category", policySubCategoryName);
+  // console.log("policy Category", policySubCategoryName);
   // console.log(policyDuration);
 
   const [filteredCategory, setFilteredCategory] = useState([]);
@@ -121,13 +126,9 @@ function InsuranceForm() {
     const id = crypto.randomUUID();
     setInsuranceId(id);
   };
-  console.log("uuid", insuranceId);
-  const [formDatas, setFormDatas] = useState({
-    NomineeIDIssueDate: null,
-    NomineeIDExpiryDate: null,
-    NomineeIDPlaceOfIssue: "Bangladesh", // Default value as read-only
-  });
-
+  // console.log("uuid", insuranceId);
+  
+ //after idtype clicking
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -161,7 +162,7 @@ function InsuranceForm() {
     }
   };
 
-  console.log("nomineeIDType", nomineeIDType);
+  // console.log("nomineeIDType", nomineeIDType);
   // Validate Main ID
   const validateMainIDInput = () => {
     let error = "";
@@ -312,7 +313,7 @@ function InsuranceForm() {
       //   throw new Error("Member_name is required");
       // }
 
-      console.log("Event target:", event.target);
+      // console.log("Event target:", event.target);
 
       formData.append("Member_name", event.target.Member_name.value);
       formData.append("BranchCode", event.target.BranchCode.value);
@@ -378,9 +379,9 @@ function InsuranceForm() {
         ])
       );
 
-      console.log("BranchCode:", event.target.BranchCode.value);
-      console.log("Member_name:", event.target.Member_name.value);
-      console.log("HealthInsuranceJson:", formData.get("HealthInsuranceJson"));
+      // console.log("BranchCode:", event.target.BranchCode.value);
+      // console.log("Member_name:", event.target.Member_name.value);
+      // console.log("HealthInsuranceJson:", formData.get("HealthInsuranceJson"));
 
       // Ensure file inputs exist and have files
       if (!event.target.Duration) {
@@ -415,12 +416,12 @@ function InsuranceForm() {
           },
         })
         .then((response) => {
-          console.log("form data 2:", formData);
+          // console.log("form data 2:", formData);
           if (response.status === 201) {
             alert("Successfully Created");
           }
 
-          console.log("inserttt data", response.data);
+          // console.log("inserttt data", response.data);
         })
         .catch((error) => {
           console.error("Error creating data:", error.message);
@@ -468,7 +469,7 @@ function InsuranceForm() {
         const response = await axios.get(
           `http://localhost:5001/api/collector/${id}/client/information`
         );
-        console.log("member_name:", response.data); // Log the response
+        // console.log("member_name:", response.data); // Log the response
       } catch (error) {
         console.error("Error fetching account number:", error.message);
       }
@@ -492,14 +493,14 @@ function InsuranceForm() {
       try {
         const response = await axios.get("http://localhost:5001/api/cardtype");
         setidType(response.data);
-        console.log("response_data", response.data);
+        // console.log("response_data", response.data);
       } catch (error) {
         console.error("Error fetching ID types:", error);
       }
     };
     fetchPostData();
   }, []);
-  console.log("cardType", idType);
+  // console.log("cardType", idType);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -534,14 +535,14 @@ function InsuranceForm() {
       setIsEligible(false);
     }
   };
-  console.log("healthStatus", healthStatus);
+  // console.log("healthStatus", healthStatus);
   const handlePolicyNameChange = (policyId) => {
-    console.log("Selected Policy ID:", policyId);
+    // console.log("Selected Policy ID:", policyId);
   };
 
   const handleCategoryChange = (category) => {
     setErrors({ ...errors, validateCategory: "" }); // Clear category errors
-    console.log("Selected Category:", category);
+    // console.log("Selected Category:", category);
   };
 
   // const handleSubmit = (event) => {
@@ -956,7 +957,7 @@ function InsuranceForm() {
                       </Col>
                     </Row>
 
-                    {["Passport", "Driving License"].includes(
+                    {["3", "4"].includes(
                       nomineeIDType
                     ) && (
                       <Row className="mb-4">

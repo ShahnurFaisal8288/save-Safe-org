@@ -31,7 +31,7 @@ const router = createBrowserRouter([
       {
         path: "/dashboard", // Child route for the dashboard
         element: (
-          <PrivateRoute>
+          <PrivateRoute requiredPermission="/dashboard">
           <Dashboard />
           </PrivateRoute>
         ),
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
       {
         path: "/insurance-list", // Child route for the dashboard
         element: (
-          <PrivateRoute>
+          <PrivateRoute requiredPermission="/insurance-list">
           <InsuranceList />
           </PrivateRoute>
         ),
@@ -55,7 +55,7 @@ const router = createBrowserRouter([
       {
         path: "/member-list", // Child route for the dashboard
         element: (
-          <PrivateRoute>
+          <PrivateRoute requiredPermission="/member-list">
           <MemberList />
           </PrivateRoute>
         ),
