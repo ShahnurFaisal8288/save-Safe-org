@@ -190,7 +190,6 @@ function InsuranceForm() {
         }
         break;
       default:
-        error = "Please select a valid ID Type.";
     }
 
     setErrors((prevErrors) => ({
