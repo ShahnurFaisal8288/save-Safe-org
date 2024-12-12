@@ -13,6 +13,7 @@ import PrivateRoute from "./PrivateRoutes";
 import InsuranceList from "../pages/InsuranceList";
 import InsuranceForm from "../pages/InsuranceForm";
 import MemberList from "../pages/MemberList";
+import InsuranceDetails from "../pages/InsuranceDetails";
 
 
 const router = createBrowserRouter([
@@ -45,10 +46,18 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/insurance-form/:id/:name/:account_number", // Child route for the dashboard with id and member_name parameters
+        path: "/insurance-form/:id/:name/:account_number/:sex/:date_of_birth", // Child route for the dashboard with id and member_name parameters
         element: (
           <PrivateRoute requiredPermission="/insurance-form">
             <InsuranceForm />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/insurance-form-details/:id/:member_name/:branch_id/:enrolment_id/:insurance_policy_id/:insurance_type_id/:category_id/:premium_amnt/:insurance_tenure/:nominee_name/:nomine_phone_no/:nominee_relation_id/:contact_no", // Child route for the dashboard with id and member_name parameters
+        element: (
+          <PrivateRoute requiredPermission="/insurance-form-details">
+            <InsuranceDetails />
           </PrivateRoute>
         ),
       },

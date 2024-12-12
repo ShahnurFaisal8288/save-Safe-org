@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const buttonStyle = {
     color: "white",
@@ -9,6 +9,7 @@ const buttonStyle = {
     borderColor: "#007bff"
 };
 const InsuranceList = () => {
+    const navigate = useNavigate();
     const [data1, setData1] = useState([]); // Store fetched data
     const [filteredData, setFilteredData] = useState([]); // Store filtered data
     const [sortConfig, setSortConfig] = useState({
@@ -39,6 +40,7 @@ const InsuranceList = () => {
 
         fetchPostData();
     }, []);
+    console.log('data1',data1)
 
     // Search functionality
     useEffect(() => {
@@ -151,11 +153,16 @@ const InsuranceList = () => {
                             currentItems.map((item, index) => (
                                 <tr key={index}>
                                     <td>{item.insurance_policy_id}</td>
-                                    <td>{item.branchcode}</td>
+                                    <td>{item.branch_id}</td>
                                     <td>{item.category_id}</td>
                                     <td>
                                         <button style={buttonStyle}
                                             className="btn btn-primary btn-sm"
+                                            onClick={() => navigate(
+                                                `/insurance-form-details/${item.id}/${item.member_name}/${item.branch_id}/${item.enrolment_id}/${item.insurance_policy_id}
+                                                /${item.insurance_type_id}/${item.category_id}/${item.premium_amnt}/${item.insurance_tenure}/${item.nominee_name}/${item.nomine_phone_no}
+                                                /${item.nominee_relation_id}/${item.contact_no}`
+                                            )}
                                         >
                                             Details
                                         </button>

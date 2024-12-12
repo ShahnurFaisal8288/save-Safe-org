@@ -171,7 +171,7 @@ const MemberList = () => {
                                     <button style={buttonStyle}
                                         className="btn btn-primary"
                                        
-                                        onClick={() => navigate(`/insurance-form/${item.id}/${item.name}/${item.account_number}`)}
+                                        onClick={() => navigate(`/insurance-form/${item.id}/${item.name}/${item.account_number}/${item.sex}/${item.date_of_birth}`)}
                                     >
                                         Details
                                     </button>

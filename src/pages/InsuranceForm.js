@@ -40,9 +40,10 @@ function InsuranceForm() {
   const [coNo, setCollectorNumber] = useState(null);
 
   //insurance form params data start
-  const { id, name, account_number } = useParams();
+  const { id, name, account_number, sex, date_of_birth } = useParams();
   //insurance form params data end
-
+  console.log("sex", sex);
+  console.log("date_of_birth", date_of_birth);
   //insurance form validation start
   const [phone, setPhone] = useState("");
   const [nomineePhone, setNomineePhone] = useState("");
@@ -127,8 +128,8 @@ function InsuranceForm() {
     setInsuranceId(id);
   };
   // console.log("uuid", insuranceId);
-  
- //after idtype clicking
+
+  //after idtype clicking
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -334,9 +335,7 @@ function InsuranceForm() {
             AnyDisease: event.target.AnyDisease
               ? event.target.AnyDisease.value
               : "",
-            PolicyName: event.target.PolicyName
-              ? validateCategory
-              : "",
+            PolicyName: event.target.PolicyName ? validateCategory : "",
             InsuranceType: event.target.InsuranceType
               ? event.target.InsuranceType.value
               : "",
@@ -582,7 +581,7 @@ function InsuranceForm() {
               <Col md={6}>
                 <Form.Group>
                   <Form.Control
-                    type="text"
+                    type="hidden"
                     name="BranchCode"
                     value={branchCode || ""} // Ensure it's never undefined
                     onChange={(e) => handleSetBranchCode(e.target.value)}
@@ -662,7 +661,7 @@ function InsuranceForm() {
                   />
                 </Form.Group>
               </Col>
-              <input type="text" name="AnyDisease" value={healthStatus} />
+              <input type="hidden" name="AnyDisease" value={healthStatus} />
 
               {healthStatus !== "1" && (
                 <Col md={12}>
@@ -740,6 +739,7 @@ function InsuranceForm() {
                       )}
                     </Form.Group>
                   </Col>
+                  
 
                   <Col md={6}>
                     <Form.Group>
@@ -956,9 +956,7 @@ function InsuranceForm() {
                       </Col>
                     </Row>
 
-                    {["3", "4"].includes(
-                      nomineeIDType
-                    ) && (
+                    {["3", "4"].includes(nomineeIDType) && (
                       <Row className="mb-4">
                         <Col md={6}>
                           <Form.Group>
