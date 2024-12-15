@@ -21,29 +21,32 @@ function InsuranceForm() {
   const [showForm, setShowForm] = useState(false);
   const [isEligible, setIsEligible] = useState(true);
   const [validated, setValidated] = useState(false);
-  // const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(null);
   //policy Name start
   const [policyName, setPolicyName] = useState([]);
 
   //policy Name end
+  const [selectedCategoryTitle, setSelectedCategoryTitle] = useState("");
 
-  //policy <>ise Category start
-  // const [categories, setCategories] = useState([]);
-  //policy <>ise Category end
+  const [categoryItems, setCategoryItems] = useState([]);
+
+  const [selectedCategoryDetails, setSelectedCategoryDetails] = useState({
+    title: "",
+    premiumAmount: "",
+    policyTenure: "",
+  });
 
   const [idType, setidType] = useState([]);
   // const [category, setCategory] = useState([]);
   const [relation, setRelation] = useState([]);
 
-  const [premiumAmount, setPremiumAmount] = useState("");
-  const [policyTenture, setPolicyTenture] = useState("");
   const [coNo, setCollectorNumber] = useState(null);
 
   //insurance form params data start
   const { id, name, account_number, sex, date_of_birth } = useParams();
+  const [isDropdownDisabled, setDropdownDisabled] = useState(false);
   //insurance form params data end
-  console.log("sex", sex);
-  console.log("date_of_birth", date_of_birth);
+
   //insurance form validation start
   const [phone, setPhone] = useState("");
   const [nomineePhone, setNomineePhone] = useState("");
@@ -92,8 +95,7 @@ function InsuranceForm() {
   const [category, refetch] = useGetCategory(policyNameId);
   const policyName1 = category?.map((item) => item?.policy_name) || [];
   const policySubCategoryName =
-    category?.find((item) => item.policy_name === selectedPolicy)?.category ||
-    [];
+    category?.find((item) => item.insurance_product_id == selectedPolicy) || [];
 
   let policyDuration;
   let policyAmount;
@@ -115,10 +117,8 @@ function InsuranceForm() {
       ) || null;
 
     policyAmount = setPolicyAmount?.premium_amount_total; // Use premium_amount_total from the found category
+    console.log("policySubCategoryName", policySubCategoryName);
   }
-
-  // console.log("policy Category", policySubCategoryName);
-  // console.log(policyDuration);
 
   const [filteredCategory, setFilteredCategory] = useState([]);
   //dynamic category end
@@ -127,7 +127,6 @@ function InsuranceForm() {
     const id = crypto.randomUUID();
     setInsuranceId(id);
   };
-  // console.log("uuid", insuranceId);
 
   //after idtype clicking
   const handleInputChange = (e) => {
@@ -163,7 +162,6 @@ function InsuranceForm() {
     }
   };
 
-  // console.log("nomineeIDType", nomineeIDType);
   // Validate Main ID
   const validateMainIDInput = () => {
     let error = "";
@@ -534,13 +532,139 @@ function InsuranceForm() {
     }
   };
   // console.log("healthStatus", healthStatus);
-  const handlePolicyNameChange = (policyId) => {
-    // console.log("Selected Policy ID:", policyId);
+  console.log('Input Parameters:', {
+    id,
+    name,
+    account_number,
+    sex,
+    date_of_birth
+  });
+
+  // Calculate age
+  const calculateAge = (dob) => {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDifference < 0 || 
+        (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    return age;
   };
 
-  const handleCategoryChange = (category) => {
-    setErrors({ ...errors, validateCategory: "" }); // Clear category errors
-    // console.log("Selected Category:", category);
+  // Validation function with more flexible sex handling
+  const validatePolicyEligibility = (selectedValue) => {
+    console.log('Validation Started');
+    console.log('Selected Policy ID:', selectedValue);
+    console.log('User Sex:', sex);
+  
+    const userAge = calculateAge(date_of_birth);
+    console.log('User Age:', userAge);
+  
+    const policyValidationRules = {
+      '1': {
+        allowedSex: ['Female'],
+        minAge: 18,
+        maxAge: 39,
+        errorMessage: 'This policy is primarily for Females aged 18-39',
+      },
+      '2': {
+        allowedSex: ['Male', 'Female'],
+        minAge: 18,
+        maxAge: 64,
+        errorMessage: 'This policy is available for Males and Females aged 18-64',
+      },
+    };
+  
+    const validationRule = policyValidationRules[selectedValue];
+  
+    if (!validationRule) {
+      setErrors((prev) => ({
+        ...prev,
+        validatePolicyName: 'Invalid policy selection',
+      }));
+      setDropdownDisabled(true);
+      return false;
+    }
+  
+    // Sex validation
+    if (!validationRule.allowedSex.includes(sex)) {
+      console.warn('Sex Validation Failed');
+      setErrors((prev) => ({
+        ...prev,
+        validatePolicyName: validationRule.errorMessage,
+      }));
+      setDropdownDisabled(true); // Disable dropdown if validation fails
+      return false;
+    }
+  
+    // Age validation
+    if (userAge < validationRule.minAge || userAge > validationRule.maxAge) {
+      console.warn('Age Validation Failed');
+      setErrors((prev) => ({
+        ...prev,
+        validatePolicyName: `${validationRule.errorMessage}. Current age does not meet requirements.`,
+      }));
+      setDropdownDisabled(true); // Disable dropdown if validation fails
+      return false;
+    }
+  
+    // Clear errors and enable dropdown if validation passes
+    setErrors((prev) => ({
+      ...prev,
+      validatePolicyName: '',
+    }));
+    setDropdownDisabled(false);
+    console.log('Validation Passed');
+    return true;
+  };
+
+  // Handle Policy Name Change
+  const handlePolicyNameChange = (selectedValue) => {
+    // Find the selected policy's categories
+    const selectedPolicyCategories = 
+      category?.find((item) => item.insurance_product_id == selectedValue)
+        ?.category || [];
+    
+    // Set the category items in state
+    setCategoryItems(selectedPolicyCategories);
+    
+    // Perform validation
+    const isValid = validatePolicyEligibility(selectedValue);
+    
+    if (isValid) {
+      // Existing logic
+      setValidatePolicyName(selectedValue);
+      setSelectedPolicy(selectedValue);
+      setErrors({ ...errors, validatePolicyName: "" });
+    }
+  };
+
+
+  const handleCategoryChange = (e) => {
+    const selectedCategoryId = e.target.value;
+
+    // Find the selected category details
+    const selectedCategory = categoryItems.find(
+      (item) => item.insurance_policy_id == selectedCategoryId
+    );
+
+    // Update state with selected category details
+    if (selectedCategory) {
+      setSelectedCategoryDetails({
+        title: selectedCategory.title,
+        premiumAmount: selectedCategory.premium_amount_total,
+        policyTenure: selectedCategory.policy_tenure,
+      });
+
+      // Existing validation logic
+      setSelectedCategoryTitle(selectedCategory.title);
+      setValidateCategory(selectedCategoryId);
+      setErrors({ ...errors, validateCategory: "" });
+    }
   };
 
   // const handleSubmit = (event) => {
@@ -551,6 +675,9 @@ function InsuranceForm() {
   //   }
   //   setValidated(true);
   // };
+
+  console.log("selectedCategoryTitle", selectedCategoryTitle);
+  console.log("validateCategory", validateCategory);
 
   return (
     <Container className="py-5">
@@ -700,46 +827,38 @@ function InsuranceForm() {
             {showForm && (
               <>
                 <Row className="mb-4">
-                  <Col md={6}>
-                    <Form.Group>
-                      <Form.Label>Insurance Policy Name</Form.Label>
-                      <Form.Control
-                        as="select"
-                        name="PolicyName"
-                        value={selectedPolicy}
-                        onChange={(e) => {
-                          const selectedValue = e.target.value;
+                <Col md={6}>
+                <Form.Group>
+  <Form.Label>Insurance Policy Name</Form.Label>
+  <Form.Control
+    as="select"
+    name="PolicyName"
+    value={selectedPolicy}
+    onChange={(e) => {
+      const selectedValue = e.target.value;
+      handlePolicyNameChange(selectedValue); // Perform validation here
+    }}
+     // Ensure this is the correct state
+    required
+  >
+    <option value="">Select Insurance Policy Name</option>
+    {category?.map((item) => (
+      <option
+        key={item.insurance_product_id}
+        value={item.insurance_product_id}
+      >
+        {item.policy_name}
+      </option>
+    ))}
+  </Form.Control>
 
-                          // Ensure only the insurance_product_id is stored
-                          setValidatePolicyName(selectedValue);
-                          setSelectedPolicy(selectedValue);
+  {/* Display validation error */}
+  {errors.validatePolicyName && (
+    <p style={{ color: 'red' }}>{errors.validatePolicyName}</p>
+  )}
+</Form.Group>
 
-                          // Call handle change with the policy ID
-                          handlePolicyNameChange(selectedValue);
-
-                          // Clear previous errors
-                          setErrors({ ...errors, validatePolicyName: "" });
-                        }}
-                        required
-                      >
-                        <option value="">Select Insurance Policy Name</option>
-                        {category?.map((item) => (
-                          <option
-                            key={item.insurance_product_id}
-                            value={item.insurance_product_id}
-                          >
-                            {item.policy_name}
-                          </option>
-                        ))}
-                      </Form.Control>
-                      {errors.validatePolicyName && (
-                        <p style={{ color: "red" }}>
-                          {errors.validatePolicyName}
-                        </p>
-                      )}
-                    </Form.Group>
-                  </Col>
-                  
+    </Col>
 
                   <Col md={6}>
                     <Form.Group>
@@ -772,23 +891,22 @@ function InsuranceForm() {
                       <Form.Control
                         as="select"
                         name="Category"
-                        onChange={(e) => {
-                          setValidateCategory(e.target.value); // Call the provided function
-                          setErrors({ ...errors, validateCategory: "" }); // Clear previous errors
-                        }}
+                        onChange={handleCategoryChange}
+                        disabled={isDropdownDisabled}
                         required
                       >
                         <option value="">
-                          {filteredCategory.length
+                          {categoryItems.length
                             ? "Select Category"
                             : "No Categories Available"}
                         </option>
-                        {policySubCategoryName.map((category, index) => (
+
+                        {categoryItems.map((item) => (
                           <option
-                            key={index}
-                            value={category.insurance_policy_id}
+                            key={item.insurance_policy_id}
+                            value={item.insurance_policy_id}
                           >
-                            {category.title}
+                            {item.title}
                           </option>
                         ))}
                       </Form.Control>
@@ -806,8 +924,7 @@ function InsuranceForm() {
                       <Form.Control
                         type="text"
                         name="PremiumAmount"
-                        value={policyAmount}
-                        // onChange={(e) => setValidatePremiumAmount(e.target.value)}
+                        value={selectedCategoryDetails.premiumAmount}
                         readOnly
                         required
                       />
@@ -827,8 +944,7 @@ function InsuranceForm() {
                       <Form.Control
                         type="text"
                         name="Duration"
-                        value={policyDuration || null}
-                        // onChange={(e) => setValidateDuration(e.target.value)}
+                        value={selectedCategoryDetails.policyTenure}
                         readOnly
                         required
                       />
@@ -935,8 +1051,8 @@ function InsuranceForm() {
                             name="NomineeIDType"
                             value={nomineeIDType}
                             onChange={(e) => {
-                              handleNomineeIDTypeChange(e); // Call the first function
-                              setValidateIDType(e.target.value); // Call the second function
+                              handleNomineeIDTypeChange(e);
+                              setValidateIDType(e.target.value);
                             }}
                             required
                           >
