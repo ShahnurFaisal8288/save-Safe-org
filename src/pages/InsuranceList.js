@@ -9,28 +9,35 @@ const InsuranceList = () => {
   const [searchDate, setSearchDate] = useState("");
   const [statusFilters, setStatusFilters] = useState({
     allDate: false,
-    pending: false,
-    approved: false,
-    reject: false,
+    Pending: false,
+    Approved: false,
+    Rejected: false,
+    Disbursed: false,
   });
   const [filteredData, setFilteredData] = useState([]);
 
   // Fetch project, PO, and member data
   const fetchData = async () => {
     try {
-      const projectResponse = await axios.get("YOUR_PROJECT_API_URL");
-      if (projectResponse.data && Array.isArray(projectResponse.data.data)) {
-        setProject(projectResponse.data.data);
+      const projectResponse = await axios.get(
+        "http://localhost:5001/api/projects"
+      );
+      if (projectResponse.data && Array.isArray(projectResponse.data)) {
+        setProject(projectResponse.data);
       }
 
-      const poResponse = await axios.get("YOUR_PO_API_URL");
-      if (poResponse.data && Array.isArray(poResponse.data.data)) {
-        setPoNo(poResponse.data.data);
+      const poResponse = await axios.get(
+        "http://localhost:5001/api/collectors"
+      );
+      if (poResponse.data) {
+        setPoNo(poResponse.data);
       }
 
-      const memberResponse = await axios.get("YOUR_MEMBER_API_URL");
-      if (memberResponse.data && Array.isArray(memberResponse.data.data)) {
-        setMemberName(memberResponse.data.data);
+      const memberResponse = await axios.get(
+        "http://localhost:5001/api/client"
+      );
+      if (memberResponse.data) {
+        setMemberName(memberResponse.data);
       }
 
       // Set initial data for display (could be fetched from a separate API for insurance list)
@@ -57,9 +64,7 @@ const InsuranceList = () => {
   const handleSearch = async () => {
     const filterParams = {
       date: searchDate,
-      status: Object.keys(statusFilters).filter(
-        (key) => statusFilters[key]
-      ),
+      status: Object.keys(statusFilters).filter((key) => statusFilters[key]),
     };
 
     try {
@@ -73,7 +78,7 @@ const InsuranceList = () => {
       console.error("Error fetching filtered data:", error.message);
     }
   };
-
+  // console.log("poNo", poNo);
   return (
     <div className="container">
       {/* Project Selection */}
@@ -85,7 +90,7 @@ const InsuranceList = () => {
           <option>Choose Project</option>
           {project.map((item, index) => (
             <option key={index} value={item.id}>
-              {item.account_number}
+              {item.projectCode}-{item.projectTitle}
             </option>
           ))}
         </select>
@@ -93,7 +98,7 @@ const InsuranceList = () => {
 
       {/* Others Info Section */}
       <div className="section card">
-        <div className="section-title mb-5">Others Info</div>
+        <div className="section-title mb-3">Others Info</div>
         <div className="form-group">
           <div className="row">
             <div className="col-6">
@@ -114,10 +119,11 @@ const InsuranceList = () => {
                 ))}
               </datalist>
             </div>
-            <div className="col-6 mt-5">
+            <div className="col-6 mt-3">
               <label>Date</label>
               <input
                 type="date"
+                name="date"
                 className="input"
                 value={searchDate}
                 onChange={(e) => setSearchDate(e.target.value)}
@@ -137,8 +143,8 @@ const InsuranceList = () => {
                 <div>
                   <input
                     type="checkbox"
-                    name="pending"
-                    checked={statusFilters.pending}
+                    name="2"
+                    checked={statusFilters.Pending}
                     onChange={handleStatusChange}
                   />
                   <label>Pending</label>
@@ -146,8 +152,8 @@ const InsuranceList = () => {
                 <div>
                   <input
                     type="checkbox"
-                    name="approved"
-                    checked={statusFilters.approved}
+                    name="1"
+                    checked={statusFilters.Approved}
                     onChange={handleStatusChange}
                   />
                   <label>Approved</label>
@@ -155,11 +161,20 @@ const InsuranceList = () => {
                 <div>
                   <input
                     type="checkbox"
-                    name="reject"
-                    checked={statusFilters.reject}
+                    name="3"
+                    checked={statusFilters.Rejected}
                     onChange={handleStatusChange}
                   />
                   <label>Reject</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="4"
+                    checked={statusFilters.Disbursed}
+                    onChange={handleStatusChange}
+                  />
+                  <label>Disbursed</label>
                 </div>
               </div>
             </div>
