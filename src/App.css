@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,142 @@
   to {
     transform: rotate(360deg);
   }
+} */
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f8f9fa;
+}
+
+.container {
+  width: 90%;
+  margin: 20px auto;
+}
+
+/* Section Styles */
+.section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  background-color: #e91e63;
+  color: #fff;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 20px;
+}
+
+/* Form Styles */
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.form-group > div {
+  flex: 1 1 22%;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.required {
+  color: red;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.checkbox-group {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.checkbox-group label {
+  margin-left: 5px;
+}
+
+/* Button Styles */
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
+}
+
+.reset-btn {
+  background-color: #6c757d;
+}
+
+.search-btn {
+  background-color: #e91e63;
+}
+
+/* Table Styles */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #e91e63;
+  color: #fff;
+  font-weight: bold;
+}
+
+.download-btn {
+  background-color: #ff4081;
+}
+
+.view-btn {
+  background-color: #e91e63;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #ddd;
+  color: #333;
+}
+
+.pagination .active {
+  background-color: #e91e63;
+  color: #fff;
 }
