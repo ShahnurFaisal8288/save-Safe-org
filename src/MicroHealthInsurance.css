@@ -1,0 +1,173 @@
+/* micro health insurance css */
+/* Container and Title */
+.container {
+    width: 90%;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Sections */
+  .section {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .section-header {
+    background-color: #e91e63;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+  }
+  
+  /* Form Styles */
+  .form-group {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .form-control,
+  input,
+  select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  input[type="date"] {
+    width: 100%;
+  }
+  
+  .search-box,
+  .date-box {
+    display: flex;
+  }
+  
+  .search-box input,
+  .date-box input {
+    flex: 1;
+  }
+  
+  .search-button,
+  .calendar-button {
+    background-color: #e91e63;
+    border: none;
+    color: white;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+  }
+  
+  .search-button:hover,
+  .calendar-button:hover {
+    background-color: #c2185b;
+  }
+  
+  /* Grid Layout */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .full-width {
+    grid-column: span 4;
+  }
+  /* Document Upload Section */
+/* Upload Section */
+.upload-grid {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .upload-box {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .upload-label {
+    cursor: pointer;
+  }
+  
+  .file-placeholder {
+    width: 150px;
+    height: 100px;
+    border: 2px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #888;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    transition: border 0.3s ease;
+  }
+  
+  .file-placeholder:hover {
+    border-color: #3f51b5;
+    color: #3f51b5;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .error-text {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  
+  /* Buttons */
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  .reset-button,
+  .claim-button {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .reset-button {
+    background-color: #f44336;
+    color: white;
+    margin-right: 10px;
+  }
+  
+  .claim-button {
+    background-color: #e91e63;
+    color: white;
+  }
+  
+  .reset-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  .claim-button:hover {
+    background-color: #c2185b;
+  }
+  
+  

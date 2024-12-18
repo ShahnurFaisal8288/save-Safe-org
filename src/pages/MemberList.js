@@ -30,7 +30,7 @@ const MemberList = () => {
 
         const fetchPostData = async () => {
             try {
-                const response = await axios.get("http://localhost:5001/api/client");
+                const response = await axios.get("http://localhost:8000/api/client");
 
 
 

@@ -14,6 +14,7 @@ import InsuranceList from "../pages/InsuranceList";
 import InsuranceForm from "../pages/InsuranceForm";
 import MemberList from "../pages/MemberList";
 import InsuranceDetails from "../pages/InsuranceDetails";
+import MicroHealthInsurance from "../pages/MicroHealthInsurance";
 
 
 const router = createBrowserRouter([
@@ -67,6 +68,14 @@ const router = createBrowserRouter([
           <PrivateRoute requiredPermission="/member-list">
           <MemberList />
           </PrivateRoute>
+        ),
+      },
+      {
+        path: "/micro-health-insurance", // Child route for the dashboard
+        element: (
+          // <PrivateRoute requiredPermission="/micro-health-insurance">
+          <MicroHealthInsurance />
+          // </PrivateRoute>
         ),
       },
     ],
