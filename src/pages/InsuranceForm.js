@@ -406,7 +406,7 @@ function InsuranceForm() {
       }
 
       axios
-        .post("http://localhost:8000/api/health_insurance/store", formData, {
+        .post("http://localhost:5000/api/health_insurance/store", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -463,7 +463,7 @@ function InsuranceForm() {
     const fetchPostData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/collector/${id}/client/information`
+          `http://localhost:5000/api/collector/${id}/client/information`
         );
         // console.log("member_name:", response.data); // Log the response
       } catch (error) {
@@ -487,7 +487,7 @@ function InsuranceForm() {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/cardtype");
+        const response = await axios.get("http://localhost:5000/api/cardtype");
         setidType(response.data);
         // console.log("response_data", response.data);
       } catch (error) {
@@ -501,7 +501,7 @@ function InsuranceForm() {
   useEffect(() => {
     const fetchPostData = async () => {
       const response = await axios.get(
-        "http://localhost:8000/api/relationdata"
+        "http://localhost:5000/api/relationdata"
       );
       setRelation(response.data);
     };
@@ -771,7 +771,7 @@ function InsuranceForm() {
                 <Form.Control
                   type="hidden"
                   name="ProjectCode"
-                  value="PROJ001"
+                  value="11"
                   readOnly
                 />
               </Form.Group>

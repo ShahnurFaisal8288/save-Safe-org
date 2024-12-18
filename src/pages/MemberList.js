@@ -27,7 +27,7 @@ const MemberList = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/client");
+        const response = await axios.get("http://localhost:5000/api/client");
 
         // Check if the response contains the data array
         if (response.data && Array.isArray(response.data)) {

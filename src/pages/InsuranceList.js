@@ -10,10 +10,10 @@ const InsuranceList = () => {
   const [searchDate, setSearchDate] = useState("");
   const [statusFilters, setStatusFilters] = useState({
     allDate: false,
-    Pending: false,
-    Approved: false,
-    Rejected: false,
-    Disbursed: false,
+    1: false,
+    2: false,
+    3: false,
+    4: false,
   });
   const [filteredData, setFilteredData] = useState([]);
 
@@ -21,21 +21,21 @@ const InsuranceList = () => {
   const fetchData = async () => {
     try {
       const projectResponse = await axios.get(
-        "http://localhost:8000/api/projects"
+        "http://localhost:5000/api/projects"
       );
       if (projectResponse.data && Array.isArray(projectResponse.data)) {
         setProject(projectResponse.data);
       }
 
       const poResponse = await axios.get(
-        "http://localhost:8000/api/collectors"
+        "http://localhost:5000/api/collectors"
       );
       if (poResponse.data) {
         setPoNo(poResponse.data);
       }
 
       const memberResponse = await axios.get(
-        "http://localhost:8000/api/client"
+        "http://localhost:5000/api/client"
       );
       if (memberResponse.data) {
         setMemberName(memberResponse.data);
@@ -43,7 +43,7 @@ const InsuranceList = () => {
 
       // Set initial data for display (could be fetched from a separate API for insurance list)
      const initialData = await axios.get(
-       "http://localhost:8000/api/health_insurance/list"
+       "http://localhost:5000/api/health_insurance/list"
      );
      setFilteredData(initialData.data);
     } catch (error) {
@@ -78,7 +78,7 @@ const InsuranceList = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/health_insurance/list/search",
+        "http://localhost:5000/api/health_insurance/list/search",
         {
           params: filterParams,
         }
@@ -223,7 +223,7 @@ const InsuranceList = () => {
           <tbody>
             {filteredData.map((item, index) => (
               <tr key={index}>
-                <td>{item.buffer_id}</td>
+                <td>{item.enrolment_id}</td>
                 <td>{item.date}</td>
                 <td>{item.member_name}</td>
                 <td>{item.insurance_product}</td>

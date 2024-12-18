@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
 const useGetCategory = (id) => {
   const {
@@ -8,9 +8,9 @@ const useGetCategory = (id) => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['category'],
+    queryKey: ["category"],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:5001/api/insurance/category`);
+      const res = await fetch(`http://localhost:5000/api/insurance/category`);
       return res.json();
     },
   });

@@ -26,7 +26,7 @@ function Login() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
+        "http://localhost:5000/api/auth/login",
         {
           email: data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
           phone: !data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
