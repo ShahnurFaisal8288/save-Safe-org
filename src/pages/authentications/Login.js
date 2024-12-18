@@ -5,22 +5,16 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Sidebar from "../../components/Sidebar";
 
-
-
-
 function Login() {
   // const [sidebarData, setSidebarData] = useState([]);
   const [sidebarData, setSidebarData] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     // Log whenever sidebarData is updated
     console.log("Updated sidebarData:", sidebarData);
   }, [sidebarData]); // Dependency on sidebarData
-
-
 
   const {
     register,
@@ -39,29 +33,25 @@ function Login() {
           password: data.password,
         }
       );
-      console.log("login user",response);
+      console.log("login user", response);
       console.log("Sidebar user..........", response.data.sidebar);
 
       if (response.status === 200) {
-        localStorage.setItem(
-          "token",
-          response.data.token,
-        );
+        localStorage.setItem("token", response.data.token);
         localStorage.setItem(
           "branch_code",
-          response.data.collector.branch.branch_code,
+          response.data.collector.branch.branch_code
         );
         localStorage.setItem(
           "collector_number",
-          response.data.collector.collector_number,
+          response.data.collector.collector_number
         );
         localStorage.setItem(
           "permissions",
-          JSON.stringify(response.data.collector.permissions),
+          JSON.stringify(response.data.collector.permissions)
         );
         localStorage.setItem("sidebar", JSON.stringify(response.data.sidebar));
 
-        
         Swal.fire({
           icon: "success",
           title: "Login Successful",
@@ -71,7 +61,7 @@ function Login() {
           timerProgressBar: true,
         });
         setSidebarData(response.data.sidebar); // Pass sidebar data correctly
-        console.log("setSidebarData",sidebarData)
+        console.log("setSidebarData", sidebarData);
         navigate("/dashboard");
         // setSidebarData(response.data.sidebar.element_url);
       } else {
@@ -92,7 +82,6 @@ function Login() {
   };
 
   return (
-    
     <div className="container-scroller">
       <div className="container-fluid page-body-wrapper full-page-wrapper">
         <div className="content-wrapper d-flex align-items-center auth">
@@ -146,7 +135,6 @@ function Login() {
         </div>
       </div>
       {/* <Sidebar data={sidebarData} /> */}
-
     </div>
   );
 }

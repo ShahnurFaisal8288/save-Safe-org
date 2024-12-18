@@ -103,7 +103,7 @@ const InsuranceList = () => {
           <option>Choose Project</option>
           {project.map((item, index) => (
             <option key={index} value={item.id}>
-              {item.projectCode}-{item.projectTitle}
+              {item.project_code}-{item.projecttitle}
             </option>
           ))}
         </select>
