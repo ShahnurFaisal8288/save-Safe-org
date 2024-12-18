@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
 
 const InsuranceList = () => {
   // All useState start
@@ -41,8 +42,10 @@ const InsuranceList = () => {
       }
 
       // Set initial data for display (could be fetched from a separate API for insurance list)
-      const initialData = await axios.get("YOUR_INITIAL_DATA_API_URL");
-      setFilteredData(initialData.data);
+     const initialData = await axios.get(
+       "http://localhost:5001/api/health_insurance/list"
+     );
+     setFilteredData(initialData.data);
     } catch (error) {
       console.error("Error fetching data:", error.message);
     }
@@ -62,15 +65,25 @@ const InsuranceList = () => {
 
   // Handle search form submission
   const handleSearch = async () => {
+    const formattedDate = searchDate
+      ? format(new Date(searchDate), "yyyy-MM-dd")
+      : "";
+
     const filterParams = {
-      date: searchDate,
-      status: Object.keys(statusFilters).filter((key) => statusFilters[key]),
+      date: formattedDate,
+      status: Object.keys(statusFilters)
+        .filter((key) => statusFilters[key])
+        .join(","),
     };
 
     try {
-      const response = await axios.get("YOUR_SEARCH_API_URL", {
-        params: filterParams,
-      });
+      const response = await axios.get(
+        "http://localhost:5001/api/health_insurance/list/search",
+        {
+          params: filterParams,
+        }
+      );
+
       if (response.data) {
         setFilteredData(response.data);
       }
@@ -78,7 +91,7 @@ const InsuranceList = () => {
       console.error("Error fetching filtered data:", error.message);
     }
   };
-  // console.log("poNo", poNo);
+  console.log("filteredData :", filteredData);
   return (
     <div className="container">
       {/* Project Selection */}
