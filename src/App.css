@@ -1,123 +1,129 @@
-
-
-/* health insurance filter css */
+/* Global styles */
 body {
   font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  background-color: #f8f9fa;
 }
 
 .container {
   width: 90%;
   margin: 20px auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Section Styles */
+/* Section styling */
 .section {
   margin-bottom: 20px;
 }
 
 .section-title {
-  background-color: #e91e63;
-  color: #fff;
+  background-color: #f72b8b;
+  color: white;
   padding: 10px;
-  font-weight: bold;
-}
-
-.card {
-  border: 1px solid #ddd;
   border-radius: 5px;
-  background-color: #fff;
-  padding: 20px;
-}
-
-/* Form Styles */
-.form-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.form-group > div {
-  flex: 1 1 22%;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 
 .label {
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .required {
   color: red;
 }
 
+/* Input fields */
 .input {
   width: 100%;
   padding: 8px;
   margin-top: 5px;
   border: 1px solid #ddd;
-  border-radius: 3px;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
-.checkbox-group {
+/* Checkbox group */
+.checkbox-group div {
   display: flex;
-  gap: 20px;
   align-items: center;
+  margin-bottom: 5px;
 }
 
-.checkbox-group label {
-  margin-left: 5px;
+.checkbox-group input {
+  margin-right: 5px;
 }
 
-/* Button Styles */
+/* Buttons */
 .buttons {
+  margin-top: 15px;
   display: flex;
+  justify-content: flex-end;
   gap: 10px;
 }
 
-button {
+.reset-btn,
+.search-btn {
+  padding: 8px 15px;
   border: none;
-  padding: 8px 12px;
-  border-radius: 3px;
-  color: white;
+  border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
 }
 
 .reset-btn {
-  background-color: #6c757d;
+  background-color: #f44336;
+  color: white;
 }
 
 .search-btn {
-  background-color: #e91e63;
+  background-color: #4caf50;
+  color: white;
 }
 
-/* Table Styles */
+/* Table styling */
 .table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 15px;
 }
 
 .table th,
 .table td {
-  border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
+  border: 1px solid #ddd;
 }
 
 .table th {
-  background-color: #e91e63;
-  color: #fff;
-  font-weight: bold;
+  background-color: #f72b8b;
+  color: white;
 }
 
-.download-btn {
-  background-color: #ff4081;
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
+/* Buttons in table */
+.download-btn,
 .view-btn {
-  background-color: #e91e63;
+  background-color: #f72b8b;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.download-btn:hover,
+.view-btn:hover {
+  background-color: #d02770;
 }
 
 /* Pagination */
@@ -126,15 +132,23 @@ button {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .pagination button {
-  background-color: #ddd;
-  color: #333;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
 }
 
-.pagination .active {
-  background-color: #e91e63;
-  color: #fff;
+.pagination button.active {
+  background-color: #f72b8b;
+  color: white;
+}
+
+.pagination select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
 }

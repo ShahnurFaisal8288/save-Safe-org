@@ -7,6 +7,7 @@ import { Outlet } from "react-router-dom";
 import Footer from "./components/Footer";
 import './index.css';
 import "./MicroHealthInsurance.css";
+import "./ClaimSettlement.css";
 function App() {
   return (
     <div className="container-scroller">
