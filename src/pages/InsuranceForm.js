@@ -406,7 +406,7 @@ function InsuranceForm() {
       }
 
       axios
-        .post("http://localhost:5001/api/health_insurance/store", formData, {
+        .post("http://localhost:5000/api/health_insurance/store", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -532,12 +532,12 @@ function InsuranceForm() {
     }
   };
   // console.log("healthStatus", healthStatus);
-  console.log('Input Parameters:', {
+  console.log("Input Parameters:", {
     id,
     name,
     account_number,
     sex,
-    date_of_birth
+    date_of_birth,
   });
 
   // Calculate age
@@ -546,53 +546,56 @@ function InsuranceForm() {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDifference = today.getMonth() - birthDate.getMonth();
-    
-    if (monthDifference < 0 || 
-        (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
-    
+
     return age;
   };
 
   // Validation function with more flexible sex handling
   const validatePolicyEligibility = (selectedValue) => {
-    console.log('Validation Started');
-    console.log('Selected Policy ID:', selectedValue);
-    console.log('User Sex:', sex);
-  
+    console.log("Validation Started");
+    console.log("Selected Policy ID:", selectedValue);
+    console.log("User Sex:", sex);
+
     const userAge = calculateAge(date_of_birth);
-    console.log('User Age:', userAge);
-  
+    console.log("User Age:", userAge);
+
     const policyValidationRules = {
-      '1': {
-        allowedSex: ['Female'],
+      1: {
+        allowedSex: ["Female"],
         minAge: 18,
         maxAge: 39,
-        errorMessage: 'This policy is primarily for Females aged 18-39',
+        errorMessage: "This policy is primarily for Females aged 18-39",
       },
-      '2': {
-        allowedSex: ['Male', 'Female'],
+      2: {
+        allowedSex: ["Male", "Female"],
         minAge: 18,
         maxAge: 64,
-        errorMessage: 'This policy is available for Males and Females aged 18-64',
+        errorMessage:
+          "This policy is available for Males and Females aged 18-64",
       },
     };
-  
+
     const validationRule = policyValidationRules[selectedValue];
-  
+
     if (!validationRule) {
       setErrors((prev) => ({
         ...prev,
-        validatePolicyName: 'Invalid policy selection',
+        validatePolicyName: "Invalid policy selection",
       }));
       setDropdownDisabled(true);
       return false;
     }
-  
+
     // Sex validation
     if (!validationRule.allowedSex.includes(sex)) {
-      console.warn('Sex Validation Failed');
+      console.warn("Sex Validation Failed");
       setErrors((prev) => ({
         ...prev,
         validatePolicyName: validationRule.errorMessage,
@@ -600,10 +603,10 @@ function InsuranceForm() {
       setDropdownDisabled(true); // Disable dropdown if validation fails
       return false;
     }
-  
+
     // Age validation
     if (userAge < validationRule.minAge || userAge > validationRule.maxAge) {
-      console.warn('Age Validation Failed');
+      console.warn("Age Validation Failed");
       setErrors((prev) => ({
         ...prev,
         validatePolicyName: `${validationRule.errorMessage}. Current age does not meet requirements.`,
@@ -611,30 +614,30 @@ function InsuranceForm() {
       setDropdownDisabled(true); // Disable dropdown if validation fails
       return false;
     }
-  
+
     // Clear errors and enable dropdown if validation passes
     setErrors((prev) => ({
       ...prev,
-      validatePolicyName: '',
+      validatePolicyName: "",
     }));
     setDropdownDisabled(false);
-    console.log('Validation Passed');
+    console.log("Validation Passed");
     return true;
   };
 
   // Handle Policy Name Change
   const handlePolicyNameChange = (selectedValue) => {
     // Find the selected policy's categories
-    const selectedPolicyCategories = 
+    const selectedPolicyCategories =
       category?.find((item) => item.insurance_product_id == selectedValue)
         ?.category || [];
-    
+
     // Set the category items in state
     setCategoryItems(selectedPolicyCategories);
-    
+
     // Perform validation
     const isValid = validatePolicyEligibility(selectedValue);
-    
+
     if (isValid) {
       // Existing logic
       setValidatePolicyName(selectedValue);
@@ -642,7 +645,6 @@ function InsuranceForm() {
       setErrors({ ...errors, validatePolicyName: "" });
     }
   };
-
 
   const handleCategoryChange = (e) => {
     const selectedCategoryId = e.target.value;
@@ -827,38 +829,39 @@ function InsuranceForm() {
             {showForm && (
               <>
                 <Row className="mb-4">
-                <Col md={6}>
-                <Form.Group>
-  <Form.Label>Insurance Policy Name</Form.Label>
-  <Form.Control
-    as="select"
-    name="PolicyName"
-    value={selectedPolicy}
-    onChange={(e) => {
-      const selectedValue = e.target.value;
-      handlePolicyNameChange(selectedValue); // Perform validation here
-    }}
-     // Ensure this is the correct state
-    required
-  >
-    <option value="">Select Insurance Policy Name</option>
-    {category?.map((item) => (
-      <option
-        key={item.insurance_product_id}
-        value={item.insurance_product_id}
-      >
-        {item.policy_name}
-      </option>
-    ))}
-  </Form.Control>
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Label>Insurance Policy Name</Form.Label>
+                      <Form.Control
+                        as="select"
+                        name="PolicyName"
+                        value={selectedPolicy}
+                        onChange={(e) => {
+                          const selectedValue = e.target.value;
+                          handlePolicyNameChange(selectedValue); // Perform validation here
+                        }}
+                        // Ensure this is the correct state
+                        required
+                      >
+                        <option value="">Select Insurance Policy Name</option>
+                        {category?.map((item) => (
+                          <option
+                            key={item.insurance_product_id}
+                            value={item.insurance_product_id}
+                          >
+                            {item.policy_name}
+                          </option>
+                        ))}
+                      </Form.Control>
 
-  {/* Display validation error */}
-  {errors.validatePolicyName && (
-    <p style={{ color: 'red' }}>{errors.validatePolicyName}</p>
-  )}
-</Form.Group>
-
-    </Col>
+                      {/* Display validation error */}
+                      {errors.validatePolicyName && (
+                        <p style={{ color: "red" }}>
+                          {errors.validatePolicyName}
+                        </p>
+                      )}
+                    </Form.Group>
+                  </Col>
 
                   <Col md={6}>
                     <Form.Group>

@@ -21,31 +21,31 @@ const InsuranceList = () => {
   const fetchData = async () => {
     try {
       const projectResponse = await axios.get(
-        "http://localhost:5001/api/projects"
+        "http://localhost:5000/api/projects"
       );
       if (projectResponse.data && Array.isArray(projectResponse.data)) {
         setProject(projectResponse.data);
       }
 
       const poResponse = await axios.get(
-        "http://localhost:5001/api/collectors"
+        "http://localhost:5000/api/collectors"
       );
       if (poResponse.data) {
         setPoNo(poResponse.data);
       }
 
       const memberResponse = await axios.get(
-        "http://localhost:5001/api/client"
+        "http://localhost:5000/api/client"
       );
       if (memberResponse.data) {
         setMemberName(memberResponse.data);
       }
 
       // Set initial data for display (could be fetched from a separate API for insurance list)
-     const initialData = await axios.get(
-       "http://localhost:5001/api/health_insurance/list"
-     );
-     setFilteredData(initialData.data);
+      const initialData = await axios.get(
+        "http://localhost:5000/api/health_insurance/list"
+      );
+      setFilteredData(initialData.data);
     } catch (error) {
       console.error("Error fetching data:", error.message);
     }
@@ -78,7 +78,7 @@ const InsuranceList = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:5001/api/health_insurance/list/search",
+        "http://localhost:5000/api/health_insurance/list/search",
         {
           params: filterParams,
         }
@@ -103,7 +103,7 @@ const InsuranceList = () => {
           <option>Choose Project</option>
           {project.map((item, index) => (
             <option key={index} value={item.id}>
-              {item.projectCode}-{item.projectTitle}
+              {item.project_code}-{item.projecttitle}
             </option>
           ))}
         </select>
