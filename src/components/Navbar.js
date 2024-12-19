@@ -16,14 +16,14 @@ const Navbar = () => {
         setIsLoggedIn(!!token); // Set login state based on token existence // Set login state based on token existence
     }, [location]); // Trigger re-check on page change
     const handleLogout = () => {
-        Swal.fire({
-            icon: "success",
-            title: "Logout Successfully",
-            // text: `Welcome back`,
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-        });
+        // Swal.fire({
+        //     icon: "success",
+        //     title: "Logout Successfully",
+        //     // text: `Welcome back`,
+        //     showConfirmButton: false,
+        //     timer: 2000,
+        //     timerProgressBar: true,
+        // });
         localStorage.removeItem("token"); // Remove token from storage
         setIsLoggedIn(false); // Update state
         navigate("/"); // Redirect to login page

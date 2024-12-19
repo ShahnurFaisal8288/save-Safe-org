@@ -52,14 +52,14 @@ function Login() {
         );
         localStorage.setItem("sidebar", JSON.stringify(response.data.sidebar));
 
-        Swal.fire({
-          icon: "success",
-          title: "Login Successful",
-          text: `Welcome back, ${response.data.user.name}!`,
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-        });
+        // Swal.fire({
+        //   icon: "success",
+        //   title: "Login Successful",
+        //   text: `Welcome back, ${response.data.user.name}!`,
+        //   showConfirmButton: false,
+        //   timer: 2000,
+        //   timerProgressBar: true,
+        // });
         setSidebarData(response.data.sidebar); // Pass sidebar data correctly
         console.log("setSidebarData", sidebarData);
         navigate("/dashboard");
@@ -68,14 +68,14 @@ function Login() {
         throw new Error("Unsuccessful login");
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Unauthorized",
-        text: "Please Try Again!!!",
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true,
-      });
+      // Swal.fire({
+      //   icon: "error",
+      //   title: "Unauthorized",
+      //   text: "Please Try Again!!!",
+      //   showConfirmButton: false,
+      //   timer: 2000,
+      //   timerProgressBar: true,
+      // });
     } finally {
       setLoading(false);
     }
