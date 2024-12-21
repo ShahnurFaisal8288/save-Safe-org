@@ -1,14 +1,51 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import "../MicroHealthInsurance.css";
+import axios from "axios";
 
 const MicroHealthInsurance = () => {
+  // const [project, setProject] = useState();
+  const [memberNo, setMemberNo] = useState([]);
+  const [selectedMemberId, setSelectedMemberId] = useState("");
+
+  //  useEffect(() => {
+  //   const fetchProjectName = async () => {
+  //     const projectResponse = await axios.get(
+  //       "http://localhost:8000/api/projects"
+  //     );
+  //     setProject(projectResponse.data);
+  //     };
+  //     fetchProjectName();
+  //   }, []);
+
+   useEffect(() => {
+    const fetchMemberNo = async () => {
+      const memberNoResponse = await axios.get(
+        "http://localhost:8000/api/client"
+      );
+      setMemberNo(memberNoResponse.data);
+      console.log("memberNoResponse :",memberNoResponse)
+      };
+      fetchMemberNo();
+    }, []);
+
+    const handleMemberChange = (e) => {
+      const accountNumber =e.target.value;
+      const selectedMember = memberNo.find(
+        (item) => item.account_number === accountNumber
+      );
+      if(selectedMember){
+        setSelectedMemberId(selectedMember.id);
+        console.log("Selected Member ID:", selectedMember.id);
+      }
+    }
+
   return (
-    <div className="container">
+    <div className="container mt-5">
       <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
 
       {/* Project Section */}
       <div className="section">
-        <div className="section-header">Project</div>
+        {/* <div className="section-header">Project</div> */}
         <div className="form-group">
           <label>Project *</label>
           <select className="form-control">
@@ -24,10 +61,23 @@ const MicroHealthInsurance = () => {
           <div className="form-group">
             <label>Member Number *</label>
             <div className="search-box">
-              <input type="text" placeholder="Member Number" />
-              <button className="search-button">🔍</button>
+              <input
+                type="text"
+                list="memberNumbers"
+                onChange={handleMemberChange}
+                placeholder="Member Number"
+              />
+              <datalist id="memberNumbers">
+                
+                {memberNo.map((item, index) => (
+                <option key={index} value={item.account_number}>
+                  {item.account_number}
+                </option>
+                ))}
+              </datalist>
             </div>
           </div>
+
           <div className="form-group">
             <label>ERP Member Number</label>
             <input type="text" />
@@ -97,51 +147,50 @@ const MicroHealthInsurance = () => {
 
       {/* Document Upload Section */}
       {/* Document Upload Section */}
-<div className="section">
-  <div className="section-header">Document Upload</div>
-  <div className="form-group">
-    <label>Member's National ID *</label>
-    <div className="upload-grid">
-      <div className="upload-box">
-        <label className="upload-label" htmlFor="frontSide">
-          <div className="file-placeholder">Front Side</div>
-        </label>
-        <input
-          type="file"
-          id="frontSide"
-          className="file-input"
-          accept=".jpg,.jpeg,.png,.pdf"
-        />
+      <div className="section">
+        <div className="section-header">Document Upload</div>
+        <div className="form-group">
+          <label>Member's National ID *</label>
+          <div className="upload-grid">
+            <div className="upload-box">
+              <label className="upload-label" htmlFor="frontSide">
+                <div className="file-placeholder">Front Side</div>
+              </label>
+              <input
+                type="file"
+                id="frontSide"
+                className="file-input"
+                accept=".jpg,.jpeg,.png,.pdf"
+              />
+            </div>
+            <div className="upload-box">
+              <label className="upload-label" htmlFor="backSide">
+                <div className="file-placeholder">Back Side</div>
+              </label>
+              <input
+                type="file"
+                id="backSide"
+                className="file-input"
+                accept=".jpg,.jpeg,.png,.pdf"
+              />
+            </div>
+          </div>
+          <small className="error-text">This field is required.</small>
+        </div>
+
+        <div className="form-group">
+          <label>Document Type *</label>
+          <select>
+            <option>Select a Document Type</option>
+          </select>
+        </div>
+
+        <p className="note">
+          <strong>N.B:</strong> If multiple document upload needed, please
+          attach all the documents in a single PDF. Then select{" "}
+          <strong>"Other documents"</strong> and upload the PDF.
+        </p>
       </div>
-      <div className="upload-box">
-        <label className="upload-label" htmlFor="backSide">
-          <div className="file-placeholder">Back Side</div>
-        </label>
-        <input
-          type="file"
-          id="backSide"
-          className="file-input"
-          accept=".jpg,.jpeg,.png,.pdf"
-        />
-      </div>
-    </div>
-    <small className="error-text">This field is required.</small>
-  </div>
-
-  <div className="form-group">
-    <label>Document Type *</label>
-    <select>
-      <option>Select a Document Type</option>
-    </select>
-  </div>
-
-  <p className="note">
-    <strong>N.B:</strong> If multiple document upload needed, please attach all
-    the documents in a single PDF. Then select{" "}
-    <strong>"Other documents"</strong> and upload the PDF.
-  </p>
-</div>
-
 
       {/* Buttons */}
       <div className="button-group">

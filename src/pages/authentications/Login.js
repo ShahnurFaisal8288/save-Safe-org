@@ -47,6 +47,14 @@ function Login() {
           response.data.collector.collector_number
         );
         localStorage.setItem(
+          "name",
+          response.data.user.name
+        );
+        localStorage.setItem(
+          "email",
+          response.data.user.email
+        );
+        localStorage.setItem(
           "permissions",
           JSON.stringify(response.data.collector.permissions)
         );

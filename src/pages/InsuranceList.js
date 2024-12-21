@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
+import '../InsuranceList.css'
 
 const InsuranceList = () => {
   // All useState start
@@ -93,9 +94,9 @@ const InsuranceList = () => {
   };
   console.log("project :", project);
   return (
-    <div className="container">
+    <div className="container mt-5">
       {/* Project Selection */}
-      <div className="section mt-5">
+      <div className="section ">
         <label className="label">
           Project <span className="required">*</span>
         </label>

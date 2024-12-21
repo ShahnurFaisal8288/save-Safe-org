@@ -1,0 +1,89 @@
+/* Container Styles */
+.container {
+    max-width: 1200px;
+    padding: 20px;
+    margin: auto;
+  }
+  
+  /* Section Styles */
+  .section {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .section-header {
+    background-color: #ec4899;
+    padding: 10px 15px;
+    font-size: 18px;
+  }
+  
+  .section-body {
+    padding: 15px;
+  }
+  
+  /* Form Styles */
+  .form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .form-control {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Input Group */
+  .input-group {
+    display: flex;
+  }
+  
+  .input-group .form-control {
+    flex: 1;
+    border-radius: 4px 0 0 4px;
+  }
+  
+  .input-group .btn-search {
+    background-color: #ec4899;
+    border: none;
+    color: white;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+  }
+  
+  .input-group .btn-search:hover {
+    background-color: #d02770;
+  }
+  
+  /* Save Button */
+  .btn-save {
+    padding: 10px 20px;
+    background-color: #ec4899;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-save:hover {
+    background-color: #d02770;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .section-body .row {
+      display: block;
+    }
+  
+    .section-body .col-md-3,
+    .section-body .col-md-6,
+    .section-body .col-12 {
+      margin-bottom: 15px;
+    }
+  }
+  

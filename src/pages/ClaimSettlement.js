@@ -1,9 +1,9 @@
 import React from "react";
-
+import "../ClaimSettlement.css";
 
 const ClaimSettlement = () => {
   return (
-    <div className="container">
+    <div className="container mt-5">
       {/* Project Section */}
       <div className="section">
         <h2>Project</h2>

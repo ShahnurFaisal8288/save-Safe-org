@@ -568,13 +568,13 @@ function InsuranceForm() {
 
     const policyValidationRules = {
       1: {
-        allowedSex: ["Female"],
+        allowedSex: ["2"],
         minAge: 18,
         maxAge: 39,
         errorMessage: "This policy is primarily for Females aged 18-39",
       },
       2: {
-        allowedSex: ["Male", "Female"],
+        allowedSex: ["1", "2"],
         minAge: 18,
         maxAge: 64,
         errorMessage:

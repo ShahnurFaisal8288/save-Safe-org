@@ -9,12 +9,25 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation(); // Detect current page
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+    const [name, setName] = useState(null);
+    const [email, setEmail] = useState(null);
+   
     useEffect(() => {
-
         const token = localStorage.getItem("token");
         setIsLoggedIn(!!token); // Set login state based on token existence // Set login state based on token existence
     }, [location]); // Trigger re-check on page change
+
+    useEffect(() => {
+        const storedSetName = localStorage.getItem("name");
+    
+        setName(storedSetName);
+      }, []);
+    useEffect(() => {
+        const storedSetEmail = localStorage.getItem("email");
+    
+        setEmail(storedSetEmail);
+      }, []);
+    
     const handleLogout = () => {
         // Swal.fire({
         //     icon: "success",
@@ -110,12 +123,12 @@ const Navbar = () => {
                     </li>
                     <li className="nav-item dropdown d-none d-xl-inline-flex user-dropdown">
                         <a className="nav-link dropdown-toggle" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img className="img-xs rounded-circle ms-2" src="/images/face8.jpg" alt="Profile image"/> <span className="font-weight-normal"> Henry Klein </span></a>
+                            <img className="img-xs rounded-circle ms-2" src="/images/face8.jpg" alt="Profile image"/> <span className="font-weight-normal"> {name} </span></a>
                         <div className="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                             <div className="dropdown-header text-center">
                                 <img className="img-md rounded-circle" src="/images/face8.jpg" alt="Profile image"/>
-                                    <p className="mb-1 mt-3">Henry Klein</p>
-                                    <p className="font-weight-light text-muted mb-0">kleinhenry@gmail.com</p>
+                                    <p className="mb-1 mt-3">{name}</p>
+                                    <p className="font-weight-light text-muted mb-0">{email}</p>
                             </div>
                             <button className="dropdown-item"><i className="dropdown-item-icon icon-user text-primary"></i> My Profile <span className="badge badge-pill badge-danger">1</span></button>
                             <button className="dropdown-item"><i className="dropdown-item-icon icon-speech text-primary"></i> Messages</button>

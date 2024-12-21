@@ -10,7 +10,7 @@ const useGetCategory = (id) => {
   } = useQuery({
     queryKey: ["category"],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:5000/api/insurance/category`);
+      const res = await fetch(`http://localhost:8000/api/insurance/category`);
       return res.json();
     },
   });
