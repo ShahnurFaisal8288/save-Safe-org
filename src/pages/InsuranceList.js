@@ -92,7 +92,7 @@ const InsuranceList = () => {
       console.error("Error fetching filtered data:", error.message);
     }
   };
-  console.log("project :", project);
+  // console.log("project :", project);
   return (
     <div className="container mt-5">
       {/* Project Selection */}
@@ -104,7 +104,7 @@ const InsuranceList = () => {
           <option>Choose Project</option>
           {project.map((item, index) => (
             <option key={index} value={item.id}>
-              {item.project_code}-{item.projecttitle}
+              {item.projectCode}-{item.projectTitle}
             </option>
           ))}
         </select>

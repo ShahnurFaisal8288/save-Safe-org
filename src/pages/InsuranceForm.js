@@ -82,6 +82,8 @@ function InsuranceForm() {
 
   //uuid
   const [insuranceId, setInsuranceId] = useState("");
+  //collector id
+  const [collectorId, setCollectorId] = useState("");
 
   //dynamic category start
   const [policyNameId, setpolicyNameId] = useState(null);
@@ -235,17 +237,7 @@ function InsuranceForm() {
       newErrors.validateCategory = "Please Select Category";
     }
 
-    // // Premium Amount validation
-    // if (!premiumAmount || parseFloat(premiumAmount) <= 0) {
-    //   valid = false;
-    //   newErrors.validatePremiumAmount = "Please Set Premium Amount";
-    // }
-
-    // // Duration validation
-    // if (!policyTenture || parseFloat(policyTenture) <= 0) {
-    //   valid = false;
-    //   newErrors.validateDuration = "Please Set Duration";
-    // }
+  
     // Nominee Name validation
     if (!validateNomineeName || validateNomineeName.trim() === "") {
       valid = false;
@@ -324,7 +316,7 @@ function InsuranceForm() {
             OrgNo: event.target.OrgNo ? event.target.OrgNo.value : "",
             OrgMemNo: event.target.OrgMemNo ? event.target.OrgMemNo.value : "",
             EnrollId: event.target.EnrollId ? event.target.EnrollId.value : "",
-            ErpMemId: event.target.ErpMemId ? event.target.ErpMemId.value : "",
+            // ErpMemId: event.target.ErpMemId ? event.target.ErpMemId.value : "",
             ProjectCode: event.target.ProjectCode
               ? event.target.ProjectCode.value
               : "",
@@ -374,10 +366,11 @@ function InsuranceForm() {
           },
         ])
       );
+      formData.append("CollectorId", event.target.CollectorId.value);
 
       // console.log("BranchCode:", event.target.BranchCode.value);
       // console.log("Member_name:", event.target.Member_name.value);
-      // console.log("HealthInsuranceJson:", formData.get("HealthInsuranceJson"));
+      console.log("HealthInsuranceJson:", formData.get("HealthInsuranceJson"));
 
       // Ensure file inputs exist and have files
       if (!event.target.Duration) {
@@ -428,11 +421,16 @@ function InsuranceForm() {
       alert("Failed to create data");
     }
   };
-
+  
   useEffect(() => {
     const storedSetCollectorNumber = localStorage.getItem("collector_number");
 
     setCollectorNumber(storedSetCollectorNumber);
+  }, []);
+  useEffect(() => {
+    const storedSetCollectorId = localStorage.getItem("id");
+
+    setCollectorId(storedSetCollectorId);
   }, []);
   //branch no
   // useEffect(() => {
@@ -441,7 +439,7 @@ function InsuranceForm() {
   //   setBranchCode(branch_code);
   // }, []);
   useEffect(() => {
-    const branch_code = localStorage.getItem("branch_code");
+    const branch_code = localStorage.getItem("id");
 
     // Add null/empty checks
     if (branch_code && branch_code !== "null") {
@@ -738,6 +736,16 @@ function InsuranceForm() {
               <Form.Group>
                 <Form.Control
                   type="hidden"
+                  name="CollectorId"
+                  value={collectorId}
+                  readOnly
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Control
+                  type="hidden"
                   name="OrgMemNo"
                   value={account_number}
                   readOnly
@@ -756,7 +764,7 @@ function InsuranceForm() {
                 {/* <Button onClick={handleSetInsuranceId}>Generate Insurance ID</Button> */}
               </Form.Group>
             </Col>
-            <Col md={6}>
+            {/* <Col md={6}>
               <Form.Group>
                 <Form.Control
                   type="hidden"
@@ -765,7 +773,7 @@ function InsuranceForm() {
                   readOnly
                 />
               </Form.Group>
-            </Col>
+            </Col> */}
             <Col md={6}>
               <Form.Group>
                 <Form.Control

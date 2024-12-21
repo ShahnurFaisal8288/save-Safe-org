@@ -4,6 +4,7 @@ import axios from "axios";
 
 const MicroHealthInsurance = () => {
   // const [project, setProject] = useState();
+  const [project, setProject] = useState([]);
   const [memberNo, setMemberNo] = useState([]);
   const [selectedMemberId, setSelectedMemberId] = useState("");
 
@@ -17,28 +18,54 @@ const MicroHealthInsurance = () => {
   //     fetchProjectName();
   //   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
+    const fetchProjectNo = async () => {
+      const projectResponse = await axios.get(
+        "http://localhost:8000/api/projects"
+      );
+      setProject(projectResponse.data);
+      console.log("memberNoResponse :", projectResponse);
+    };
+    fetchProjectNo();
+  }, []);
+  useEffect(() => {
     const fetchMemberNo = async () => {
       const memberNoResponse = await axios.get(
         "http://localhost:8000/api/client"
       );
       setMemberNo(memberNoResponse.data);
-      console.log("memberNoResponse :",memberNoResponse)
-      };
-      fetchMemberNo();
-    }, []);
+      console.log("memberNoResponse :", memberNoResponse);
+    };
+    fetchMemberNo();
+  }, []);
 
-    const handleMemberChange = (e) => {
-      const accountNumber =e.target.value;
-      const selectedMember = memberNo.find(
-        (item) => item.account_number === accountNumber
-      );
-      if(selectedMember){
-        setSelectedMemberId(selectedMember.id);
-        console.log("Selected Member ID:", selectedMember.id);
-      }
+  //calculate Age
+  const calculateAge = (dateOfBirth) => {
+    const dob = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+
+    // Adjust age if the current date is before the birthday this year
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
     }
 
+    return age;
+  };
+
+  const handleMemberChange = (e) => {
+    const accountNumber = e.target.value;
+    const selectedMember = memberNo.find(
+      (item) => item.account_number === accountNumber
+    );
+    if (selectedMember) {
+      setSelectedMemberId(selectedMember);
+      console.log("Selected Member ID:", selectedMember);
+    }
+  };
+  // console.log("selectedMemberId :",selectedMemberId);
+  console.log("project :", project);
   return (
     <div className="container mt-5">
       <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
@@ -48,9 +75,13 @@ const MicroHealthInsurance = () => {
         {/* <div className="section-header">Project</div> */}
         <div className="form-group">
           <label>Project *</label>
-          <select className="form-control">
-            <option>Select Project</option>
-          </select>
+          <select>
+  {project.map((item, index) => (
+    <option key={index} value={item.id}>
+      {item.projectTitle}
+    </option>
+  ))}
+</select>
         </div>
       </div>
 
@@ -68,40 +99,44 @@ const MicroHealthInsurance = () => {
                 placeholder="Member Number"
               />
               <datalist id="memberNumbers">
-                
                 {memberNo.map((item, index) => (
-                <option key={index} value={item.account_number}>
-                  {item.account_number}
-                </option>
+                  <option key={index} value={item.account_number}>
+                    {item.account_number}
+                  </option>
                 ))}
               </datalist>
             </div>
           </div>
 
-          <div className="form-group">
-            <label>ERP Member Number</label>
-            <input type="text" />
-          </div>
+          
           <div className="form-group">
             <label>Member Name</label>
-            <input type="text" />
+            <input
+              type="text"
+              value={selectedMemberId ? selectedMemberId.name : ""}
+            />
           </div>
-          <div className="form-group">
-            <label>Member Category</label>
-            <input type="text" />
-          </div>
+
           <div className="form-group">
             <label>Member Mobile Number</label>
-            <input type="text" />
+            <input
+              type="text"
+              value={selectedMemberId ? selectedMemberId.contact_number : ""}
+            />
           </div>
           <div className="form-group">
             <label>Age</label>
-            <input type="number" />
+            <input
+              type="text"
+              value={
+                selectedMemberId && selectedMemberId.date_of_birth
+                  ? calculateAge(selectedMemberId.date_of_birth)
+                  : ""
+              }
+              readOnly
+            />
           </div>
-          <div className="form-group full-width">
-            <label>Identification Number</label>
-            <input type="text" />
-          </div>
+          
         </div>
       </div>
 
