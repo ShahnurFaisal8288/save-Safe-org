@@ -167,7 +167,7 @@ const MicroHealthInsurance = () => {
             <select>
               <option>Select Product</option>
               {product.map((item,index) => (
-              <option key={index} value={item.name}>{item.name}</option>
+              <option key={index} value={item.policy_name}>{item.policy_name}</option>
                 ))}
             </select>
           </div>
