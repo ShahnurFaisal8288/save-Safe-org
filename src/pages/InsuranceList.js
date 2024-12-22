@@ -92,7 +92,7 @@ const InsuranceList = () => {
       console.error("Error fetching filtered data:", error.message);
     }
   };
-  // console.log("project :", project);
+  console.log("filteredData :", filteredData);
   return (
     <div className="container mt-5">
       {/* Project Selection */}
@@ -224,11 +224,11 @@ const InsuranceList = () => {
           <tbody>
             {filteredData.map((item, index) => (
               <tr key={index}>
-                <td>{item.enrolment_id}</td>
-                <td>{item.date}</td>
-                <td>{item.member_name}</td>
-                <td>{item.insurance_product}</td>
-                <td>{item.status}</td>
+                <td>{item?.enrolment_id}</td>
+                <td>{item?.date}</td>
+                <td>{item?.member_name}</td>
+                <td>{item?.insurance_product}</td>
+                <td>{item?.status}</td>
                 <td>
                   <button className="download-btn">Download</button>
                 </td>

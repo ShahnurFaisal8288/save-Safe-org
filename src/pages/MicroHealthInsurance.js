@@ -7,6 +7,7 @@ const MicroHealthInsurance = () => {
   const [project, setProject] = useState([]);
   const [memberNo, setMemberNo] = useState([]);
   const [selectedMemberId, setSelectedMemberId] = useState("");
+  const [product, setProduct] = useState([]);
 
   //  useEffect(() => {
   //   const fetchProjectName = async () => {
@@ -54,16 +55,34 @@ const MicroHealthInsurance = () => {
     return age;
   };
 
-  const handleMemberChange = (e) => {
+  const handleMemberChange = async (e) => {
     const accountNumber = e.target.value;
+  
+    // Find the selected member based on the account number
     const selectedMember = memberNo.find(
       (item) => item.account_number === accountNumber
     );
+  
     if (selectedMember) {
       setSelectedMemberId(selectedMember);
       console.log("Selected Member ID:", selectedMember);
+  
+      try {
+        // Pass the account_number as a query parameter in the API request
+        const productResponse = await axios.get(
+          `http://localhost:8000/api/health_insurances/account_number?account_number=${accountNumber}`
+        );
+  
+        // Set the response data to the product state
+        setProduct(productResponse.data);
+
+        console.log("Product Product Response:", productResponse.data);
+      } catch (error) {
+        console.error("Error Fetching Products:", error);
+      }
     }
   };
+  
   // console.log("selectedMemberId :",selectedMemberId);
   console.log("project :", project);
   return (
@@ -76,12 +95,13 @@ const MicroHealthInsurance = () => {
         <div className="form-group">
           <label>Project *</label>
           <select>
-  {project.map((item, index) => (
-    <option key={index} value={item.id}>
-      {item.projectTitle}
-    </option>
-  ))}
-</select>
+            <option>Choose</option>
+            {project.map((item, index) => (
+              <option key={index} value={item.id}>
+                {item.projectTitle}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -108,7 +128,6 @@ const MicroHealthInsurance = () => {
             </div>
           </div>
 
-          
           <div className="form-group">
             <label>Member Name</label>
             <input
@@ -136,7 +155,6 @@ const MicroHealthInsurance = () => {
               readOnly
             />
           </div>
-          
         </div>
       </div>
 
@@ -148,6 +166,9 @@ const MicroHealthInsurance = () => {
             <label>Product *</label>
             <select>
               <option>Select Product</option>
+              {product.map((item,index) => (
+              <option key={index} value={item.name}>{item.name}</option>
+                ))}
             </select>
           </div>
           <div className="form-group">

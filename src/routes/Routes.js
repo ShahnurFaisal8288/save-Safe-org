@@ -17,6 +17,7 @@ import InsuranceDetails from "../pages/InsuranceDetails";
 import MicroHealthInsurance from "../pages/MicroHealthInsurance";
 import ReceiveCreditAdvice from "../pages/ReceiveCreditAdvice";
 import ClaimSettlement from "../pages/ClaimSettlement";
+import ApproveStatus from "../pages/ApproveStatus";
 
 
 const router = createBrowserRouter([
@@ -93,6 +94,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/claim-settlement">
           <ClaimSettlement />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/approve-insurance-enrollment", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/approve-insurance-enrollment">
+          <ApproveStatus />
           </PrivateRoute>
         ),
       },
