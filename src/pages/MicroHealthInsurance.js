@@ -8,6 +8,10 @@ const MicroHealthInsurance = () => {
   const [memberNo, setMemberNo] = useState([]);
   const [selectedMemberId, setSelectedMemberId] = useState("");
   const [product, setProduct] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [treatmentType, setTreatmentType] = useState([]);
+  const [selectedPolicyNumber, setSelectedPolicyNumber] = useState("");
+  const [mappedHealthInsuranceId, setMappedHealthInsuranceId] = useState("");
 
   //  useEffect(() => {
   //   const fetchProjectName = async () => {
@@ -39,6 +43,16 @@ const MicroHealthInsurance = () => {
     };
     fetchMemberNo();
   }, []);
+  useEffect(() => {
+    const fetchTreatmentType = async () => {
+      const treatmentResponse = await axios.get(
+        "http://localhost:8000/api/treatmenttypes"
+      );
+      setTreatmentType(treatmentResponse.data);
+      console.log("treatmentResponse :", treatmentResponse);
+    };
+    fetchTreatmentType();
+  }, []);
 
   //calculate Age
   const calculateAge = (dateOfBirth) => {
@@ -57,22 +71,22 @@ const MicroHealthInsurance = () => {
 
   const handleMemberChange = async (e) => {
     const accountNumber = e.target.value;
-  
+
     // Find the selected member based on the account number
     const selectedMember = memberNo.find(
       (item) => item.account_number === accountNumber
     );
-  
+
     if (selectedMember) {
       setSelectedMemberId(selectedMember);
       console.log("Selected Member ID:", selectedMember);
-  
+
       try {
         // Pass the account_number as a query parameter in the API request
         const productResponse = await axios.get(
           `http://localhost:8000/api/health_insurances/account_number?account_number=${accountNumber}`
         );
-  
+
         // Set the response data to the product state
         setProduct(productResponse.data);
 
@@ -82,12 +96,58 @@ const MicroHealthInsurance = () => {
       }
     }
   };
-  
-  // console.log("selectedMemberId :",selectedMemberId);
-  console.log("project :", project);
+  const handleProductChange = (e) => {
+    const policyName = e.target.value;
+
+    const selectedPolicy = product.find(
+      (item) => item.policy_name === policyName
+    );
+    if (selectedPolicy) {
+      setSelectedProduct(selectedPolicy);
+      console.log("policyName:", policyName);
+    }
+  };
+  const handlePolicyNumberChange = (e) => {
+    const policyNumber = e.target.value;
+    setSelectedPolicyNumber(policyNumber);
+
+    if (selectedProduct) {
+      const policyNumbers = selectedProduct.insurance_policy_numbers.split(",");
+      const healthIds = selectedProduct.health_insurance_ids.split(",");
+
+      const index = policyNumbers.findIndex(
+        (number) => number.trim() === policyNumber
+      );
+
+      if (index !== -1) {
+        setMappedHealthInsuranceId(healthIds[index].trim());
+      }
+    }
+  };
+
+  console.log("product :", product);
+  console.log("selectedProduct :", selectedProduct);
   return (
     <div className="container mt-5">
       <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
+      <div className="form-group">
+        <label>Mapped Health Insurance ID</label>
+        <input
+          type="text"
+          name="health_insurance_id"
+          value={selectedProduct.insurance_product_id}
+          readOnly
+        />
+      </div>
+      <div className="form-group">
+        <label>Insurance Policy id</label>
+        <input
+          type="text"
+          name="health_insurance_id"
+          value={mappedHealthInsuranceId}
+          readOnly
+        />
+      </div>
 
       {/* Project Section */}
       <div className="section">
@@ -164,23 +224,39 @@ const MicroHealthInsurance = () => {
         <div className="form-grid">
           <div className="form-group">
             <label>Product *</label>
-            <select>
+            <select onChange={handleProductChange}>
               <option>Select Product</option>
-              {product.map((item,index) => (
-              <option key={index} value={item.policy_name}>{item.policy_name}</option>
-                ))}
+              {product.map((item, index) => (
+                <option key={index} value={item.policy_name}>
+                  {item.policy_name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="form-group">
             <label>Select Policy No *</label>
-            <select>
+            <select onChange={handlePolicyNumberChange}>
               <option>Select Policy Number</option>
+
+              {selectedProduct.insurance_policy_numbers &&
+                selectedProduct.insurance_policy_numbers
+                  .split(",")
+                  .map((number, index) => (
+                    <option key={index} value={number.trim()}>
+                      {number.trim()}
+                    </option>
+                  ))}
             </select>
           </div>
           <div className="form-group">
             <label>Treatment Type *</label>
             <select>
               <option>Select Treatment Type</option>
+              {treatmentType.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.type_name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="form-group">
