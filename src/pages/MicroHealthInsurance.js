@@ -125,7 +125,7 @@ const MicroHealthInsurance = () => {
     }
   };
 
-  console.log("product :", product);
+  console.log("treatmentType :", treatmentType);
   console.log("selectedProduct :", selectedProduct);
   return (
     <div className="container mt-5">
