@@ -10,8 +10,11 @@ const MicroHealthInsurance = () => {
   const [product, setProduct] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [treatmentType, setTreatmentType] = useState([]);
+  const [selectedTreatment, setSelectedTreatment] = useState([]);
   const [selectedPolicyNumber, setSelectedPolicyNumber] = useState("");
+  const [remainingSum, setRemainingSum] = useState("");
   const [mappedHealthInsuranceId, setMappedHealthInsuranceId] = useState("");
+  const [documentType, setDocumentType] = useState("");
 
   //  useEffect(() => {
   //   const fetchProjectName = async () => {
@@ -53,6 +56,15 @@ const MicroHealthInsurance = () => {
     };
     fetchTreatmentType();
   }, []);
+  const getDocumentTypeOptions = () => {
+    return [
+      { value: "doctor_advise", label: "Doctor Advise" },
+      { value: "discharge_certificate", label: "Discharge Certificate" },
+      { value: "hospital_bill", label: "Hospital Bill" },
+      { value: "investigation_report", label: "Investigation Report" },
+      { value: "other_documents", label: "Other Documents" },
+    ];
+  };
 
   //calculate Age
   const calculateAge = (dateOfBirth) => {
@@ -113,6 +125,7 @@ const MicroHealthInsurance = () => {
 
     if (selectedProduct) {
       const policyNumbers = selectedProduct.insurance_policy_numbers.split(",");
+      console.log("policyNumbers",selectedProduct)
       const healthIds = selectedProduct.health_insurance_ids.split(",");
 
       const index = policyNumbers.findIndex(
@@ -125,7 +138,49 @@ const MicroHealthInsurance = () => {
     }
   };
 
-  console.log("treatmentType :", treatmentType);
+  const handleTreatmentChange = async (e) => {
+    const treatmentType = e.target.value.toLowerCase(); // Convert to lowercase
+
+    if (!selectedProduct || !selectedProduct.insurance_product_id) {
+      console.error("selectedProduct or insurance_product_id is undefined");
+      return;
+    }
+
+    const insurancePolicyId = selectedProduct.insurance_product_id;
+    const insurancePolicyNo = selectedPolicyNumber;
+
+    console.log("Selected Treatment Type:", treatmentType);
+    console.log("Insurance Policy ID:", insurancePolicyId);
+    console.log("Insurance Policy No:", insurancePolicyNo);
+
+    if (treatmentType && insurancePolicyId && insurancePolicyNo) {
+      setSelectedTreatment(treatmentType);
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/searchTreatment/typename?type_name=${treatmentType}&insurance_policy_id=${insurancePolicyId}&insurance_policy_no=${insurancePolicyNo}`
+        );
+
+        if (response.status === 200) {
+          setRemainingSum(response.data);
+          console.log("Remaining Sum Insured Response:", response.data);
+        } else {
+          console.error("Unexpected response status:", response.status);
+        }
+      } catch (error) {
+        console.error(
+          "Error Fetching Treatment Data:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    } else {
+      console.error(
+        "Required fields are missing. Ensure treatmentType, insurancePolicyId, and insurancePolicyNo are defined."
+      );
+    }
+  };
+
+  console.log("selectedTreatment :", selectedTreatment);
   console.log("selectedProduct :", selectedProduct);
   return (
     <div className="container mt-5">
@@ -143,7 +198,7 @@ const MicroHealthInsurance = () => {
         <label>Insurance Policy id</label>
         <input
           type="text"
-          name="health_insurance_id"
+          name="insurance_policy_id"
           value={mappedHealthInsuranceId}
           readOnly
         />
@@ -235,7 +290,10 @@ const MicroHealthInsurance = () => {
           </div>
           <div className="form-group">
             <label>Select Policy No *</label>
-            <select onChange={handlePolicyNumberChange}>
+            <select
+              onChange={handlePolicyNumberChange}
+              name="insurance_policy_no"
+            >
               <option>Select Policy Number</option>
 
               {selectedProduct.insurance_policy_numbers &&
@@ -250,10 +308,10 @@ const MicroHealthInsurance = () => {
           </div>
           <div className="form-group">
             <label>Treatment Type *</label>
-            <select>
+            <select onChange={handleTreatmentChange} name="treatment_type_id">
               <option>Select Treatment Type</option>
               {treatmentType.map((item, index) => (
-                <option key={index} value={item.id}>
+                <option key={index} value={item.type_name}>
                   {item.type_name}
                 </option>
               ))}
@@ -262,17 +320,17 @@ const MicroHealthInsurance = () => {
           <div className="form-group">
             <label>Date of Incident *</label>
             <div className="date-box">
-              <input type="date" />
+              <input type="date" name="date_of_incident" />
               <button className="calendar-button">📅</button>
             </div>
           </div>
           <div className="form-group">
             <label>Claim Amount *</label>
-            <input type="number" />
+            <input type="number" name="claim_amount" />
           </div>
           <div className="form-group">
             <label>Remaining Sum Insured</label>
-            <input type="number" />
+            <input type="number" value={remainingSum[0]} />
           </div>
         </div>
       </div>
@@ -293,6 +351,7 @@ const MicroHealthInsurance = () => {
                 id="frontSide"
                 className="file-input"
                 accept=".jpg,.jpeg,.png,.pdf"
+                name="frontImage"
               />
             </div>
             <div className="upload-box">
@@ -304,19 +363,60 @@ const MicroHealthInsurance = () => {
                 id="backSide"
                 className="file-input"
                 accept=".jpg,.jpeg,.png,.pdf"
+                name="backImage"
               />
             </div>
           </div>
           <small className="error-text">This field is required.</small>
         </div>
 
+        {/* <div className="form-group">
+          <label>Document Type *</label>
+          <select >
+            <option>Select a Document Type</option>
+          </select>
+        </div> */}
         <div className="form-group">
           <label>Document Type *</label>
-          <select>
-            <option>Select a Document Type</option>
+          <select
+            value={documentType}
+            name="document_type"
+            onChange={(e) => setDocumentType(e.target.value)}
+          >
+            <option value="">Select a Document Type</option>
+            {getDocumentTypeOptions().map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
 
+        {/* Dynamic Document Upload Section */}
+        {documentType && (
+          <div className="form-group">
+            <label>
+              {
+                getDocumentTypeOptions().find(
+                  (opt) => opt.value === documentType
+                )?.label
+              }{" "}
+              *
+            </label>
+            <div className="upload-box">
+              <input
+                type="file"
+                className="file-input"
+                accept=".jpg,.jpeg,.png,.pdf"
+                id={documentType}
+                name="documentPath"
+              />
+              <label className="upload-label" htmlFor={documentType}>
+                Choose a file
+              </label>
+            </div>
+          </div>
+        )}
         <p className="note">
           <strong>N.B:</strong> If multiple document upload needed, please
           attach all the documents in a single PDF. Then select{" "}
