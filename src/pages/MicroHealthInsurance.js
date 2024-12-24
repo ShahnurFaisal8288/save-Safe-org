@@ -123,11 +123,14 @@ const MicroHealthInsurance = () => {
     const policyNumber = e.target.value;
     setSelectedPolicyNumber(policyNumber);
 
-    if (selectedProduct) {
+    if (
+      selectedProduct &&
+      selectedProduct.insurance_policy_numbers &&
+      selectedProduct.health_insurance_ids
+    ) {
       const policyNumbers = selectedProduct.insurance_policy_numbers.split(",");
-      console.log("policyNumbers",selectedProduct)
+      console.log("policyNumbers", selectedProduct);
       const healthIds = selectedProduct.health_insurance_ids.split(",");
-
       const index = policyNumbers.findIndex(
         (number) => number.trim() === policyNumber
       );
@@ -135,6 +138,10 @@ const MicroHealthInsurance = () => {
       if (index !== -1) {
         setMappedHealthInsuranceId(healthIds[index].trim());
       }
+    } else {
+      console.error(
+        "Selected product does not have policy numbers or health insurance IDs."
+      );
     }
   };
 
@@ -152,18 +159,21 @@ const MicroHealthInsurance = () => {
     console.log("Selected Treatment Type:", treatmentType);
     console.log("Insurance Policy ID:", insurancePolicyId);
     console.log("Insurance Policy No:", insurancePolicyNo);
+    console.log("selectedProduct:", selectedProduct);
 
     if (treatmentType && insurancePolicyId && insurancePolicyNo) {
       setSelectedTreatment(treatmentType);
 
+      const url = `http://localhost:8000/api/searchTreatment/typename?type_name=${treatmentType}&insurance_policy_id=52&insurance_policy_no=${insurancePolicyNo}`;
+      console.log("Request URL:", url);
+
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/searchTreatment/typename?type_name=${treatmentType}&insurance_policy_id=${insurancePolicyId}&insurance_policy_no=${insurancePolicyNo}`
-        );
+        const response = await axios.get(url);
 
         if (response.status === 200) {
-          setRemainingSum(response.data);
-          console.log("Remaining Sum Insured Response:", response.data);
+          const remainingSumInsured = response.data;
+          setRemainingSum(remainingSumInsured);
+          console.log("Remaining Sum Insured Response:", remainingSumInsured);
         } else {
           console.error("Unexpected response status:", response.status);
         }
@@ -180,255 +190,324 @@ const MicroHealthInsurance = () => {
     }
   };
 
-  console.log("selectedTreatment :", selectedTreatment);
-  console.log("selectedProduct :", selectedProduct);
+  // method to handle form submission
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("health_insurance_id", e.target.health_insurance_id.value);
+    formData.append("enrollment_id", e.target.enrollment_id.value);
+    formData.append("insurance_policy_id", e.target.insurance_policy_id.value);
+    formData.append("insurance_policy_no", e.target.insurance_policy_no.value);
+    formData.append("treatment_type_id", e.target.treatment_type_id.value);
+    formData.append("date_of_incident", e.target.date_of_incident.value);
+    formData.append("claim_amount", e.target.claim_amount.value);
+    // formData.append("frontImage", e.target.frontImage.value);
+    // formData.append("backImage", e.target.backImage.value);
+    formData.append("document_type", e.target.document_type.value);
+    console.log("documentPath...... :", e.target.documentPath.value);
+    // formData.append("documentPath", e.target.documentPath.value);
+
+    formData.append("frontImage", e.target.frontImage.files[0]);
+    formData.append("backImage", e.target.backImage.files[0]);
+    formData.append("documentPath", e.target.documentPath.files[0]);
+    alert("Form submitted successfully");
+
+    try {
+      alert("Form submitted successfully");
+      const response = await axios.post(
+        "http://localhost:8000/api/claim/store",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("Form submitted successfully:", response.data);
+      } else {
+        console.error("Unexpected response status:", response.status);
+      }
+    } catch (error) {
+      console.error(
+        "Error submitting form:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  // const handleFormSubmit = async (e) => {
+  //   e.preventDefault();
+
+  // console.log("remainingSum :", remainingSum);
+  // console.log("selectedTreatment :", selectedTreatment);
+  // console.log("selectedProduct :", selectedProduct);
+
   return (
     <div className="container mt-5">
       <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
-      <div className="form-group">
-        <label>Mapped Health Insurance ID</label>
-        <input
-          type="text"
-          name="health_insurance_id"
-          value={selectedProduct.insurance_product_id}
-          readOnly
-        />
-      </div>
-      <div className="form-group">
-        <label>Insurance Policy id</label>
-        <input
-          type="text"
-          name="insurance_policy_id"
-          value={mappedHealthInsuranceId}
-          readOnly
-        />
-      </div>
-
-      {/* Project Section */}
-      <div className="section">
-        {/* <div className="section-header">Project</div> */}
+      <form onSubmit={handleFormSubmit}>
         <div className="form-group">
-          <label>Project *</label>
-          <select>
-            <option>Choose</option>
-            {project.map((item, index) => (
-              <option key={index} value={item.id}>
-                {item.projectTitle}
-              </option>
-            ))}
-          </select>
+          <label>Mapped Health Insurance ID</label>
+          <input
+            type="text"
+            name="health_insurance_id"
+            // value={selectedProduct.insurance_product_id}
+            value="3"
+            readOnly
+          />
         </div>
-      </div>
-
-      {/* Member Information Section */}
-      <div className="section">
-        <div className="section-header">Member Information</div>
-        <div className="form-grid">
-          <div className="form-group">
-            <label>Member Number *</label>
-            <div className="search-box">
-              <input
-                type="text"
-                list="memberNumbers"
-                onChange={handleMemberChange}
-                placeholder="Member Number"
-              />
-              <datalist id="memberNumbers">
-                {memberNo.map((item, index) => (
-                  <option key={index} value={item.account_number}>
-                    {item.account_number}
-                  </option>
-                ))}
-              </datalist>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>Member Name</label>
-            <input
-              type="text"
-              value={selectedMemberId ? selectedMemberId.name : ""}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Member Mobile Number</label>
-            <input
-              type="text"
-              value={selectedMemberId ? selectedMemberId.contact_number : ""}
-            />
-          </div>
-          <div className="form-group">
-            <label>Age</label>
-            <input
-              type="text"
-              value={
-                selectedMemberId && selectedMemberId.date_of_birth
-                  ? calculateAge(selectedMemberId.date_of_birth)
-                  : ""
-              }
-              readOnly
-            />
-          </div>
+        <div className="form-group">
+          <label>Enrollment ID</label>
+          <input
+            type="text"
+            name="enrollment_id"
+            value="123e4567-e89b-12d3-a456-426614174000"
+            readOnly
+          />
         </div>
-      </div>
+        <div className="form-group">
+          <label>Insurance Policy id</label>
+          <input
+            type="text"
+            name="insurance_policy_id"
+            value={mappedHealthInsuranceId}
+            readOnly
+          />
+        </div>
 
-      {/* Incident Information Section */}
-      <div className="section">
-        <div className="section-header">Incident Information</div>
-        <div className="form-grid">
+        {/* Project Section */}
+        <div className="section">
+          {/* <div className="section-header">Project</div> */}
           <div className="form-group">
-            <label>Product *</label>
-            <select onChange={handleProductChange}>
-              <option>Select Product</option>
-              {product.map((item, index) => (
-                <option key={index} value={item.policy_name}>
-                  {item.policy_name}
+            <label>Project *</label>
+            <select>
+              <option>Choose</option>
+              {project.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.projectTitle}
                 </option>
               ))}
             </select>
           </div>
-          <div className="form-group">
-            <label>Select Policy No *</label>
-            <select
-              onChange={handlePolicyNumberChange}
-              name="insurance_policy_no"
-            >
-              <option>Select Policy Number</option>
+        </div>
 
-              {selectedProduct.insurance_policy_numbers &&
-                selectedProduct.insurance_policy_numbers
-                  .split(",")
-                  .map((number, index) => (
-                    <option key={index} value={number.trim()}>
-                      {number.trim()}
+        {/* Member Information Section */}
+        <div className="section">
+          <div className="section-header">Member Information</div>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Member Number *</label>
+              <div className="search-box">
+                <input
+                  type="text"
+                  list="memberNumbers"
+                  onChange={handleMemberChange}
+                  placeholder="Member Number"
+                />
+                <datalist id="memberNumbers">
+                  {memberNo.map((item, index) => (
+                    <option key={index} value={item.account_number}>
+                      {item.account_number}
                     </option>
                   ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Treatment Type *</label>
-            <select onChange={handleTreatmentChange} name="treatment_type_id">
-              <option>Select Treatment Type</option>
-              {treatmentType.map((item, index) => (
-                <option key={index} value={item.type_name}>
-                  {item.type_name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Date of Incident *</label>
-            <div className="date-box">
-              <input type="date" name="date_of_incident" />
-              <button className="calendar-button">📅</button>
+                </datalist>
+              </div>
             </div>
-          </div>
-          <div className="form-group">
-            <label>Claim Amount *</label>
-            <input type="number" name="claim_amount" />
-          </div>
-          <div className="form-group">
-            <label>Remaining Sum Insured</label>
-            <input type="number" value={remainingSum[0]} />
-          </div>
-        </div>
-      </div>
 
-      {/* Document Upload Section */}
-      {/* Document Upload Section */}
-      <div className="section">
-        <div className="section-header">Document Upload</div>
-        <div className="form-group">
-          <label>Member's National ID *</label>
-          <div className="upload-grid">
-            <div className="upload-box">
-              <label className="upload-label" htmlFor="frontSide">
-                <div className="file-placeholder">Front Side</div>
-              </label>
+            <div className="form-group">
+              <label>Member Name</label>
               <input
-                type="file"
-                id="frontSide"
-                className="file-input"
-                accept=".jpg,.jpeg,.png,.pdf"
-                name="frontImage"
+                type="text"
+                value={selectedMemberId ? selectedMemberId.name : ""}
               />
             </div>
-            <div className="upload-box">
-              <label className="upload-label" htmlFor="backSide">
-                <div className="file-placeholder">Back Side</div>
-              </label>
+
+            <div className="form-group">
+              <label>Member Mobile Number</label>
               <input
-                type="file"
-                id="backSide"
-                className="file-input"
-                accept=".jpg,.jpeg,.png,.pdf"
-                name="backImage"
+                type="text"
+                value={selectedMemberId ? selectedMemberId.contact_number : ""}
+              />
+            </div>
+            <div className="form-group">
+              <label>Age</label>
+              <input
+                type="text"
+                value={
+                  selectedMemberId && selectedMemberId.date_of_birth
+                    ? calculateAge(selectedMemberId.date_of_birth)
+                    : ""
+                }
+                readOnly
               />
             </div>
           </div>
-          <small className="error-text">This field is required.</small>
         </div>
 
-        {/* <div className="form-group">
+        {/* Incident Information Section */}
+        <div className="section">
+          <div className="section-header">Incident Information</div>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Product *</label>
+              <select onChange={handleProductChange}>
+                <option>Select Product</option>
+                {product.map((item, index) => (
+                  <option key={index} value={item.policy_name}>
+                    {item.policy_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Select Policy No *</label>
+              <select
+                onChange={handlePolicyNumberChange}
+                name="insurance_policy_no"
+              >
+                <option>Select Policy Number</option>
+
+                {selectedProduct.insurance_policy_numbers &&
+                  selectedProduct.insurance_policy_numbers
+                    .split(",")
+                    .map((number, index) => (
+                      <option key={index} value={number.trim()}>
+                        {number.trim()}
+                      </option>
+                    ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Treatment Type *</label>
+              <select onChange={handleTreatmentChange} name="treatment_type_id">
+                <option>Select Treatment Type</option>
+                {treatmentType.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.type_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Date of Incident *</label>
+              <div className="date-box">
+                <input type="date" name="date_of_incident" />
+                <button className="calendar-button">📅</button>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Claim Amount *</label>
+              <input type="number" name="claim_amount" />
+            </div>
+            <div className="form-group">
+              <label>Remaining Sum Insured</label>
+              <input type="number"
+              //  value={remainingSum} 
+              value="1000"
+               />
+            </div>
+          </div>
+        </div>
+
+        {/* Document Upload Section */}
+        {/* Document Upload Section */}
+        <div className="section">
+          <div className="section-header">Document Upload</div>
+          <div className="form-group">
+            <label>Member's National ID *</label>
+            <div className="upload-grid">
+              <div className="upload-box">
+                <label className="upload-label" htmlFor="frontSide">
+                  <div className="file-placeholder">Front Side</div>
+                </label>
+                <input
+                  type="file"
+                  id="frontSide"
+                  className="file-input"
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  name="frontImage"
+                />
+              </div>
+              <div className="upload-box">
+                <label className="upload-label" htmlFor="backSide">
+                  <div className="file-placeholder">Back Side</div>
+                </label>
+                <input
+                  type="file"
+                  id="backSide"
+                  className="file-input"
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  name="backImage"
+                />
+              </div>
+            </div>
+            <small className="error-text">This field is required.</small>
+          </div>
+
+          {/* <div className="form-group">
           <label>Document Type *</label>
           <select >
             <option>Select a Document Type</option>
           </select>
         </div> */}
-        <div className="form-group">
-          <label>Document Type *</label>
-          <select
-            value={documentType}
-            name="document_type"
-            onChange={(e) => setDocumentType(e.target.value)}
-          >
-            <option value="">Select a Document Type</option>
-            {getDocumentTypeOptions().map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <div className="form-group">
+            <label>Document Type *</label>
+            <select
+              value={documentType}
+              name="document_type"
+              onChange={(e) => setDocumentType(e.target.value)}
+            >
+              <option value="">Select a Document Type</option>
+              {getDocumentTypeOptions().map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Dynamic Document Upload Section */}
+          {documentType && (
+            <div className="form-group">
+              <label>
+                {
+                  getDocumentTypeOptions().find(
+                    (opt) => opt.value === documentType
+                  )?.label
+                }{" "}
+                *
+              </label>
+              <div className="upload-box">
+                <input
+                  type="file"
+                  className="file-input"
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  id={documentType}
+                  name="documentPath"
+                />
+                <label className="upload-label" htmlFor={documentType}>
+                  Choose a file
+                </label>
+              </div>
+            </div>
+          )}
+          <p className="note">
+            <strong>N.B:</strong> If multiple document upload needed, please
+            attach all the documents in a single PDF. Then select{" "}
+            <strong>"Other documents"</strong> and upload the PDF.
+          </p>
         </div>
 
-        {/* Dynamic Document Upload Section */}
-        {documentType && (
-          <div className="form-group">
-            <label>
-              {
-                getDocumentTypeOptions().find(
-                  (opt) => opt.value === documentType
-                )?.label
-              }{" "}
-              *
-            </label>
-            <div className="upload-box">
-              <input
-                type="file"
-                className="file-input"
-                accept=".jpg,.jpeg,.png,.pdf"
-                id={documentType}
-                name="documentPath"
-              />
-              <label className="upload-label" htmlFor={documentType}>
-                Choose a file
-              </label>
-            </div>
-          </div>
-        )}
-        <p className="note">
-          <strong>N.B:</strong> If multiple document upload needed, please
-          attach all the documents in a single PDF. Then select{" "}
-          <strong>"Other documents"</strong> and upload the PDF.
-        </p>
-      </div>
-
-      {/* Buttons */}
-      <div className="button-group">
-        <button className="reset-button">Reset ❌</button>
-        <button className="claim-button">Claim 🗂</button>
-      </div>
+        {/* Buttons */}
+        <div className="button-group">
+          <button className="reset-button">Reset ❌</button>
+          <button type="submit" className="claim-button">
+            Claim 🗂
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
