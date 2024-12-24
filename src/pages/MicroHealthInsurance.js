@@ -249,9 +249,9 @@ const MicroHealthInsurance = () => {
       <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
       <form onSubmit={handleFormSubmit}>
         <div className="form-group">
-          <label>Mapped Health Insurance ID</label>
+          {/* <label>Mapped Health Insurance ID</label> */}
           <input
-            type="text"
+            type="hidden"
             name="health_insurance_id"
             // value={selectedProduct.insurance_product_id}
             value="3"
@@ -259,18 +259,18 @@ const MicroHealthInsurance = () => {
           />
         </div>
         <div className="form-group">
-          <label>Enrollment ID</label>
+          {/* <label>Enrollment ID</label> */}
           <input
-            type="text"
+            type="hidden"
             name="enrollment_id"
             value="123e4567-e89b-12d3-a456-426614174000"
             readOnly
           />
         </div>
         <div className="form-group">
-          <label>Insurance Policy id</label>
+          {/* <label>Insurance Policy id</label> */}
           <input
-            type="text"
+            type="hidden"
             name="insurance_policy_id"
             value={mappedHealthInsuranceId}
             readOnly
@@ -403,10 +403,11 @@ const MicroHealthInsurance = () => {
             </div>
             <div className="form-group">
               <label>Remaining Sum Insured</label>
-              <input type="number"
-              //  value={remainingSum} 
-              value="1000"
-               />
+              <input
+                type="number"
+                //  value={remainingSum}
+                value="1000"
+              />
             </div>
           </div>
         </div>
