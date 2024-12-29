@@ -18,6 +18,7 @@ import MicroHealthInsurance from "../pages/MicroHealthInsurance";
 import ReceiveCreditAdvice from "../pages/ReceiveCreditAdvice";
 import ClaimSettlement from "../pages/ClaimSettlement";
 import ApproveStatus from "../pages/ApproveStatus";
+import InsuranceFormPdf from "../pages/InsuranceFormPdf";
 
 
 const router = createBrowserRouter([
@@ -98,11 +99,19 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/approve-insurance-enrollment", // Child route for the dashboard
+        path: "/approve-insurance-enrollment/:id", // Child route for the dashboard
         element: (
           <PrivateRoute requiredPermission="/approve-insurance-enrollment">
           <ApproveStatus />
           </PrivateRoute>
+        ),
+      },
+      {
+        path: "/insuranceFormPdf/:id", // Child route for the dashboard
+        element: (
+          // <PrivateRoute requiredPermission="/insuranceFormPdf">
+          <InsuranceFormPdf />
+          /* </PrivateRoute> */
         ),
       },
     ],

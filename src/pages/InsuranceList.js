@@ -2,9 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import '../InsuranceList.css'
+import { useNavigate } from "react-router-dom";
 
 const InsuranceList = () => {
   // All useState start
+  const navigate = useNavigate();
   const [project, setProject] = useState([]);
   const [poNo, setPoNo] = useState([]);
   const [memberName, setMemberName] = useState([]);
@@ -92,7 +94,7 @@ const InsuranceList = () => {
       console.error("Error fetching filtered data:", error.message);
     }
   };
-  console.log("filteredData :", filteredData);
+ 
   return (
     <div className="container mt-5">
       {/* Project Selection */}
@@ -230,10 +232,25 @@ const InsuranceList = () => {
                 <td>{item?.insurance_product}</td>
                 <td>{item?.status}</td>
                 <td>
-                  <button className="download-btn">Download</button>
+                  <button
+                   className="download-btn"
+                   onClick={() =>
+                    navigate(
+                      `/insuranceFormPdf/${item.id}`,{ state: { item } }
+                    )
+                  }
+                   >Download</button>
                 </td>
                 <td>
-                  <button className="view-btn">View</button>
+                  <button 
+                  className="view-btn"
+                  onClick={() =>
+                    navigate(
+                      `/approve-insurance-enrollment/${item.id}`,{ state: { item }}
+                    )
+                  }
+                  >View
+                  </button>
                 </td>
               </tr>
             ))}

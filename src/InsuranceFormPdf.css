@@ -1,0 +1,168 @@
+/* InsuranceFormPdf.css */
+.insurance-form {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.form-header {
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.logo img {
+  max-width: 120px;
+  height: auto;
+}
+
+.title-bengali {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.subtitle-bengali {
+  font-size: 20px;
+  color: #34495e;
+}
+
+.chartered-life {
+  text-align: right;
+}
+
+.chartered-life span {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.chartered-life p {
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.policy-section {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.form-check-input {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+.form-check-label {
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-right: 10px;
+}
+
+.value {
+  color: #34495e;
+}
+
+.info-section .row {
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.bg-info-subtle {
+  background-color: #e3f2fd !important;
+}
+
+.bg-success-subtle {
+  background-color: #e8f5e9 !important;
+}
+
+.bg-warning-subtle {
+  background-color: #fff3e0 !important;
+}
+
+.form-footer {
+  border-top: 2px solid #e9ecef;
+  padding-top: 20px;
+  margin-top: 30px;
+}
+
+.signature-section p {
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.signature-line {
+  height: 2px;
+  background-color: #dee2e6;
+  margin: 10px 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .insurance-form {
+    padding: 15px;
+  }
+
+  .title-bengali {
+    font-size: 24px;
+  }
+
+  .subtitle-bengali {
+    font-size: 18px;
+  }
+
+  .form-header .col-md-3,
+  .form-header .col-md-6 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .chartered-life {
+    text-align: center;
+  }
+
+  .info-section .col-md-4,
+  .info-section .col-md-6 {
+    margin-bottom: 10px;
+  }
+}
+.download-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #0d6efd;
+  border: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+  background-color: #0b5ed7;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
+/* Print-specific styles */
+@media print {
+  .download-btn {
+    display: none;
+  }
+  
+  .insurance-form {
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+}
