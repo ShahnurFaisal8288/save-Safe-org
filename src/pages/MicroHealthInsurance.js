@@ -116,7 +116,7 @@ const MicroHealthInsurance = () => {
     );
     if (selectedPolicy) {
       setSelectedProduct(selectedPolicy);
-      console.log("policyName:", policyName);
+      console.log("policyName:", selectedPolicy);
     }
   };
   const handlePolicyNumberChange = (e) => {
