@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ApproveStatus = () => {
   const { id } = useParams(); // Get ID from the URL params
   const [data, setData] = useState(null); // Store fetched data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
-
+  const navigate = useNavigate()
   useEffect(() => {
     const fetchPostData = async () => {
       try {
@@ -48,7 +48,14 @@ const ApproveStatus = () => {
 
     return age;
   };
-
+  const handleReject = () =>{
+    const fetchResponse = axios.put(`http://localhost:8000/api/health_insurance/update/${id}`,{status:3});
+    navigate("/insurance-list")
+  }
+  const handleApprove = () =>{
+    const fetchResponse = axios.put(`http://localhost:8000/api/health_insurance/update/${id}`,{status:2});
+    navigate("/insurance-list")
+  }
   return (
     <div className="container mt-5">
       <header className="header">
@@ -162,8 +169,8 @@ const ApproveStatus = () => {
       </section>
 
       <footer className="footer">
-        <button className="btn reject" value="">Reject</button>
-        <button className="btn approve">Approve</button>
+        <button className="btn reject" onClick={handleReject} value="">Reject</button>
+        <button className="btn approve" onClick={handleApprove}>Approve</button>
       </footer>
     </div>
   );

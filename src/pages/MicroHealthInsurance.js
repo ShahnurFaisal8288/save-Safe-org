@@ -108,6 +108,11 @@ const MicroHealthInsurance = () => {
       }
     }
   };
+  console.log("product", product);
+  //   const categoryOptions = product?.data.map((category) => ({
+  //     label: category.name,
+  //     value: category._id
+  //   })) || [];
   const handleProductChange = (e) => {
     const policyName = e.target.value;
 
@@ -119,6 +124,12 @@ const MicroHealthInsurance = () => {
       console.log("policyName:", selectedPolicy);
     }
   };
+
+  const policy_number_options = selectedProduct?.insurance_details
+    ?.map((item) => item.insurance_policy_no)
+    .filter((item) => item); // Remove undefined or falsy values
+
+  console.log("policy_number_options", policy_number_options);
   const handlePolicyNumberChange = (e) => {
     const policyNumber = e.target.value;
     setSelectedPolicyNumber(policyNumber);
@@ -153,7 +164,6 @@ const MicroHealthInsurance = () => {
       return;
     }
 
-    
     const insurancePolicyNo = selectedPolicyNumber;
 
     console.log("Selected Treatment Type:", treatmentType);
@@ -188,7 +198,7 @@ const MicroHealthInsurance = () => {
       );
     }
   };
-
+  console.log(treatmentType)
   // method to handle form submission
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -363,25 +373,21 @@ const MicroHealthInsurance = () => {
             <div className="form-group">
               <label>Select Policy No *</label>
               <select
-                onChange={handlePolicyNumberChange}
+                // onChange={handlePolicyNumberChange}
                 name="insurance_policy_no"
               >
                 <option>Select Policy Number</option>
-
-                {selectedProduct.insurance_policy_numbers &&
-                  selectedProduct.insurance_policy_numbers
-                    .split(",")
-                    .map((number, index) => (
-                      <option key={index} value={number.trim()}>
-                        {number.trim()}
-                      </option>
-                    ))}
+                {policy_number_options?.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="form-group">
               <label>Treatment Type *</label>
-              <select onChange={handleTreatmentChange} name="treatment_type_id">
-                <option>Select Treatment Type</option>
+              <select onChange={handleTreatmentChange} name="policy_no">
+                <option>Select Policy No</option>
                 {treatmentType.map((item, index) => (
                   <option key={index} value={item.id}>
                     {item.type_name}
@@ -404,7 +410,7 @@ const MicroHealthInsurance = () => {
               <label>Remaining Sum Insured</label>
               <input
                 type="number"
-                 value={remainingSum}
+                value={remainingSum}
                 // value="1000"
               />
             </div>
