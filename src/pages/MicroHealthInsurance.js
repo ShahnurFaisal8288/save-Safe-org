@@ -146,25 +146,24 @@ const MicroHealthInsurance = () => {
   };
 
   const handleTreatmentChange = async (e) => {
-    const treatmentType = e.target.value.toLowerCase(); // Convert to lowercase
+    const treatmentType = e.target.value; // Convert to lowercase
 
     if (!selectedProduct || !selectedProduct.insurance_product_id) {
       console.error("selectedProduct or insurance_product_id is undefined");
       return;
     }
 
-    const insurancePolicyId = selectedProduct.insurance_product_id;
+    
     const insurancePolicyNo = selectedPolicyNumber;
 
     console.log("Selected Treatment Type:", treatmentType);
-    console.log("Insurance Policy ID:", insurancePolicyId);
     console.log("Insurance Policy No:", insurancePolicyNo);
     console.log("selectedProduct:", selectedProduct);
 
-    if (treatmentType && insurancePolicyId && insurancePolicyNo) {
+    if (treatmentType && insurancePolicyNo) {
       setSelectedTreatment(treatmentType);
 
-      const url = `http://localhost:8000/api/searchTreatment/typename?type_name=${treatmentType}&insurance_policy_id=52&insurance_policy_no=${insurancePolicyNo}`;
+      const url = `http://localhost:8000/api/searchTreatment/typename?type_name=${treatmentType}&insurance_policy_no=${insurancePolicyNo}`;
       console.log("Request URL:", url);
 
       try {
@@ -405,8 +404,8 @@ const MicroHealthInsurance = () => {
               <label>Remaining Sum Insured</label>
               <input
                 type="number"
-                //  value={remainingSum}
-                value="1000"
+                 value={remainingSum}
+                // value="1000"
               />
             </div>
           </div>

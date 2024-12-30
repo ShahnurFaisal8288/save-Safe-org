@@ -34,3 +34,24 @@
     color: #007bff !important;
     font-weight: bold;
   }
+  .sidebar {
+    max-height: 100vh; /* Ensure it doesn't exceed the viewport height */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    scrollbar-width: thin; /* For Firefox - set a thinner scrollbar */
+    scrollbar-color: #ccc transparent; /* Custom scrollbar color */
+  }
+  
+  /* Customize scrollbar for Webkit-based browsers (Chrome, Edge, etc.) */
+  .sidebar::-webkit-scrollbar {
+    width: 8px; /* Set scrollbar width */
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: #ccc; /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded edges */
+  }
+  
+  .sidebar::-webkit-scrollbar-track {
+    background: transparent; /* Scrollbar track color */
+  }
+  

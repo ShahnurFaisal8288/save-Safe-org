@@ -10,6 +10,7 @@ const InsuranceFormPdf = () => {
   const { id } = useParams();
   const [data,setData] = useState([]);
   const [error, setError] = useState(null);
+  // const [insuranceTypeId, setInsuranceTypeId] = useState(null);
   
   const formRef = useRef(null);
   useEffect(() => {
@@ -20,7 +21,7 @@ const InsuranceFormPdf = () => {
           );
           
           setData(response.data); // Set data
-          console.log("response.data:",response.data)
+          console.log("responseData:",response.data)
          
         } catch (err) {
           setError("Failed to fetch data");
@@ -56,7 +57,7 @@ const InsuranceFormPdf = () => {
     }
   };
   
-  console.log(data)
+  // console.log(data)
   return (
     <div className="container mt-4">
       {/* Download Button */}
@@ -94,23 +95,23 @@ const InsuranceFormPdf = () => {
         <div className="policy-section row mb-4 p-3 bg-light rounded">
           <div className="col-md-3">
             <div className="form-check">
-              <input type="checkbox" className="form-check-input" id="newPolicy" />
+              <input type="checkbox" className="form-check-input" id="newPolicy" checked={data.insurance_type_id === 1}/>
               <label className="form-check-label" htmlFor="newPolicy">নতুন পলিসি</label>
             </div>
           </div>
           <div className="col-md-3">
             <div className="form-check">
-              <input type="checkbox" className="form-check-input" id="renewPolicy" />
+              <input type="checkbox" className="form-check-input" id="renewPolicy" checked={data.insurance_type_id === 2}/>
               <label className="form-check-label" htmlFor="renewPolicy">নবায়ন পলিসি</label>
             </div>
           </div>
           <div className="col-md-3">
             <span className="label">সদস্য নং:</span>
-            <span className="value">82</span>
+            <span className="value">{data.orgmemno}</span>
           </div>
           <div className="col-md-3">
             <span className="label">বিমা পলিসি নং:</span>
-            <span className="value">1321SC3276471924683-0</span>
+            <span className="value">{data.insurance_policy_no}</span>
           </div>
         </div>
 
@@ -127,45 +128,45 @@ const InsuranceFormPdf = () => {
             </div>
             <div className="col-md-4">
               <span className="label">প্রজেক্টের নাম:</span>
-              <span className="value"></span>
+              <span className="value">{data?.project?.projectTitle}</span>
             </div>
           </div>
 
           <div className="row mb-3 p-3 bg-success-subtle rounded">
             <div className="col-md-6">
               <span className="label">বীমাগ্রহীতার নাম:</span>
-              <span className="value">Halima Akter</span>
+              <span className="value">{data?.client?.name}</span>
             </div>
             <div className="col-md-6">
               <span className="label">মোবাইল নম্বর:</span>
-              <span className="value">01763465654</span>
+              <span className="value">{data?.client?.contact_number}</span>
             </div>
             <div className="col-md-6">
               <span className="label">বীমার প্যাকেজ:</span>
-              <span className="value">Shurokha Shastho Bima</span>
+              <span className="value">{data?.category?.policy_name}</span>
             </div>
             <div className="col-md-6">
               <span className="label">বীমার ক্যাটাগরি:</span>
-              <span className="value">Shurokha-CAT-3</span>
+              <span className="value">{data?.category?.title}</span>
             </div>
           </div>
 
           <div className="row mb-3 p-3 bg-warning-subtle rounded">
             <div className="col-md-6">
               <span className="label">নমিনির নাম:</span>
-              <span className="value">Test R</span>
+              <span className="value">{data.nominee_name}</span>
             </div>
             <div className="col-md-6">
               <span className="label">নমিনির সাথে সম্পর্ক:</span>
-              <span className="value">Cousin</span>
+              <span className="value">{data?.nomineeRelation?.data_name}</span>
             </div>
             <div className="col-md-6">
               <span className="label">নমিনির মোবাইল নম্বর:</span>
-              <span className="value">01764644446</span>
+              <span className="value">{data.nominee_phone_no}</span>
             </div>
             <div className="col-md-6">
               <span className="label">প্রিমিয়াম:</span>
-              <span className="value">1200.0</span>
+              <span className="value">{data.premium_amnt}</span>
             </div>
           </div>
         </div>

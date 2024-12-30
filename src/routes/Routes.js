@@ -19,6 +19,16 @@ import ReceiveCreditAdvice from "../pages/ReceiveCreditAdvice";
 import ClaimSettlement from "../pages/ClaimSettlement";
 import ApproveStatus from "../pages/ApproveStatus";
 import InsuranceFormPdf from "../pages/InsuranceFormPdf";
+import Sidebar from "../pages/Sidebar";
+import Area from "../pages/Area";
+import Member from "../pages/Member";
+import CollectorAdd from "../pages/CollectorAdd";
+import HouseHold from "../pages/HouseHold";
+import LoanEntry from "../pages/LoanEntry";
+import LTSAccount from "../pages/LTSAccount";
+import LTSLoneEntry from "../pages/LTSLoneEntry";
+
+
 
 
 const router = createBrowserRouter([
@@ -109,9 +119,73 @@ const router = createBrowserRouter([
       {
         path: "/insuranceFormPdf/:id", // Child route for the dashboard
         element: (
-          // <PrivateRoute requiredPermission="/insuranceFormPdf">
+          <PrivateRoute requiredPermission="/insuranceFormPdf">
           <InsuranceFormPdf />
-          /* </PrivateRoute> */
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/sidebar", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/sidebar">
+          <Sidebar />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/area", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/area">
+          <Area />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/member", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/member">
+          <Member />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/collectorAdd", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/collectorAdd">
+          <CollectorAdd />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/houseHold", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/houseHold">
+          <HouseHold />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/loanEntry", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/loanEntry">
+          <LoanEntry />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/LTSAccount", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/LTSAccount">
+          <LTSAccount />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/LTSLoanEntry", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/LTSLoanEntry">
+          <LTSLoneEntry />
+          </PrivateRoute>
         ),
       },
     ],

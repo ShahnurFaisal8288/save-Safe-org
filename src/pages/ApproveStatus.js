@@ -116,7 +116,7 @@ const ApproveStatus = () => {
         <div className="form-row">
           <div className="form-group">
             <label>Product<span>*</span></label>
-            <input type="text" value={data.category.policy_name || "N/A"} disabled />
+            <input type="text" value={data?.category?.policy_name || "N/A"} disabled />
           </div>
           <div className="form-group">
             <label>Category<span>*</span></label>
