@@ -326,6 +326,7 @@ function InsuranceForm() {
               ? event.target.AnyDisease.value
               : "",
             PolicyName: event.target.PolicyName ? validateCategory : "",
+            
             InsuranceType: event.target.InsuranceType
               ? event.target.InsuranceType.value
               : "",
@@ -678,6 +679,7 @@ function InsuranceForm() {
 
   console.log("selectedCategoryTitle", selectedCategoryTitle);
   console.log("validateCategory", validateCategory);
+  console.log("category", category);
 
   return (
     <Container className="py-5">

@@ -2,9 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 function Sidebar({ data = [] }) {
+  const [name, setName] = useState(null);
   const [sidebars, setSidebars] = useState([]);
   const [openItems, setOpenItems] = useState({});
   const location = useLocation();
+  useEffect(() => {
+          const storedSetName = localStorage.getItem("name");
+      
+          setName(storedSetName);
+        }, []);
 
   useEffect(() => {
     const storedSidebars = localStorage.getItem("sidebar");
@@ -72,18 +78,18 @@ function Sidebar({ data = [] }) {
 
         <li className="nav-item nav-profile">
           <a href="#" className="nav-link">
-            <div className="profile-image">
-              {/* <img className="img-xs rounded-circle" src="../../../assets/images/faces/face8.jpg" alt="profile image" /> */}
+            {/* <div className="profile-image">
+              <img className="img-xs rounded-circle" src="../../../assets/images/faces/face8.jpg" alt="profile image" />
               <div className="dot-indicator bg-success" />
-            </div>
-            <div className="text-wrapper">
-              <p className="profile-name">Henry Klein</p>
+            </div> */}
+            {/* <div className="text-wrapper">
+              <p className="profile-name">{name}</p>
               <p className="designation">Administrator</p>
-            </div>
-            <div className="icon-container">
+            </div> */}
+            {/* <div className="icon-container">
               <i className="icon-bubbles" />
               <div className="dot-indicator bg-danger" />
-            </div>
+            </div> */}
           </a>
         </li>
 

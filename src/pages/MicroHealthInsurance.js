@@ -15,6 +15,8 @@ const MicroHealthInsurance = () => {
   const [remainingSum, setRemainingSum] = useState("");
   const [mappedHealthInsuranceId, setMappedHealthInsuranceId] = useState("");
   const [documentType, setDocumentType] = useState("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [treatmentTypeId, setTreatmentTypeId] = useState("");
 
   //  useEffect(() => {
   //   const fetchProjectName = async () => {
@@ -109,10 +111,7 @@ const MicroHealthInsurance = () => {
     }
   };
   console.log("product", product);
-  //   const categoryOptions = product?.data.map((category) => ({
-  //     label: category.name,
-  //     value: category._id
-  //   })) || [];
+
   const handleProductChange = (e) => {
     const policyName = e.target.value;
 
@@ -121,84 +120,71 @@ const MicroHealthInsurance = () => {
     );
     if (selectedPolicy) {
       setSelectedProduct(selectedPolicy);
-      console.log("policyName:", selectedPolicy);
+      console.log("policyName:", selectedProduct);
     }
   };
 
   const policy_number_options = selectedProduct?.insurance_details
     ?.map((item) => item.insurance_policy_no)
-    .filter((item) => item); // Remove undefined or falsy values
+    .filter((item) => item);
 
-  console.log("policy_number_options", policy_number_options);
-  const handlePolicyNumberChange = (e) => {
+  console.log("policy_number_options", selectedProduct.insurance_details);
+  const handlePolicyNoChange = (e) => {
     const policyNumber = e.target.value;
     setSelectedPolicyNumber(policyNumber);
+    const selectedPolicy = selectedProduct.insurance_details.find(
+      (detail) => detail.insurance_policy_no === policyNumber
+  );
 
-    if (
-      selectedProduct &&
-      selectedProduct.insurance_policy_numbers &&
-      selectedProduct.health_insurance_ids
-    ) {
-      const policyNumbers = selectedProduct.insurance_policy_numbers.split(",");
-      console.log("policyNumbers", selectedProduct);
-      const healthIds = selectedProduct.health_insurance_ids.split(",");
-      const index = policyNumbers.findIndex(
-        (number) => number.trim() === policyNumber
-      );
-
-      if (index !== -1) {
-        setMappedHealthInsuranceId(healthIds[index].trim());
-      }
-    } else {
-      console.error(
-        "Selected product does not have policy numbers or health insurance IDs."
-      );
-    }
+  // Check if a match is found
+  if (selectedPolicy) {
+    setSelectedCategoryId(selectedPolicy.category_id); // Set the category_id
+    console.log("Category ID:", selectedPolicy.category_id);
+} else {
+    setSelectedCategoryId(null); // Reset if no match found
+    console.log("Policy number not found.");
+}
   };
 
   const handleTreatmentChange = async (e) => {
-    const treatmentType = e.target.value; // Convert to lowercase
+    const selectedValue = JSON.parse(e.target.value); // Parse JSON string
+        const id = selectedValue.id; // Extract id
+        setTreatmentTypeId(id); // Parse the JSON string
+    const treatmentType = selectedValue.column_name; // Extract `column_name` (e.g., 'opd') // Extract `id` (e.g., '1')
 
-    if (!selectedProduct || !selectedProduct.insurance_product_id) {
-      console.error("selectedProduct or insurance_product_id is undefined");
-      return;
-    }
-
-    const insurancePolicyNo = selectedPolicyNumber;
+    const insurancePolicyNo = selectedPolicyNumber; // Assuming this is already defined
 
     console.log("Selected Treatment Type:", treatmentType);
+    console.log("Treatment Type ID:", treatmentTypeId);
     console.log("Insurance Policy No:", insurancePolicyNo);
-    console.log("selectedProduct:", selectedProduct);
 
     if (treatmentType && insurancePolicyNo) {
-      setSelectedTreatment(treatmentType);
+        setSelectedTreatment(treatmentTypeId); // Store only `id` in state
+        const url = `http://localhost:8000/api/searchTreatment/typename?insurance_policy_id=${selectedCategoryId}&type_name=${treatmentType}`;
+        console.log("Request URL:", url);
 
-      const url = `http://localhost:8000/api/searchTreatment/typename?type_name=${treatmentType}&insurance_policy_no=${insurancePolicyNo}`;
-      console.log("Request URL:", url);
+        try {
+            const response = await axios.get(url);
 
-      try {
-        const response = await axios.get(url);
-
-        if (response.status === 200) {
-          const remainingSumInsured = response.data;
-          setRemainingSum(remainingSumInsured);
-          console.log("Remaining Sum Insured Response:", remainingSumInsured);
-        } else {
-          console.error("Unexpected response status:", response.status);
+            if (response.status === 200) {
+                const remainingSumInsured = response.data;
+                setRemainingSum(remainingSumInsured);
+                console.log("Remaining Sum Insured Response:", remainingSumInsured);
+            } else {
+                console.error("Unexpected response status:", response.status);
+            }
+        } catch (error) {
+            console.error(
+                "Error Fetching Treatment Data:",
+                error.response ? error.response.data : error.message
+            );
         }
-      } catch (error) {
-        console.error(
-          "Error Fetching Treatment Data:",
-          error.response ? error.response.data : error.message
-        );
-      }
     } else {
-      console.error(
-        "Required fields are missing. Ensure treatmentType, insurancePolicyId, and insurancePolicyNo are defined."
-      );
+        console.error(
+            "Required fields are missing. Ensure treatmentType, insurancePolicyId, and insurancePolicyNo are defined."
+        );
     }
-  };
-  console.log(treatmentType)
+};
   // method to handle form submission
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -250,7 +236,7 @@ const MicroHealthInsurance = () => {
   //   e.preventDefault();
 
   // console.log("remainingSum :", remainingSum);
-  // console.log("selectedTreatment :", selectedTreatment);
+  console.log("selectedTreatment :", treatmentType);
   // console.log("selectedProduct :", selectedProduct);
 
   return (
@@ -281,7 +267,7 @@ const MicroHealthInsurance = () => {
           <input
             type="hidden"
             name="insurance_policy_id"
-            value={mappedHealthInsuranceId}
+            value={selectedCategoryId}
             readOnly
           />
         </div>
@@ -373,7 +359,7 @@ const MicroHealthInsurance = () => {
             <div className="form-group">
               <label>Select Policy No *</label>
               <select
-                // onChange={handlePolicyNumberChange}
+                onChange={handlePolicyNoChange}
                 name="insurance_policy_no"
               >
                 <option>Select Policy Number</option>
@@ -386,15 +372,23 @@ const MicroHealthInsurance = () => {
             </div>
             <div className="form-group">
               <label>Treatment Type *</label>
-              <select onChange={handleTreatmentChange} name="policy_no">
+              <select onChange={handleTreatmentChange}>
                 <option>Select Policy No</option>
                 {treatmentType.map((item, index) => (
-                  <option key={index} value={item.id}>
-                    {item.type_name}
+                  <option key={index} value={JSON.stringify({ id: item.id, column_name: item.column_name })}>
+                    {item.column_name}
                   </option>
                 ))}
               </select>
             </div>
+            {/* <div className="form-group"> */}
+                <input
+                    type="hidden"
+                    name="treatment_type_id"
+                    value={treatmentTypeId}
+                    readOnly
+                />
+            {/* </div> */}
             <div className="form-group">
               <label>Date of Incident *</label>
               <div className="date-box">
@@ -411,7 +405,7 @@ const MicroHealthInsurance = () => {
               <input
                 type="number"
                 value={remainingSum}
-                // value="1000"
+                // value="100"
               />
             </div>
           </div>

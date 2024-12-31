@@ -101,10 +101,7 @@ function Login() {
             <div className="col-lg-4 mx-auto">
               <div className="auth-form-light text-left p-5">
                 <div className="brand-logo">
-                  <img
-                    src="https://demo.bootstrapdash.com/stellar-admin-new/themes/assets/images/logo-dark.svg"
-                    alt="logo"
-                  />
+                <h2 css={{ color: "teal"}}>Save Safe</h2>
                 </div>
                 <h4>Hello! let's get started</h4>
                 <h6 className="font-weight-light">Sign in to continue.</h6>

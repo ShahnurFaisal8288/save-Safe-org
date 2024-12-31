@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-import '../InsuranceList.css'
+import "../InsuranceList.css";
 import { useNavigate } from "react-router-dom";
 
 const InsuranceList = () => {
@@ -19,6 +19,9 @@ const InsuranceList = () => {
     4: false,
   });
   const [filteredData, setFilteredData] = useState([]);
+  const [selectedAccountNumber, setSelectedAccountNumber] = useState("");
+  const [selectedProject, setSelectedProject] = useState("");
+  const [selectedPo, setSelectedPo] = useState("");
 
   // Fetch project, PO, and member data
   const fetchData = async () => {
@@ -37,18 +40,18 @@ const InsuranceList = () => {
         setPoNo(poResponse.data);
       }
 
-      const memberResponse = await axios.get(
-        "http://localhost:8000/api/client"
-      );
-      if (memberResponse.data) {
-        setMemberName(memberResponse.data);
-      }
+      // const memberResponse = await axios.get(
+      //   `http://localhost:8000/api/collector/${selectedPo}/client/information`
+      // );
+      // if (memberResponse.data) {
+      //   setMemberName(memberResponse.data);
+      // }
 
       // Set initial data for display (could be fetched from a separate API for insurance list)
-     const initialData = await axios.get(
-       "http://localhost:8000/api/health_insurance/list"
-     );
-     setFilteredData(initialData.data);
+      const initialData = await axios.get(
+        "http://localhost:8000/api/health_insurance/list"
+      );
+      setFilteredData(initialData.data);
     } catch (error) {
       console.error("Error fetching data:", error.message);
     }
@@ -58,6 +61,37 @@ const InsuranceList = () => {
     fetchData();
   }, []);
 
+// Fetch Members based on PO
+useEffect(() => {
+  const fetchMembers = async () => {
+    try {
+      if (selectedPo) {
+        const response = await axios.get(
+          `http://localhost:8000/api/collector/${selectedPo}/client/information`
+        );
+        setMemberName(response.data || []);
+      }
+    } catch (error) {
+      console.error("Error fetching members:", error.message);
+    }
+  };
+
+  fetchMembers();
+}, [selectedPo]);
+
+  const handleReset = () => {
+    setSearchDate("");
+    setSelectedAccountNumber("");
+    setSelectedProject("");
+    setStatusFilters({
+      allDate: false,
+      1: false,
+      2: false,
+      3: false,
+      4: false,
+    });
+  };
+
   // Handle checkbox change for status filters
   const handleStatusChange = (e) => {
     setStatusFilters({
@@ -65,18 +99,59 @@ const InsuranceList = () => {
       [e.target.name]: e.target.checked,
     });
   };
-
+  const handlePoChange = (event) => {
+    const selectedCollectorNumber = event.target.value;
+    const selectedItem = poNo.find(
+      (item) => item.collector_number === selectedCollectorNumber
+    );
+    if (selectedItem) {
+      setSelectedPo(selectedItem.id); // Set ID as the selected value
+    } else {
+      setSelectedPo(""); // Reset if no match
+    }
+  };
   // Handle search form submission
+  // const handleSearch = async () => {
+  //   const formattedDate = searchDate
+  //     ? format(new Date(searchDate), "yyyy-MM-dd")
+  //     : "";
+
+  //   const filterParams = {
+  //     date: formattedDate,
+  //     status: Object.keys(statusFilters)
+  //       .filter((key) => statusFilters[key])
+  //       .join(","),
+  //   };
+
+  //   try {
+  //     const response = await axios.get(
+  //       "http://localhost:8000/api/health_insurance/list/search",
+  //       {
+  //         params: filterParams,
+  //       }
+  //     );
+
+  //     if (response.data) {
+  //       setFilteredData(response.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching filtered data:", error.message);
+  //   }
+  // };
   const handleSearch = async () => {
     const formattedDate = searchDate
       ? format(new Date(searchDate), "yyyy-MM-dd")
       : "";
+
+    // Add state variables for account number and project code
 
     const filterParams = {
       date: formattedDate,
       status: Object.keys(statusFilters)
         .filter((key) => statusFilters[key])
         .join(","),
+      account_number: selectedAccountNumber, // Add account number to params
+      projectCode: selectedProject, // Add project code to params
     };
 
     try {
@@ -94,18 +169,22 @@ const InsuranceList = () => {
       console.error("Error fetching filtered data:", error.message);
     }
   };
- 
+  // console.log("selectedPo: ", selectedPo);
   return (
     <div className="container mt-5">
       {/* Project Selection */}
-      <div className="section ">
+      <div className="section">
         <label className="label">
           Project <span className="required">*</span>
         </label>
-        <select className="input">
+        <select
+          className="input"
+          value={selectedProject}
+          onChange={(e) => setSelectedProject(e.target.value)}
+        >
           <option>Choose Project</option>
           {project.map((item, index) => (
-            <option key={index} value={item.id}>
+            <option key={index} value={item.projectCode}>
               {item.projectCode}-{item.projectTitle}
             </option>
           ))}
@@ -119,16 +198,28 @@ const InsuranceList = () => {
           <div className="row">
             <div className="col-6">
               <label>PO</label>
-              <input className="input" list="poList" />
+              <input
+                className="input"
+                list="poList"
+                onChange={handlePoChange}
+              />
               <datalist id="poList">
                 {poNo.map((item, index) => (
-                  <option key={index} value={item.collector_number} />
+                  <option key={index} value={item.collector_number}>
+                    {item.collector_number}
+                  </option>
                 ))}
               </datalist>
             </div>
+            {/* Member Number Input */}
             <div className="col-6">
               <label>Member Number</label>
-              <input className="input" list="memberList" />
+              <input
+                className="input"
+                list="memberList"
+                value={selectedAccountNumber}
+                onChange={(e) => setSelectedAccountNumber(e.target.value)}
+              />
               <datalist id="memberList">
                 {memberName.map((item, index) => (
                   <option key={index} value={item.account_number} />
@@ -159,7 +250,7 @@ const InsuranceList = () => {
                 <div>
                   <input
                     type="checkbox"
-                    name="2"
+                    name="1"
                     checked={statusFilters.Pending}
                     onChange={handleStatusChange}
                   />
@@ -168,7 +259,7 @@ const InsuranceList = () => {
                 <div>
                   <input
                     type="checkbox"
-                    name="1"
+                    name="2"
                     checked={statusFilters.Approved}
                     onChange={handleStatusChange}
                   />
@@ -199,7 +290,7 @@ const InsuranceList = () => {
 
         {/* Buttons */}
         <div className="buttons">
-          <button className="reset-btn" onClick={() => setSearchDate("")}>
+          <button className="reset-btn" onClick={handleReset}>
             Reset
           </button>
           <button className="search-btn" onClick={handleSearch}>
@@ -233,23 +324,26 @@ const InsuranceList = () => {
                 <td>{item?.statusDetails.status_name}</td>
                 <td>
                   <button
-                   className="download-btn"
-                   onClick={() =>
-                    navigate(
-                      `/insuranceFormPdf/${item.id}`,{ state: { item } }
-                    )
-                  }
-                   >Download</button>
+                    className="download-btn"
+                    onClick={() =>
+                      navigate(`/insuranceFormPdf/${item.id}`, {
+                        state: { item },
+                      })
+                    }
+                  >
+                    Download
+                  </button>
                 </td>
                 <td>
-                  <button 
-                  className="view-btn"
-                  onClick={() =>
-                    navigate(
-                      `/approve-insurance-enrollment/${item.id}`,{ state: { item }}
-                    )
-                  }
-                  >View
+                  <button
+                    className="view-btn"
+                    onClick={() =>
+                      navigate(`/approve-insurance-enrollment/${item.id}`, {
+                        state: { item },
+                      })
+                    }
+                  >
+                    View
                   </button>
                 </td>
               </tr>

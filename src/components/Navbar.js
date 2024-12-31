@@ -46,24 +46,24 @@ const Navbar = () => {
         <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a className="navbar-brand brand-logo" href="index-2.html">
-                    <img src="https://demo.bootstrapdash.com/stellar-admin-new/themes/assets/images/logo.svg" alt="logo" className="logo-dark" />
-                    <img src="https://demo.bootstrapdash.com/stellar-admin-new/themes/assets/images/logo-light.svg" alt="logo-light" className="logo-light" />
+                    <h5 className="logo-dark" style={{color:"white"}}>Save Safe</h5>
+                    {/* <h5 className="logo-light">Save Safe</h5> */}
                 </a>
-                <a className="navbar-brand brand-logo-mini" href="index-2.html"><img src="https://demo.bootstrapdash.com/stellar-admin-new/themes/assets/images/logo-mini.svg" alt="logo" /></a>
+                <a className="navbar-brand brand-logo-mini" href="index-2.html"><img src="https://images.app.goo.gl/Y331S72X99K5Maqi8" alt="logo" /></a>
                 <button className="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                     <span className="icon-menu"></span>
                 </button>
             </div>
             <div className="navbar-menu-wrapper d-flex align-items-center">
-                <h5 className="mb-0 font-weight-medium d-none d-lg-flex">Welcome stellar dashboard!</h5>
+                {/* <h5 className="mb-0 font-weight-medium d-none d-lg-flex">Welcome Safe Save dashboard!</h5> */}
                 <ul className="navbar-nav navbar-nav-right">
-                    <form className="search-form d-none d-md-block" action="#">
+                    {/* <form className="search-form d-none d-md-block" action="#">
                         <i className="icon-magnifier"></i>
                         <input type="search" className="form-control" placeholder="Search Here" title="Search here"/>
-                    </form>
-                    <li className="nav-item"><a href="#" className="nav-link"><i className="icon-basket-loaded"></i></a></li>
-                    <li className="nav-item"><a href="#" className="nav-link"><i className="icon-chart"></i></a></li>
-                    <li className="nav-item dropdown">
+                    </form> */}
+                    {/* <li className="nav-item"><a href="#" className="nav-link"><i className="icon-basket-loaded"></i></a></li>
+                    <li className="nav-item"><a href="#" className="nav-link"><i className="icon-chart"></i></a></li> */}
+                    {/* <li className="nav-item dropdown">
                         <a className="nav-link count-indicator message-dropdown" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="icon-speech"></i>
                             <span className="count">7</span>
@@ -120,20 +120,20 @@ const Navbar = () => {
                             <a className="dropdown-item">
                                 <i className="flag-icon flag-icon-ru"></i> Russian </a>
                         </div>
-                    </li>
+                    </li> */}
                     <li className="nav-item dropdown d-none d-xl-inline-flex user-dropdown">
                         <a className="nav-link dropdown-toggle" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img className="img-xs rounded-circle ms-2" src="/images/face8.jpg" alt="Profile image"/> <span className="font-weight-normal"> {name} </span></a>
+                            <img className="img-xs rounded-circle ms-2" src="https://images.pexels.com/photos/102155/pexels-photo-102155.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1g" alt="Profile image"/> <span className="font-weight-normal"> {name} </span></a>
                         <div className="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                             <div className="dropdown-header text-center">
-                                <img className="img-md rounded-circle" src="/images/face8.jpg" alt="Profile image"/>
+                                <img className="img-md rounded-circle" height="100px" width="100px" src="https://images.pexels.com/photos/102155/pexels-photo-102155.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Profile image"/>
                                     <p className="mb-1 mt-3">{name}</p>
                                     <p className="font-weight-light text-muted mb-0">{email}</p>
                             </div>
-                            <button className="dropdown-item"><i className="dropdown-item-icon icon-user text-primary"></i> My Profile <span className="badge badge-pill badge-danger">1</span></button>
-                            <button className="dropdown-item"><i className="dropdown-item-icon icon-speech text-primary"></i> Messages</button>
-                            <button className="dropdown-item"><i className="dropdown-item-icon icon-energy text-primary"></i> Activity</button>
-                            <button className="dropdown-item"><i className="dropdown-item-icon icon-question text-primary"></i> FAQ</button>
+                            {/* <button className="dropdown-item"><i className="dropdown-item-icon icon-user text-primary"></i> My Profile <span className="badge badge-pill badge-danger">1</span></button> */}
+                            {/* <button className="dropdown-item"><i className="dropdown-item-icon icon-speech text-primary"></i> Messages</button> */}
+                            {/* <button className="dropdown-item"><i className="dropdown-item-icon icon-energy text-primary"></i> Activity</button> */}
+                            {/* <button className="dropdown-item"><i className="dropdown-item-icon icon-question text-primary"></i> FAQ</button> */}
                             <button onClick={handleLogout} className="dropdown-item"><i className="dropdown-item-icon icon-power text-primary"></i>Sign Out</button>
                         </div>
                     </li>
