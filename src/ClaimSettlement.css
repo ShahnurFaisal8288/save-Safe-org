@@ -1,4 +1,4 @@
-body {
+/* body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
     margin: 0;
@@ -96,9 +96,10 @@ body {
   .settle-btn {
     background-color: #4caf50;
     color: white;
-  }
+  } */
+
   /* General Styles */
-.container {
+/* .container {
   width: 90%;
   max-width: 1200px;
   margin: 0 auto;
@@ -112,10 +113,10 @@ body {
 
 h2 {
   margin-bottom: 10px;
-}
+} */
 
 /* Form Layout */
-.form-grid {
+/* .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 15px;
@@ -159,10 +160,10 @@ h2 {
   border: none;
   border-radius: 0 4px 4px 0;
   cursor: pointer;
-}
+} */
 
 /* Button Styles */
-.button-group {
+/* .button-group {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -185,10 +186,10 @@ h2 {
 .settle-btn {
   background-color: #4caf50;
   color: #fff;
-}
+} */
 
 /* Responsive Design */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .form-grid {
     grid-template-columns: 1fr;
   }
@@ -206,4 +207,4 @@ h2 {
   .settle-btn {
     width: 100%;
   }
-}
+} */

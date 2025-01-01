@@ -4,7 +4,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import '../InsuranceFormPdf.css';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const InsuranceFormPdf = () => {
   const { id } = useParams();
@@ -59,7 +59,8 @@ const InsuranceFormPdf = () => {
   
   // console.log(data)
   return (
-    <div className="container mt-4">
+    <>
+    <div className="container mt-5 mb-5">
       {/* Download Button */}
       <div className="text-end mb-3">
         <button 
@@ -73,131 +74,481 @@ const InsuranceFormPdf = () => {
       {/* Form Content */}
       <div className="insurance-form" ref={formRef}>
         {/* Header */}
-        <div className="form-header row align-items-center mb-4">
-          <div className="col-md-3">
-            <div className="logo">
-              <img src="brac-logo.png" alt="BRAC" className="img-fluid" />
-            </div>
+        <div className="mx-auto" style={{ maxWidth: '1000px' }}>
+        {/* Header Section */}
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          {/* <img src="brac-logo.png" alt="Save Safe Logo" height="40" /> */}
+          <div className="text-center">
+            <h1 className="h4 mb-1">নিউবনা স্বাস্থ্যবিমা</h1>
+            <p className="small mb-0">গ্রাহক নিবন্ধন ফর্ম</p>
           </div>
-          <div className="col-md-6 text-center">
-            <h2 className="title-bengali mb-2">নির্বাণা স্বাস্থ্যবিমা</h2>
-            <h3 className="subtitle-bengali">গ্রাহক নিবন্ধন ফর্ম</h3>
-          </div>
-          <div className="col-md-3 text-end">
-            <div className="chartered-life">
-              <span className="d-block fs-4 fw-bold">Chartered Life</span>
-              <p className="mb-0">Secured Life</p>
-            </div>
+          <div className="text-end">
+            {/* <img src="/api/placeholder/120/40" alt="Chartered Life Logo" height="40" /> */}
+            <div className="border border-dark d-inline-block px-2 small">গ্রাহক কপি </div>
           </div>
         </div>
 
-        {/* Policy Type Section */}
-        <div className="policy-section row mb-4 p-3 bg-light rounded">
-          <div className="col-md-3">
-            <div className="form-check">
-              <input type="checkbox" className="form-check-input" id="newPolicy" checked={data.insurance_type_id === 1}/>
-              <label className="form-check-label" htmlFor="newPolicy">নতুন পলিসি</label>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="form-check">
-              <input type="checkbox" className="form-check-input" id="renewPolicy" checked={data.insurance_type_id === 2}/>
-              <label className="form-check-label" htmlFor="renewPolicy">নবায়ন পলিসি</label>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <span className="label">সদস্য নং:</span>
-            <span className="value">{data.orgmemno}</span>
-          </div>
-          <div className="col-md-3">
-            <span className="label">বিমা পলিসি নং:</span>
-            <span className="value">{data.insurance_policy_no}</span>
-          </div>
-        </div>
-
-        {/* Main Information */}
-        <div className="info-section">
-          <div className="row mb-3 p-3 bg-info-subtle rounded">
-            <div className="col-md-4">
-              <span className="label">শাখার নাম:</span>
-              <span className="value">Gulshan</span>
-            </div>
-            <div className="col-md-4">
-              <span className="label">শাখার কোড:</span>
-              <span className="value">0605</span>
-            </div>
-            <div className="col-md-4">
-              <span className="label">প্রজেক্টের নাম:</span>
-              <span className="value">{data?.project?.projectTitle}</span>
-            </div>
-          </div>
-
-          <div className="row mb-3 p-3 bg-success-subtle rounded">
-            <div className="col-md-6">
-              <span className="label">বীমাগ্রহীতার নাম:</span>
-              <span className="value">{data?.client?.name}</span>
-            </div>
-            <div className="col-md-6">
-              <span className="label">মোবাইল নম্বর:</span>
-              <span className="value">{data?.client?.contact_number}</span>
-            </div>
-            <div className="col-md-6">
-              <span className="label">বীমার প্যাকেজ:</span>
-              <span className="value">{data?.category?.policy_name}</span>
-            </div>
-            <div className="col-md-6">
-              <span className="label">বীমার ক্যাটাগরি:</span>
-              <span className="value">{data?.category?.title}</span>
-            </div>
-          </div>
-
-          <div className="row mb-3 p-3 bg-warning-subtle rounded">
-            <div className="col-md-6">
-              <span className="label">নমিনির নাম:</span>
-              <span className="value">{data.nominee_name}</span>
-            </div>
-            <div className="col-md-6">
-              <span className="label">নমিনির সাথে সম্পর্ক:</span>
-              <span className="value">{data?.nomineeRelation?.data_name}</span>
-            </div>
-            <div className="col-md-6">
-              <span className="label">নমিনির মোবাইল নম্বর:</span>
-              <span className="value">{data.nominee_phone_no}</span>
-            </div>
-            <div className="col-md-6">
-              <span className="label">প্রিমিয়াম:</span>
-              <span className="value">{data.premium_amnt}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="form-footer mt-4 pt-4 border-top">
-          <p className="text-center mb-4">বীমা মেয়াদকাল: ৩৬৫ দিন</p>
-          <div className="row">
-            <div className="col-md-4">
-              <div className="signature-section">
-                <p>বীমাগ্রহীতার স্বাক্ষর:</p>
-                <div className="signature-line"></div>
-                <p className="mt-3">তারিখ:</p>
-                <div className="signature-line"></div>
+        {/* Form Type and Number Section */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col border-end">
+              <div className="p-2 d-flex align-items-center gap-3">
+                <span>নতুন পলিসি</span>
+                <input type="checkbox" className="form-check-input" checked={data.insurance_type_id === 1} />
+                <span>নবায়ন পলিসি</span>
+                <input type="checkbox" className="form-check-input" checked={data.insurance_type_id === 2} />
               </div>
             </div>
-            <div className="col-md-4"></div>
-            <div className="col-md-4">
-              <div className="signature-section">
-                <p>ব্র্যাক কর্মীর নাম:</p>
-                <div className="signature-line"></div>
-                <p className="mt-3">পদবী:</p>
-                <div className="signature-line"></div>
-                <p className="mt-3">তারিখ:</p>
-                <div className="signature-line"></div>
+            <div className="col">
+              <div className="p-2 d-flex align-items-center">
+                <span>বিমা পলিসি নং - </span>
+                <span style={{ fontSize: "0.8rem" }}>{data.insurance_policy_no}</span>
+                <span className="ms-auto">তারিখ - 2024-12-11</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Branch Information */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col border-end">
+              <div className="p-2">
+                <div className="d-flex">
+                  <span>শাখার নাম - {data?.branch?.branch_name}</span>
+                  <div className="ms-4">
+                    <span>শাখা কোড: {data?.branch?.branch_code}</span>
+                    <span className="ms-4">ডি:ও কোড: 2009</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+            <div className=" bg-light">
+                <span>প্রকল্পের নাম:{data?.project?.projectTitle}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Location Information */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col border-end">
+              <div className="p-2">
+                <span>এলাকার নাম - </span>
+              </div>
+            </div>
+            <div className="col">
+              <div className="p-2 d-flex justify-content-between">
+                <span>অঞ্চলের নাম - </span>
+                {/* <span>Microfinance (Dabi)</span> */}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Health Declaration */}
+        <div className="border mb-4">
+          <div className="bg-light p-2 text-center">বিমাধারীর স্বাস্থ্য সম্পর্কিত তথ্য</div>
+          <div className="p-2">
+            <div className="d-flex align-items-center justify-content-between">
+              <p className="flex-grow-1 mb-0">
+                আপনি কি বর্তমানে ক্যান্সার/ এইচআইভি/ কিডনি/ জন্ডিস/ হার্ট/ ফুসফুস সংক্রান্ত জটিলতায় আক্রান্ত আছেন বা বর্তমানে এ সংক্রান্ত কোনরূপ চিকিৎসা গ্রহণ করছেন?
+              </p>
+              <div className="d-flex gap-3">
+                <div className="d-flex align-items-center gap-1">
+                  <input type="checkbox" className="form-check-input" checked={data?.any_disease === true}></input>
+                  <span>হ্যাঁ</span>
+                </div>
+                <div className="d-flex align-items-center gap-1">
+                <input type="checkbox" className="form-check-input" checked={data?.any_disease === false}></input>
+                  <span>না</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Personal Information */}
+        <div className="border mb-4">
+          <div className="p-2">বিমাধারীর নাম: {data?.client?.name}</div>
+          <div className="border-top">
+            <div className="row g-0">
+              <div className="col-4 border-end p-2">
+                সদস্য নং: {data.orgmemno}
+              </div>
+              <div className="col-4 border-end p-2">
+                <div className="d-flex align-items-center gap-3">
+                  <span>লিঙ্গ:</span>
+                  <div className="d-flex gap-3">
+                    <div className="d-flex align-items-center gap-1">
+                      {/* <div className="checkbox-custom" checked={data?.client?.sex === 1}></div> */}
+                      <input type="checkbox" className="form-check-input" checked={data?.client?.sex === 1}></input>
+                      <span>পুরুষ</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-1">
+                      <input type="checkbox" className="form-check-input" checked={data?.client?.sex === 2}></input>
+                      <span>নারী</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-1">
+                      <div className="checkbox-custom"></div>
+                      <span>অন্যান্য</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-4 p-2">
+                মোবাইল নম্বর: {data?.client?.contact_number}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Information */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col-6 border-end p-2">
+            নমিনির  জাতীয় পরিচয়পত্র নং: {data?.nominee_card_id}
+            </div>
+            <div className="col-6 p-2"></div>
+          </div>
+          <div className="row g-0 border-top">
+            <div className="col-6 border-end p-2">
+              নমিনির নাম: {data.nominee_name}
+            </div>
+            <div className="col-6 p-2">
+              নমিনির বয়স: 34
+            </div>
+          </div>
+          <div className="row g-0 border-top">
+            <div className="col-6 border-end p-2">
+              বিমাধারীর সাথে সম্পর্ক: {data?.nomineeRelation?.data_name}
+            </div>
+            <div className="col-6 p-2">
+              নমিনির মোবাইল নম্বর: {data.nominee_phone_no}
+            </div>
+          </div>
+          {/* <div className="row g-0 border-top">
+            <div className="col-12 p-2">
+              নমিনির স্মার্ট কার্ড নং: {data?.nominee_card_id}
+            </div>
+          </div> */}
+        </div>
+
+        {/* Insurance Details */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col-3 border-end p-2">
+              বিমার প্যাকেজ: {data?.category?.policy_name}
+            </div>
+            <div className="col-3 border-end p-2">
+              বিমার ক্যাটাগরি:  {data?.category?.title}
+            </div>
+            <div className="col-3 border-end p-2">
+              প্রিমিয়াম: {data.premium_amnt} টাকা
+            </div>
+            <div className="col-3 p-2">
+              বিমার মেয়াদকাল: ৩৬৫ দিন
+            </div>
+          </div>
+        </div>
+
+        {/* Declaration */}
+        <div className="border mb-4 p-2">
+          <p className="small mb-0">
+            ফর্মে প্রদত্ত বিমা সংক্রান্ত সকল তথ্য সঠিক এবং বর্ণিত সকল নিয়মাবলী আমি নিজে পড়ে/ বুঝে মেনে নিয়ে স্বাক্ষর করলাম। উক্ত তথ্যাবলী ব্যবহারে ব্র্যাককে অনুমতি প্রদান করছি।
+          </p>
+        </div>
+
+        {/* Signature Section */}
+        <div className="border">
+          <div className="row g-0">
+            <div className="col-3 border-end p-3">
+              <div className="signature-box"></div>
+              <div className="text-center small mt-2">বিমাধারীর স্বাক্ষর/টিপসই ও তারিখ</div>
+            </div>
+            <div className="col-3 border-end p-3">
+              <div className="signature-box"></div>
+              <div className="text-center small mt-2">
+                শাখা ব্যবস্থাপক / একজন ব্যবস্থাপক (প্রভিত) এর নাম, পিন, স্বাক্ষর ও তারিখ
+              </div>
+            </div>
+            <div className="col-3 border-end p-3">
+              <div className="h-100"></div>
+            </div>
+            <div className="col-3 p-3">
+              <div className="signature-box"></div>
+              <div className="text-center small mt-2">শাখা হিসাব কর্মকর্তা নাম, পিন, স্বাক্ষর ও তারিখ</div>
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        .checkbox-custom {
+          width: 1rem;
+          height: 1rem;
+          border: 1px solid black;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .signature-box {
+          height: 5rem;
+          border-bottom: 1px solid #dee2e6;
+        }
+      `}</style>
+      </div>
     </div>
+
+    <div className="container mt-5 mb-5">
+      {/* Download Button */}
+      {/* <div className="text-end mb-3">
+        <button 
+          className="btn btn-primary download-btn"
+          onClick={downloadPDF}
+        >
+          Download as PDF
+        </button>
+      </div> */}
+
+      {/* Form Content */}
+      <div className="insurance-form" ref={formRef}>
+        {/* Header */}
+        <div className="mx-auto" style={{ maxWidth: '1000px' }}>
+        {/* Header Section */}
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          {/* <img src="brac-logo.png" alt="Save Safe Logo" height="40" /> */}
+          <div className="text-center">
+            <h1 className="h4 mb-1">নিউবনা স্বাস্থ্যবিমা</h1>
+            <p className="small mb-0">গ্রাহক নিবন্ধন ফর্ম</p>
+          </div>
+          <div className="text-end">
+            {/* <img src="/api/placeholder/120/40" alt="Chartered Life Logo" height="40" /> */}
+            <div className="border border-dark d-inline-block px-2 small">অফিস কপি </div>
+          </div>
+        </div>
+
+        {/* Form Type and Number Section */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col border-end">
+              <div className="p-2 d-flex align-items-center gap-3">
+                <span>নতুন পলিসি</span>
+                <input type="checkbox" className="form-check-input" checked={data.insurance_type_id === 1} />
+                <span>নবায়ন পলিসি</span>
+                <input type="checkbox" className="form-check-input" checked={data.insurance_type_id === 2} />
+              </div>
+            </div>
+            <div className="col">
+              <div className="p-2 d-flex align-items-center">
+                <span>বিমা পলিসি নং - </span>
+                <span style={{ fontSize: "0.8rem" }}>{data.insurance_policy_no}</span>
+                <span className="ms-auto">তারিখ - 2024-12-11</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Branch Information */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col border-end">
+              <div className="p-2">
+                <div className="d-flex">
+                  <span>শাখার নাম - {data?.branch?.branch_name}</span>
+                  <div className="ms-4">
+                    <span>শাখা কোড: {data?.branch?.branch_code}</span>
+                    <span className="ms-4">ডি:ও কোড: 2009</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className=" bg-light">
+                <span>প্রকল্পের নাম:{data?.project?.projectTitle}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Location Information */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col border-end">
+              <div className="p-2">
+                <span>এলাকার নাম - </span>
+              </div>
+            </div>
+            <div className="col">
+              <div className="p-2 d-flex justify-content-between">
+                <span>অঞ্চলের নাম - </span>
+                {/* <span>Microfinance (Dabi)</span> */}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Health Declaration */}
+        <div className="border mb-4">
+          <div className="bg-light p-2 text-center">বিমাধারীর স্বাস্থ্য সম্পর্কিত তথ্য</div>
+          <div className="p-2">
+            <div className="d-flex align-items-center justify-content-between">
+              <p className="flex-grow-1 mb-0">
+                আপনি কি বর্তমানে ক্যান্সার/ এইচআইভি/ কিডনি/ জন্ডিস/ হার্ট/ ফুসফুস সংক্রান্ত জটিলতায় আক্রান্ত আছেন বা বর্তমানে এ সংক্রান্ত কোনরূপ চিকিৎসা গ্রহণ করছেন?
+              </p>
+              <div className="d-flex gap-3">
+                <div className="d-flex align-items-center gap-1">
+                  <input type="checkbox" className="form-check-input" checked={data?.any_disease === true}></input>
+                  <span>হ্যাঁ</span>
+                </div>
+                <div className="d-flex align-items-center gap-1">
+                <input type="checkbox" className="form-check-input" checked={data?.any_disease === false}></input>
+                  <span>না</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Personal Information */}
+        <div className="border mb-4">
+          <div className="p-2">বিমাধারীর নাম: {data?.client?.name}</div>
+          <div className="border-top">
+            <div className="row g-0">
+              <div className="col-4 border-end p-2">
+                সদস্য নং: {data.orgmemno}
+              </div>
+              <div className="col-4 border-end p-2">
+                <div className="d-flex align-items-center gap-3">
+                  <span>লিঙ্গ:</span>
+                  <div className="d-flex gap-3">
+                    <div className="d-flex align-items-center gap-1">
+                      {/* <div className="checkbox-custom" checked={data?.client?.sex === 1}></div> */}
+                      <input type="checkbox" className="form-check-input" checked={data?.client?.sex === 1}></input>
+                      <span>পুরুষ</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-1">
+                      <input type="checkbox" className="form-check-input" checked={data?.client?.sex === 2}></input>
+                      <span>নারী</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-1">
+                      <div className="checkbox-custom"></div>
+                      <span>অন্যান্য</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-4 p-2">
+                মোবাইল নম্বর: {data?.client?.contact_number}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Information */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col-6 border-end p-2">
+            নমিনির  জাতীয় পরিচয়পত্র নং: {data?.nominee_card_id}
+            </div>
+            <div className="col-6 p-2"></div>
+          </div>
+          <div className="row g-0 border-top">
+            <div className="col-6 border-end p-2">
+              নমিনির নাম: {data.nominee_name}
+            </div>
+            <div className="col-6 p-2">
+              নমিনির বয়স: 34
+            </div>
+          </div>
+          <div className="row g-0 border-top">
+            <div className="col-6 border-end p-2">
+              বিমাধারীর সাথে সম্পর্ক: {data?.nomineeRelation?.data_name}
+            </div>
+            <div className="col-6 p-2">
+              নমিনির মোবাইল নম্বর: {data.nominee_phone_no}
+            </div>
+          </div>
+          {/* <div className="row g-0 border-top">
+            <div className="col-12 p-2">
+              নমিনির স্মার্ট কার্ড নং: {data?.nominee_card_id}
+            </div>
+          </div> */}
+        </div>
+
+        {/* Insurance Details */}
+        <div className="border mb-4">
+          <div className="row g-0">
+            <div className="col-3 border-end p-2">
+              বিমার প্যাকেজ: {data?.category?.policy_name}
+            </div>
+            <div className="col-3 border-end p-2">
+              বিমার ক্যাটাগরি:  {data?.category?.title}
+            </div>
+            <div className="col-3 border-end p-2">
+              প্রিমিয়াম: {data.premium_amnt} টাকা
+            </div>
+            <div className="col-3 p-2">
+              বিমার মেয়াদকাল: ৩৬৫ দিন
+            </div>
+          </div>
+        </div>
+
+        {/* Declaration */}
+        <div className="border mb-4 p-2">
+          <p className="small mb-0">
+            ফর্মে প্রদত্ত বিমা সংক্রান্ত সকল তথ্য সঠিক এবং বর্ণিত সকল নিয়মাবলী আমি নিজে পড়ে/ বুঝে মেনে নিয়ে স্বাক্ষর করলাম। উক্ত তথ্যাবলী ব্যবহারে ব্র্যাককে অনুমতি প্রদান করছি।
+          </p>
+        </div>
+
+        {/* Signature Section */}
+        <div className="border">
+          <div className="row g-0">
+            <div className="col-3 border-end p-3">
+              <div className="signature-box"></div>
+              <div className="text-center small mt-2">বিমাধারীর স্বাক্ষর/টিপসই ও তারিখ</div>
+            </div>
+            <div className="col-3 border-end p-3">
+              <div className="signature-box"></div>
+              <div className="text-center small mt-2">
+                শাখা ব্যবস্থাপক / একজন ব্যবস্থাপক (প্রভিত) এর নাম, পিন, স্বাক্ষর ও তারিখ
+              </div>
+            </div>
+            <div className="col-3 border-end p-3">
+              <div className="h-100"></div>
+            </div>
+            <div className="col-3 p-3">
+              <div className="signature-box"></div>
+              <div className="text-center small mt-2">শাখা হিসাব কর্মকর্তা নাম, পিন, স্বাক্ষর ও তারিখ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        .checkbox-custom {
+          width: 1rem;
+          height: 1rem;
+          border: 1px solid black;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .signature-box {
+          height: 5rem;
+          border-bottom: 1px solid #dee2e6;
+        }
+      `}</style>
+      </div>
+    </div>
+    </>
+
+
+
   );
 };
 

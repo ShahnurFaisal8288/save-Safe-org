@@ -17,6 +17,7 @@ const MicroHealthInsurance = () => {
   const [documentType, setDocumentType] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [treatmentTypeId, setTreatmentTypeId] = useState("");
+  const [selectedInsuranceId, setSelectedInsuranceId] = useState(null);
 
   //  useEffect(() => {
   //   const fetchProjectName = async () => {
@@ -134,16 +135,27 @@ const MicroHealthInsurance = () => {
     setSelectedPolicyNumber(policyNumber);
     const selectedPolicy = selectedProduct.insurance_details.find(
       (detail) => detail.insurance_policy_no === policyNumber
+      
   );
-
-  // Check if a match is found
-  if (selectedPolicy) {
-    setSelectedCategoryId(selectedPolicy.category_id); // Set the category_id
+  if (selectedPolicy) { 
+    setSelectedCategoryId(selectedPolicy.category_id); // Set the category_id 
+    setSelectedInsuranceId(selectedPolicy.id); // Set the insurance ID
     console.log("Category ID:", selectedPolicy.category_id);
-} else {
-    setSelectedCategoryId(null); // Reset if no match found
-    console.log("Policy number not found.");
-}
+    console.log("Insurance ID:", selectedPolicy.id);
+  } else { 
+    setSelectedCategoryId(null); // Reset if no match found 
+    setSelectedInsuranceId(null); // Reset insurance ID if no match found
+    console.log("Policy number not found."); 
+  } 
+
+//   // Check if a match is found
+//   if (selectedPolicy) {
+//     // setSelectedCategoryId(selectedPolicy.category_id); // Set the category_id
+//     // console.log("Category ID:", selectedPolicy.category_id);
+// } else {
+//     setSelectedCategoryId(null); // Reset if no match found
+//     console.log("Policy number not found.");
+// }
   };
 
   const handleTreatmentChange = async (e) => {
@@ -237,19 +249,226 @@ const MicroHealthInsurance = () => {
 
   // console.log("remainingSum :", remainingSum);
   console.log("selectedTreatment :", treatmentType);
-  // console.log("selectedProduct :", selectedProduct);
+  console.log("selectedProduct :", selectedProduct);
 
   return (
+    <>
+    <style>
+      {`
+      /* General Styles */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Section Styles */
+.section {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff; /* White background for section content */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.section-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  padding: 10px;
+  color: #fff; /* White text */
+  background-color: #f72b8b; /* Pink background */
+  border-radius: 5px;
+}
+
+/* Form Styles */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+/* Search Box */
+.search-box {
+  display: flex;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 10px;
+}
+
+.search-button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+/* Date Box */
+.date-box {
+  display: flex;
+}
+
+.date-box input {
+  flex: 1;
+  padding: 10px;
+}
+
+.calendar-button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+/* Upload Section */
+.upload-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.upload-label {
+  display: block;
+  cursor: pointer;
+}
+
+.file-placeholder {
+  color: #777;
+  font-size: 14px;
+}
+
+.file-input {
+  display: none;
+}
+
+.error-text {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Note */
+.note {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.reset-button,
+.claim-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reset-button {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.claim-button {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reset-button,
+  .claim-button {
+    width: 100%;
+  }
+
+  .upload-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+      `}
+    </style>
     <div className="container mt-5">
       <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
       <form onSubmit={handleFormSubmit}>
         <div className="form-group">
           {/* <label>Mapped Health Insurance ID</label> */}
           <input
-            type="hidden"
+            type="text"
             name="health_insurance_id"
-            // value={selectedProduct.insurance_product_id}
-            value="3"
+            value={selectedInsuranceId}
+            // value="3"
             readOnly
           />
         </div>
@@ -509,6 +728,7 @@ const MicroHealthInsurance = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 

@@ -122,6 +122,10 @@ const MemberList = () => {
                 Birthday Date{" "}
                 {sortConfig.key === "date_birthday" && (sortConfig.direction === "ascending" ? "↑" : "↓")}
               </th>
+              <th onClick={() => requestSort("project_code")} style={{ cursor: "pointer" }}>
+                Project Code{" "}
+                {sortConfig.key === "date_birthday" && (sortConfig.direction === "ascending" ? "↑" : "↓")}
+              </th>
               <th onClick={() => requestSort("action")} style={{ cursor: "pointer" }}>
                 Action{" "}
                 {sortConfig.key === "action" && (sortConfig.direction === "ascending" ? "↑" : "↓")}
@@ -135,12 +139,13 @@ const MemberList = () => {
                   <td>{item.name}</td>
                   <td>{item.sex}</td>
                   <td>{item.date_of_birth}</td>
+                  <td>{item.project_code}</td>
                   <button
                     style={buttonStyle}
                     className="btn btn-primary"
                     onClick={() =>
                       navigate(
-                        `/insurance-form/${item.id}/${item.name}/${item.account_number}/${item.sex}/${item.date_of_birth}`
+                        `/insurance-form/${item.id}/${item.name}/${item.account_number}/${item.sex}/${item.date_of_birth}/${item.project_code}`
                       )
                     }
                   >

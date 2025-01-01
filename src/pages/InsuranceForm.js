@@ -14,6 +14,7 @@ import { Camera, CheckCircle } from "lucide-react";
 import axios from "axios";
 import reportWebVitals from "./../reportWebVitals";
 import useGetCategory from "../hooks/useGetCategory";
+import Swal from "sweetalert2";
 
 function InsuranceForm() {
   const [frontPreview, setFrontPreview] = useState(null);
@@ -43,7 +44,7 @@ function InsuranceForm() {
   const [coNo, setCollectorNumber] = useState(null);
 
   //insurance form params data start
-  const { id, name, account_number, sex, date_of_birth } = useParams();
+  const { id, name, account_number, sex, date_of_birth, project_code } = useParams();
   const [isDropdownDisabled, setDropdownDisabled] = useState(false);
   //insurance form params data end
 
@@ -288,7 +289,7 @@ function InsuranceForm() {
     }
 
     // Proceed with form submission if valid
-    alert("Form submitted successfully!");
+    // alert("Form submitted successfully!");
 
     try {
       const formData = new FormData();
@@ -325,7 +326,8 @@ function InsuranceForm() {
             AnyDisease: event.target.AnyDisease
               ? event.target.AnyDisease.value
               : "",
-            PolicyName: event.target.PolicyName ? validateCategory : "",
+            // PolicyName: event.target.PolicyName ? validateCategory : "",
+            PolicyName: event.target.PolicyName ?  event.target.PolicyName.value : "",
             
             InsuranceType: event.target.InsuranceType
               ? event.target.InsuranceType.value
@@ -408,14 +410,21 @@ function InsuranceForm() {
         .then((response) => {
           // console.log("form data 2:", formData);
           if (response.status === 201) {
-            alert("Successfully Created");
+            Swal.fire({
+              icon: "success",
+              title: "Data Submission Successful",
+              text: `Data has been stored successfully!`,
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
           }
 
           // console.log("inserttt data", response.data);
         })
         .catch((error) => {
           console.error("Error creating data:", error.message);
-          alert("Failed to create data");
+          
         });
     } catch (error) {
       console.error("Error creating data:", error.message);
@@ -537,6 +546,7 @@ function InsuranceForm() {
     account_number,
     sex,
     date_of_birth,
+    project_code,
   });
 
   // Calculate age
@@ -680,6 +690,7 @@ function InsuranceForm() {
   console.log("selectedCategoryTitle", selectedCategoryTitle);
   console.log("validateCategory", validateCategory);
   console.log("category", category);
+  console.log("selectedPolicy", selectedPolicy);
 
   return (
     <Container className="py-5">
@@ -781,7 +792,7 @@ function InsuranceForm() {
                 <Form.Control
                   type="hidden"
                   name="ProjectCode"
-                  value="11"
+                  value={project_code}
                   readOnly
                 />
               </Form.Group>

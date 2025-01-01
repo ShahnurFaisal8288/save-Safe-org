@@ -27,6 +27,8 @@ import HouseHold from "../pages/HouseHold";
 import LoanEntry from "../pages/LoanEntry";
 import LTSAccount from "../pages/LTSAccount";
 import LTSLoneEntry from "../pages/LTSLoneEntry";
+import ClaimList from "../pages/ClaimList";
+import ClaimFormPdf from "../pages/ClaimFormPdf";
 
 
 
@@ -61,7 +63,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/insurance-form/:id/:name/:account_number/:sex/:date_of_birth", // Child route for the dashboard with id and member_name parameters
+        path: "/insurance-form/:id/:name/:account_number/:sex/:date_of_birth/:project_code", // Child route for the dashboard with id and member_name parameters
         element: (
           <PrivateRoute requiredPermission="/insurance-form">
             <InsuranceForm />
@@ -121,6 +123,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/insuranceFormPdf">
           <InsuranceFormPdf />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/claimFormPdf/:id", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/claimFormPdf">
+          <ClaimFormPdf />
           </PrivateRoute>
         ),
       },
@@ -185,6 +195,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/LTSLoanEntry">
           <LTSLoneEntry />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/claimList", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/claimList">
+          <ClaimList />
           </PrivateRoute>
         ),
       },
