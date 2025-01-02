@@ -22,40 +22,71 @@ const InsuranceList = () => {
   const [selectedAccountNumber, setSelectedAccountNumber] = useState("");
   const [selectedProject, setSelectedProject] = useState("");
   const [selectedPo, setSelectedPo] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Fetch project, PO, and member data
+  // const fetchData = async () => {
+  //   try {
+  //     const projectResponse = await axios.get(
+  //       "http://localhost:8000/api/projects"
+  //     );
+  //     if (projectResponse.data && Array.isArray(projectResponse.data)) {
+  //       setProject(projectResponse.data);
+  //     }
+
+  //     const poResponse = await axios.get(
+  //       "http://localhost:8000/api/collectors"
+  //     );
+  //     if (poResponse.data) {
+  //       setPoNo(poResponse.data);
+  //     }
+
+  //     // const memberResponse = await axios.get(
+  //     //   `http://localhost:8000/api/collector/${selectedPo}/client/information`
+  //     // );
+  //     // if (memberResponse.data) {
+  //     //   setMemberName(memberResponse.data);
+  //     // }
+
+  //     // Set initial data for display (could be fetched from a separate API for insurance list)
+  //     const initialData = await axios.get(
+  //       "http://localhost:8000/api/health_insurance/list"
+  //     );
+  //     setFilteredData(initialData.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error.message);
+  //   }
+  // };
   const fetchData = async () => {
     try {
-      const projectResponse = await axios.get(
-        "http://localhost:8000/api/projects"
-      );
+      // Fetch projects
+      const projectResponse = await axios.get("http://localhost:8000/api/projects");
       if (projectResponse.data && Array.isArray(projectResponse.data)) {
         setProject(projectResponse.data);
+      } else if (projectResponse.data?.error) {
+        console.warn("Project Error:", projectResponse.data.error);
       }
-
-      const poResponse = await axios.get(
-        "http://localhost:8000/api/collectors"
-      );
+  
+      // Fetch collectors
+      const poResponse = await axios.get("http://localhost:8000/api/collectors");
       if (poResponse.data) {
         setPoNo(poResponse.data);
+      } else if (poResponse.data?.error) {
+        console.warn("Collector Error:", poResponse.data.error);
       }
-
-      // const memberResponse = await axios.get(
-      //   `http://localhost:8000/api/collector/${selectedPo}/client/information`
-      // );
-      // if (memberResponse.data) {
-      //   setMemberName(memberResponse.data);
-      // }
-
-      // Set initial data for display (could be fetched from a separate API for insurance list)
-      const initialData = await axios.get(
-        "http://localhost:8000/api/health_insurance/list"
-      );
-      setFilteredData(initialData.data);
+  
+      // Fetch health insurance list
+      const initialData = await axios.get("http://localhost:8000/api/health_insurance/list");
+      if (initialData.data) {
+        setFilteredData(initialData.data);
+      } else if (initialData.data?.error) {
+        console.warn("Health Insurance Error:", initialData.data.error);
+      }
     } catch (error) {
       console.error("Error fetching data:", error.message);
     }
   };
+  
 
   useEffect(() => {
     fetchData();
@@ -110,50 +141,21 @@ useEffect(() => {
       setSelectedPo(""); // Reset if no match
     }
   };
-  // Handle search form submission
-  // const handleSearch = async () => {
-  //   const formattedDate = searchDate
-  //     ? format(new Date(searchDate), "yyyy-MM-dd")
-  //     : "";
-
-  //   const filterParams = {
-  //     date: formattedDate,
-  //     status: Object.keys(statusFilters)
-  //       .filter((key) => statusFilters[key])
-  //       .join(","),
-  //   };
-
-  //   try {
-  //     const response = await axios.get(
-  //       "http://localhost:8000/api/health_insurance/list/search",
-  //       {
-  //         params: filterParams,
-  //       }
-  //     );
-
-  //     if (response.data) {
-  //       setFilteredData(response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching filtered data:", error.message);
-  //   }
-  // };
+ 
   const handleSearch = async () => {
     const formattedDate = searchDate
       ? format(new Date(searchDate), "yyyy-MM-dd")
       : "";
-
-    // Add state variables for account number and project code
-
+  
     const filterParams = {
       date: formattedDate,
       status: Object.keys(statusFilters)
         .filter((key) => statusFilters[key])
         .join(","),
-      account_number: selectedAccountNumber, // Add account number to params
-      projectCode: selectedProject, // Add project code to params
+      account_number: selectedAccountNumber,
+      projectCode: selectedProject,
     };
-
+  
     try {
       const response = await axios.get(
         "http://localhost:8000/api/health_insurance/list/search",
@@ -161,12 +163,15 @@ useEffect(() => {
           params: filterParams,
         }
       );
-
+  
       if (response.data) {
-        setFilteredData(response.data);
+        setFilteredData(response.data); // Success data
+        setErrorMessage(null); // Clear any previous errors
       }
     } catch (error) {
       console.error("Error fetching filtered data:", error.message);
+      setErrorMessage(error.response?.data?.error || "An error occurred."); // Store the error message
+      setFilteredData([]); // Clear data on error
     }
   };
   // console.log("selectedPo: ", selectedPo);
@@ -367,6 +372,14 @@ body {
   .search-btn {
     width: 100%;
   }
+    .container {
+  font-size: 0.7rem;
+  transform: scale(0.2);
+}
+
+.container * {
+  font-size: inherit;
+}
 }
 
       `}
@@ -516,40 +529,47 @@ body {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((item, index) => (
-              <tr key={index}>
-                <td>{item?.enrolment_id}</td>
-                <td>{item?.created_at}</td>
-                <td>{item?.client.name}</td>
-                <td>{item?.policy_names}</td>
-                <td>{item?.statuses}</td>
-                <td>
-                  <button
-                    className="download-btn"
-                    onClick={() =>
-                      navigate(`/insuranceFormPdf/${item.id}`, {
-                        state: { item },
-                      })
-                    }
-                  >
-                    Download
-                  </button>
-                </td>
-                <td>
-                  <button
-                    className="view-btn"
-                    onClick={() =>
-                      navigate(`/approve-insurance-enrollment/${item.id}`, {
-                        state: { item },
-                      })
-                    }
-                  >
-                    View
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {errorMessage && (
+    <tr>
+      <td colSpan="7" style={{ color: "red", textAlign: "center" }}>
+        {errorMessage}
+      </td>
+    </tr>
+  )}
+  {filteredData.map((item, index) => (
+    <tr key={index}>
+      <td>{item?.enrolment_id}</td>
+      <td>{item?.created_at}</td>
+      <td>{item?.client.name}</td>
+      <td>{item?.policy_names}</td>
+      <td>{item?.statuses}</td>
+      <td>
+        <button
+          className="download-btn"
+          onClick={() =>
+            navigate(`/insuranceFormPdf/${item.id}`, {
+              state: { item },
+            })
+          }
+        >
+          Download
+        </button>
+      </td>
+      <td>
+        <button
+          className="view-btn"
+          onClick={() =>
+            navigate(`/approve-insurance-enrollment/${item.id}`, {
+              state: { item },
+            })
+          }
+        >
+          View
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>;
         </table>
 
         {/* Pagination */}

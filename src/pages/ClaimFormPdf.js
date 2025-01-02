@@ -56,7 +56,15 @@ const ClaimFormPdf = () => {
   };
     return (
         <div className="min-h-screen bg-gray-100 p-5">
-          <div className="container mx-auto bg-white p-5 rounded-lg shadow-sm">
+          <div className="text-end mb-3">
+        <button 
+          className="btn btn-primary download-btn"
+          onClick={downloadPDF}
+        >
+          Download as PDF
+        </button>
+      </div>
+          <div className="container mx-auto bg-white p-5 rounded-lg shadow-sm" ref={formRef}>
             {/* <div className="flex justify-between items-center mb-5">
               <img src="/api/placeholder/120/40" alt="BRAC logo" className="h-10" />
               <div className="text-center">
@@ -69,7 +77,7 @@ const ClaimFormPdf = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
           {/* <img src="brac-logo.png" alt="Save Safe Logo" height="40" /> */}
           <div className="text-center">
-            <h1 className="h4 mb-1">নিউবনা স্বাস্থ্যবিমা</h1>
+            <h1 className="h4 mb-1">নির্ভাবনা স্বাস্থ্যবিমা</h1>
             <p className="small mb-0">গ্রাহক নিবন্ধন ফর্ম</p>
           </div>
           <div className="text-end">
@@ -106,7 +114,7 @@ const ClaimFormPdf = () => {
                 </tr>
                 <tr>
                   <td className="border border-gray-300 p-2">সদস্য নং</td>
-                  <td className="border border-gray-300 p-2">{data.healthInsurance.orgmemno}</td>
+                  <td className="border border-gray-300 p-2">{data?.healthInsurance?.orgmemno}</td>
                   <td className="border border-gray-300 p-2">শাখার নাম</td>
                   <td className="border border-gray-300 p-2">Tikkatoli</td>
                   <td className="border border-gray-300 p-2">ancholer nam</td>
@@ -138,9 +146,9 @@ const ClaimFormPdf = () => {
               <tbody>
                 <tr>
                   <td className="border border-gray-300 p-2 w-1/5">বিমা পলিসি</td>
-                  <td className="border border-gray-300 p-2 w-3/10">{data.insurancePolicy.policy_name}</td>
+                  <td className="border border-gray-300 p-2 w-3/10">{data?.insurancePolicy?.policy_name}</td>
                   <td className="border border-gray-300 p-2 w-1/5">বিমা পলিসি নং</td>
-                  <td className="border border-gray-300 p-2 w-1/5">{data.insurance_policy_no}</td>
+                  <td className="border border-gray-300 p-2 w-1/5">{data?.insurance_policy_no}</td>
                   <td className="border border-gray-300 p-2 w-1/6">বিমা Premium</td>
                   <td className="border border-gray-300 p-2 w-1/6">1200</td>
                 </tr>

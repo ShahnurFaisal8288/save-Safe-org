@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "../MicroHealthInsurance.css";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const MicroHealthInsurance = () => {
+const navigate = useNavigate()
+
   // const [project, setProject] = useState();
   const [project, setProject] = useState([]);
   const [memberNo, setMemberNo] = useState([]);
@@ -18,6 +22,8 @@ const MicroHealthInsurance = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [treatmentTypeId, setTreatmentTypeId] = useState("");
   const [selectedInsuranceId, setSelectedInsuranceId] = useState(null);
+  const [frontImagePreview, setFrontImagePreview] = useState(null);
+  const [backImagePreview, setBackImagePreview] = useState(null);
 
   //  useEffect(() => {
   //   const fetchProjectName = async () => {
@@ -69,6 +75,31 @@ const MicroHealthInsurance = () => {
     ];
   };
 
+  const handleFrontImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFrontImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFrontImagePreview(null);
+    }
+  };
+
+  const handleBackImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBackImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setBackImagePreview(null);
+    }
+  };
   //calculate Age
   const calculateAge = (dateOfBirth) => {
     const dob = new Date(dateOfBirth);
@@ -135,33 +166,32 @@ const MicroHealthInsurance = () => {
     setSelectedPolicyNumber(policyNumber);
     const selectedPolicy = selectedProduct.insurance_details.find(
       (detail) => detail.insurance_policy_no === policyNumber
-      
-  );
-  if (selectedPolicy) { 
-    setSelectedCategoryId(selectedPolicy.category_id); // Set the category_id 
-    setSelectedInsuranceId(selectedPolicy.id); // Set the insurance ID
-    console.log("Category ID:", selectedPolicy.category_id);
-    console.log("Insurance ID:", selectedPolicy.id);
-  } else { 
-    setSelectedCategoryId(null); // Reset if no match found 
-    setSelectedInsuranceId(null); // Reset insurance ID if no match found
-    console.log("Policy number not found."); 
-  } 
+    );
+    if (selectedPolicy) {
+      setSelectedCategoryId(selectedPolicy.category_id); // Set the category_id
+      setSelectedInsuranceId(selectedPolicy.id); // Set the insurance ID
+      console.log("Category ID:", selectedPolicy.category_id);
+      console.log("Insurance ID:", selectedPolicy.id);
+    } else {
+      setSelectedCategoryId(null); // Reset if no match found
+      setSelectedInsuranceId(null); // Reset insurance ID if no match found
+      console.log("Policy number not found.");
+    }
 
-//   // Check if a match is found
-//   if (selectedPolicy) {
-//     // setSelectedCategoryId(selectedPolicy.category_id); // Set the category_id
-//     // console.log("Category ID:", selectedPolicy.category_id);
-// } else {
-//     setSelectedCategoryId(null); // Reset if no match found
-//     console.log("Policy number not found.");
-// }
+    //   // Check if a match is found
+    //   if (selectedPolicy) {
+    //     // setSelectedCategoryId(selectedPolicy.category_id); // Set the category_id
+    //     // console.log("Category ID:", selectedPolicy.category_id);
+    // } else {
+    //     setSelectedCategoryId(null); // Reset if no match found
+    //     console.log("Policy number not found.");
+    // }
   };
 
   const handleTreatmentChange = async (e) => {
     const selectedValue = JSON.parse(e.target.value); // Parse JSON string
-        const id = selectedValue.id; // Extract id
-        setTreatmentTypeId(id); // Parse the JSON string
+    const id = selectedValue.id; // Extract id
+    setTreatmentTypeId(id); // Parse the JSON string
     const treatmentType = selectedValue.column_name; // Extract `column_name` (e.g., 'opd') // Extract `id` (e.g., '1')
 
     const insurancePolicyNo = selectedPolicyNumber; // Assuming this is already defined
@@ -171,32 +201,32 @@ const MicroHealthInsurance = () => {
     console.log("Insurance Policy No:", insurancePolicyNo);
 
     if (treatmentType && insurancePolicyNo) {
-        setSelectedTreatment(treatmentTypeId); // Store only `id` in state
-        const url = `http://localhost:8000/api/searchTreatment/typename?insurance_policy_id=${selectedCategoryId}&type_name=${treatmentType}`;
-        console.log("Request URL:", url);
+      setSelectedTreatment(treatmentTypeId); // Store only `id` in state
+      const url = `http://localhost:8000/api/searchTreatment/typename?insurance_policy_id=${selectedCategoryId}&type_name=${treatmentType}`;
+      console.log("Request URL:", url);
 
-        try {
-            const response = await axios.get(url);
+      try {
+        const response = await axios.get(url);
 
-            if (response.status === 200) {
-                const remainingSumInsured = response.data;
-                setRemainingSum(remainingSumInsured);
-                console.log("Remaining Sum Insured Response:", remainingSumInsured);
-            } else {
-                console.error("Unexpected response status:", response.status);
-            }
-        } catch (error) {
-            console.error(
-                "Error Fetching Treatment Data:",
-                error.response ? error.response.data : error.message
-            );
+        if (response.status === 200) {
+          const remainingSumInsured = response.data;
+          setRemainingSum(remainingSumInsured);
+          console.log("Remaining Sum Insured Response:", remainingSumInsured);
+        } else {
+          console.error("Unexpected response status:", response.status);
         }
-    } else {
+      } catch (error) {
         console.error(
-            "Required fields are missing. Ensure treatmentType, insurancePolicyId, and insurancePolicyNo are defined."
+          "Error Fetching Treatment Data:",
+          error.response ? error.response.data : error.message
         );
+      }
+    } else {
+      console.error(
+        "Required fields are missing. Ensure treatmentType, insurancePolicyId, and insurancePolicyNo are defined."
+      );
     }
-};
+  };
   // method to handle form submission
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -218,10 +248,8 @@ const MicroHealthInsurance = () => {
     formData.append("frontImage", e.target.frontImage.files[0]);
     formData.append("backImage", e.target.backImage.files[0]);
     formData.append("documentPath", e.target.documentPath.files[0]);
-    alert("Form submitted successfully");
 
     try {
-      alert("Form submitted successfully");
       const response = await axios.post(
         "http://localhost:8000/api/claim/store",
         formData,
@@ -231,10 +259,19 @@ const MicroHealthInsurance = () => {
           },
         }
       );
-      if (response.status === 200) {
-        console.log("Form submitted successfully:", response.data);
-      } else {
-        console.error("Unexpected response status:", response.status);
+      if (response.status === 201) {
+        Swal.fire({
+          icon: "success",
+          title: "Data Submission Successful",
+          text: `Data has been stored successfully!`,
+          showConfirmButton: true,
+          confirmButtonText: "OK",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate("/claimList")
+            window.location.href = "/claimList"; // Replace with your target URL
+          }
+        });
       }
     } catch (error) {
       console.error(
@@ -248,13 +285,13 @@ const MicroHealthInsurance = () => {
   //   e.preventDefault();
 
   // console.log("remainingSum :", remainingSum);
-  console.log("selectedTreatment :", treatmentType);
-  console.log("selectedProduct :", selectedProduct);
+  // console.log("selectedTreatment :", treatmentType);
+  // console.log("selectedProduct :", selectedProduct);
 
   return (
     <>
-    <style>
-      {`
+      <style>
+        {`
       /* General Styles */
 .container {
   width: 90%;
@@ -455,188 +492,219 @@ const MicroHealthInsurance = () => {
   .upload-grid {
     grid-template-columns: 1fr;
   }
+
+  .preview-image {
+            max-width: 100%;
+            max-height: 150px;
+            margin-top: 10px;
+            border-radius: 4px;
+            object-fit: contain;
+          }
+
+          .upload-box {
+            min-height: 120px;
+          }
+
+          .file-placeholder {
+            margin-bottom: 10px;
+          }
+
+          .preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+          }
 }
 
       `}
-    </style>
-    <div className="container mt-5">
-      <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
-      <form onSubmit={handleFormSubmit}>
-        <div className="form-group">
-          {/* <label>Mapped Health Insurance ID</label> */}
-          <input
-            type="text"
-            name="health_insurance_id"
-            value={selectedInsuranceId}
-            // value="3"
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          {/* <label>Enrollment ID</label> */}
-          <input
-            type="hidden"
-            name="enrollment_id"
-            value="123e4567-e89b-12d3-a456-426614174000"
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          {/* <label>Insurance Policy id</label> */}
-          <input
-            type="hidden"
-            name="insurance_policy_id"
-            value={selectedCategoryId}
-            readOnly
-          />
-        </div>
-
-        {/* Project Section */}
-        <div className="section">
-          {/* <div className="section-header">Project</div> */}
+      </style>
+      <div className="container mt-5">
+        <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
+        <form onSubmit={handleFormSubmit}>
           <div className="form-group">
-            <label>Project *</label>
-            <select>
-              <option>Choose</option>
-              {project.map((item, index) => (
-                <option key={index} value={item.id}>
-                  {item.projectTitle}
-                </option>
-              ))}
-            </select>
+            {/* <label>Mapped Health Insurance ID</label> */}
+            <input
+              type="hidden"
+              name="health_insurance_id"
+              value={selectedInsuranceId}
+              // value="3"
+              readOnly
+            />
           </div>
-        </div>
+          <div className="form-group">
+            {/* <label>Enrollment ID</label> */}
+            <input
+              type="hidden"
+              name="enrollment_id"
+              value="123e4567-e89b-12d3-a456-426614174000"
+              readOnly
+            />
+          </div>
+          <div className="form-group">
+            {/* <label>Insurance Policy id</label> */}
+            <input
+              type="hidden"
+              name="insurance_policy_id"
+              value={selectedCategoryId}
+              readOnly
+            />
+          </div>
 
-        {/* Member Information Section */}
-        <div className="section">
-          <div className="section-header">Member Information</div>
-          <div className="form-grid">
+          {/* Project Section */}
+          <div className="section">
+            {/* <div className="section-header">Project</div> */}
             <div className="form-group">
-              <label>Member Number *</label>
-              <div className="search-box">
+              <label>Project *</label>
+              <select>
+                <option>Choose</option>
+                {project.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.projectTitle}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Member Information Section */}
+          <div className="section">
+            <div className="section-header">Member Information</div>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>Member Number *</label>
+                <div className="search-box">
+                  <input
+                    type="text"
+                    list="memberNumbers"
+                    onChange={handleMemberChange}
+                    placeholder="Member Number"
+                  />
+                  <datalist id="memberNumbers">
+                    {memberNo.map((item, index) => (
+                      <option key={index} value={item.account_number}>
+                        {item.account_number}
+                      </option>
+                    ))}
+                  </datalist>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Member Name</label>
                 <input
                   type="text"
-                  list="memberNumbers"
-                  onChange={handleMemberChange}
-                  placeholder="Member Number"
+                  value={selectedMemberId ? selectedMemberId.name : ""}
                 />
-                <datalist id="memberNumbers">
-                  {memberNo.map((item, index) => (
-                    <option key={index} value={item.account_number}>
-                      {item.account_number}
+              </div>
+
+              <div className="form-group">
+                <label>Member Mobile Number</label>
+                <input
+                  type="text"
+                  value={
+                    selectedMemberId ? selectedMemberId.contact_number : ""
+                  }
+                />
+              </div>
+              <div className="form-group">
+                <label>Age</label>
+                <input
+                  type="text"
+                  value={
+                    selectedMemberId && selectedMemberId.date_of_birth
+                      ? calculateAge(selectedMemberId.date_of_birth)
+                      : ""
+                  }
+                  readOnly
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Incident Information Section */}
+          <div className="section">
+            <div className="section-header">Incident Information</div>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>Product *</label>
+                <select onChange={handleProductChange}>
+                  <option>Select Product</option>
+                  {product.map((item, index) => (
+                    <option key={index} value={item.policy_name}>
+                      {item.policy_name}
                     </option>
                   ))}
-                </datalist>
+                </select>
               </div>
-            </div>
-
-            <div className="form-group">
-              <label>Member Name</label>
+              <div className="form-group">
+                <label>Select Policy No *</label>
+                <select
+                  onChange={handlePolicyNoChange}
+                  name="insurance_policy_no"
+                >
+                  <option>Select Policy Number</option>
+                  {policy_number_options?.map((item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Treatment Type *</label>
+                <select onChange={handleTreatmentChange}>
+                  <option>Select Policy No</option>
+                  {treatmentType.map((item, index) => (
+                    <option
+                      key={index}
+                      value={JSON.stringify({
+                        id: item.id,
+                        column_name: item.column_name,
+                      })}
+                    >
+                      {item.column_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* <div className="form-group"> */}
               <input
-                type="text"
-                value={selectedMemberId ? selectedMemberId.name : ""}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Member Mobile Number</label>
-              <input
-                type="text"
-                value={selectedMemberId ? selectedMemberId.contact_number : ""}
-              />
-            </div>
-            <div className="form-group">
-              <label>Age</label>
-              <input
-                type="text"
-                value={
-                  selectedMemberId && selectedMemberId.date_of_birth
-                    ? calculateAge(selectedMemberId.date_of_birth)
-                    : ""
-                }
+                type="hidden"
+                name="treatment_type_id"
+                value={treatmentTypeId}
                 readOnly
               />
-            </div>
-          </div>
-        </div>
-
-        {/* Incident Information Section */}
-        <div className="section">
-          <div className="section-header">Incident Information</div>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Product *</label>
-              <select onChange={handleProductChange}>
-                <option>Select Product</option>
-                {product.map((item, index) => (
-                  <option key={index} value={item.policy_name}>
-                    {item.policy_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Select Policy No *</label>
-              <select
-                onChange={handlePolicyNoChange}
-                name="insurance_policy_no"
-              >
-                <option>Select Policy Number</option>
-                {policy_number_options?.map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Treatment Type *</label>
-              <select onChange={handleTreatmentChange}>
-                <option>Select Policy No</option>
-                {treatmentType.map((item, index) => (
-                  <option key={index} value={JSON.stringify({ id: item.id, column_name: item.column_name })}>
-                    {item.column_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* <div className="form-group"> */}
+              {/* </div> */}
+              <div className="form-group">
+                <label>Date of Incident *</label>
+                <div className="date-box">
+                  <input type="date" name="date_of_incident" />
+                  <button className="calendar-button">📅</button>
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Claim Amount *</label>
+                <input type="number" name="claim_amount" />
+              </div>
+              <div className="form-group">
+                <label>Remaining Sum Insured</label>
                 <input
-                    type="hidden"
-                    name="treatment_type_id"
-                    value={treatmentTypeId}
-                    readOnly
+                  type="number"
+                  value={remainingSum}
+                  // value="100"
                 />
-            {/* </div> */}
-            <div className="form-group">
-              <label>Date of Incident *</label>
-              <div className="date-box">
-                <input type="date" name="date_of_incident" />
-                <button className="calendar-button">📅</button>
               </div>
             </div>
-            <div className="form-group">
-              <label>Claim Amount *</label>
-              <input type="number" name="claim_amount" />
-            </div>
-            <div className="form-group">
-              <label>Remaining Sum Insured</label>
-              <input
-                type="number"
-                value={remainingSum}
-                // value="100"
-              />
-            </div>
           </div>
-        </div>
 
-        {/* Document Upload Section */}
-        {/* Document Upload Section */}
-        <div className="section">
-          <div className="section-header">Document Upload</div>
-          <div className="form-group">
-            <label>Member's National ID *</label>
-            <div className="upload-grid">
+          {/* Document Upload Section */}
+          {/* Document Upload Section */}
+          <div className="section">
+            <div className="section-header">Document Upload</div>
+            <div className="form-group">
+              <label>Member's National ID *</label>
+              <div className="upload-grid">
               <div className="upload-box">
                 <label className="upload-label" htmlFor="frontSide">
                   <div className="file-placeholder">Front Side</div>
@@ -647,7 +715,19 @@ const MicroHealthInsurance = () => {
                   className="file-input"
                   accept=".jpg,.jpeg,.png,.pdf"
                   name="frontImage"
+                  onChange={handleFrontImageChange}
                 />
+                {frontImagePreview && (
+                  <div className="preview-container">
+                    <img 
+                      src={frontImagePreview} 
+                      alt="Front ID Preview" 
+                      className="preview-image"
+                      height="100px"
+                      width="100px"
+                    />
+                  </div>
+                )}
               </div>
               <div className="upload-box">
                 <label className="upload-label" htmlFor="backSide">
@@ -659,75 +739,87 @@ const MicroHealthInsurance = () => {
                   className="file-input"
                   accept=".jpg,.jpeg,.png,.pdf"
                   name="backImage"
+                  onChange={handleBackImageChange}
                 />
+                {backImagePreview && (
+                  <div className="preview-container">
+                    <img 
+                      src={backImagePreview} 
+                      alt="Back ID Preview" 
+                      className="preview-image"
+                       height="100px"
+                      width="100px"
+                    />
+                  </div>
+                )}
               </div>
             </div>
-            <small className="error-text">This field is required.</small>
-          </div>
+              <small className="error-text">This field is required.</small>
+            </div>
 
-          {/* <div className="form-group">
+            {/* <div className="form-group">
           <label>Document Type *</label>
           <select >
             <option>Select a Document Type</option>
           </select>
         </div> */}
-          <div className="form-group">
-            <label>Document Type *</label>
-            <select
-              value={documentType}
-              name="document_type"
-              onChange={(e) => setDocumentType(e.target.value)}
-            >
-              <option value="">Select a Document Type</option>
-              {getDocumentTypeOptions().map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            <div className="form-group">
+              <label>Document Type *</label>
+              <select
+                value={documentType}
+                name="document_type"
+                onChange={(e) => setDocumentType(e.target.value)}
+              >
+                <option value="">Select a Document Type</option>
+                {getDocumentTypeOptions().map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Dynamic Document Upload Section */}
+            {documentType && (
+              <div className="form-group">
+                <label>
+                  {
+                    getDocumentTypeOptions().find(
+                      (opt) => opt.value === documentType
+                    )?.label
+                  }{" "}
+                  *
+                </label>
+                <div className="upload-box">
+                  <input
+                    type="file"
+                    className="file-input"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    id={documentType}
+                    name="documentPath"
+                  />
+                  <label className="upload-label" htmlFor={documentType}>
+                    Choose a file
+                  </label>
+                </div>
+              </div>
+            )}
+            <p className="note">
+              <strong>N.B:</strong> If multiple document upload needed, please
+              attach all the documents in a single PDF. Then select{" "}
+              <strong>"Other documents"</strong> and upload the PDF.
+            </p>
           </div>
 
-          {/* Dynamic Document Upload Section */}
-          {documentType && (
-            <div className="form-group">
-              <label>
-                {
-                  getDocumentTypeOptions().find(
-                    (opt) => opt.value === documentType
-                  )?.label
-                }{" "}
-                *
-              </label>
-              <div className="upload-box">
-                <input
-                  type="file"
-                  className="file-input"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  id={documentType}
-                  name="documentPath"
-                />
-                <label className="upload-label" htmlFor={documentType}>
-                  Choose a file
-                </label>
-              </div>
-            </div>
-          )}
-          <p className="note">
-            <strong>N.B:</strong> If multiple document upload needed, please
-            attach all the documents in a single PDF. Then select{" "}
-            <strong>"Other documents"</strong> and upload the PDF.
-          </p>
-        </div>
-
-        {/* Buttons */}
-        <div className="button-group">
-          <button className="reset-button">Reset ❌</button>
-          <button type="submit" className="claim-button">
-            Claim 🗂
-          </button>
-        </div>
-      </form>
-    </div>
+          {/* Buttons */}
+          <div className="button-group">
+            <button className="reset-button">Reset ❌</button>
+            <button type="submit" className="claim-button">
+              Claim 🗂
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 };

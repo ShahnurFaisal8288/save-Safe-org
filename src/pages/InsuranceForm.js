@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Container,
@@ -17,6 +17,7 @@ import useGetCategory from "../hooks/useGetCategory";
 import Swal from "sweetalert2";
 
 function InsuranceForm() {
+  const navigate = useNavigate()
   const [frontPreview, setFrontPreview] = useState(null);
   const [backPreview, setBackPreview] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -410,15 +411,19 @@ function InsuranceForm() {
         .then((response) => {
           // console.log("form data 2:", formData);
           if (response.status === 201) {
-            Swal.fire({
-              icon: "success",
-              title: "Data Submission Successful",
-              text: `Data has been stored successfully!`,
-              showConfirmButton: false,
-              timer: 2000,
-              timerProgressBar: true,
-            });
-          }
+                  Swal.fire({
+                    icon: "success",
+                    title: "Data Submission Successful",
+                    text: `Data has been stored successfully!`,
+                    showConfirmButton: true,
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      navigate("/insurance-list")
+                      window.location.href = "/insurance-list"; // Replace with your target URL
+                    }
+                  });
+                }
 
           // console.log("inserttt data", response.data);
         })
