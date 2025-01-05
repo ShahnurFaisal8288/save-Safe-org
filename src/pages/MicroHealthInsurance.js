@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const MicroHealthInsurance = () => {
-const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // const [project, setProject] = useState();
   const [project, setProject] = useState([]);
@@ -17,6 +17,7 @@ const navigate = useNavigate()
   const [selectedTreatment, setSelectedTreatment] = useState([]);
   const [selectedPolicyNumber, setSelectedPolicyNumber] = useState("");
   const [remainingSum, setRemainingSum] = useState("");
+  const [remainingSumLast, setRemainingSumLast] = useState("");
   const [mappedHealthInsuranceId, setMappedHealthInsuranceId] = useState("");
   const [documentType, setDocumentType] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
@@ -24,6 +25,7 @@ const navigate = useNavigate()
   const [selectedInsuranceId, setSelectedInsuranceId] = useState(null);
   const [frontImagePreview, setFrontImagePreview] = useState(null);
   const [backImagePreview, setBackImagePreview] = useState(null);
+  const [claimAmount, setClaimAmount] = useState();
 
   //  useEffect(() => {
   //   const fetchProjectName = async () => {
@@ -192,17 +194,18 @@ const navigate = useNavigate()
     const selectedValue = JSON.parse(e.target.value); // Parse JSON string
     const id = selectedValue.id; // Extract id
     setTreatmentTypeId(id); // Parse the JSON string
-    const treatmentType = selectedValue.column_name; // Extract `column_name` (e.g., 'opd') // Extract `id` (e.g., '1')
+    const treatmentType = selectedValue.column_name; // Extract `column_name` (e.g., 'opd')
 
     const insurancePolicyNo = selectedPolicyNumber; // Assuming this is already defined
 
     console.log("Selected Treatment Type:", treatmentType);
     console.log("Treatment Type ID:", treatmentTypeId);
     console.log("Insurance Policy No:", insurancePolicyNo);
+    // console.log("selectedPolicyNumber:", selectedPolicyNumber);
 
     if (treatmentType && insurancePolicyNo) {
       setSelectedTreatment(treatmentTypeId); // Store only `id` in state
-      const url = `http://localhost:8000/api/searchTreatment/typename?insurance_policy_id=${selectedCategoryId}&type_name=${treatmentType}`;
+      const url = `http://localhost:8000/api/searchTreatment/typename?type_name=${treatmentType}&insurance_policy_id=${selectedCategoryId}&insurance_policy_no=${insurancePolicyNo}`;
       console.log("Request URL:", url);
 
       try {
@@ -211,6 +214,7 @@ const navigate = useNavigate()
         if (response.status === 200) {
           const remainingSumInsured = response.data;
           setRemainingSum(remainingSumInsured);
+          setRemainingSumLast(remainingSumInsured); // Update last remaining sum insured
           console.log("Remaining Sum Insured Response:", remainingSumInsured);
         } else {
           console.error("Unexpected response status:", response.status);
@@ -222,11 +226,28 @@ const navigate = useNavigate()
         );
       }
     } else {
-      console.error(
-        "Required fields are missing. Ensure treatmentType, insurancePolicyId, and insurancePolicyNo are defined."
-      );
+      console.error("Required fields are missing.");
     }
   };
+  const handleClaimAmountChange = (e) => {
+    const newClaimAmount = e.target.value;
+
+    // Prevent negative sign or invalid numbers
+    if (newClaimAmount.includes("-") || isNaN(newClaimAmount)) {
+      return; // Don't allow invalid input
+    }
+
+    // Update the claim amount
+    setClaimAmount(newClaimAmount);
+
+    // Calculate the new remaining sum insured (ensure it doesn't go below zero)
+    const newRemainingSum = remainingSumLast.treatmentAmount - parseFloat(newClaimAmount || 0);
+    setRemainingSumLast((prev) => ({
+      ...prev,
+      remainingAmount: newRemainingSum >= 0 ? newRemainingSum : 0, // Ensure non-negative value
+    }));
+  };
+
   // method to handle form submission
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -268,7 +289,7 @@ const navigate = useNavigate()
           confirmButtonText: "OK",
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate("/claimList")
+            navigate("/claimList");
             window.location.href = "/claimList"; // Replace with your target URL
           }
         });
@@ -685,14 +706,21 @@ const navigate = useNavigate()
               </div>
               <div className="form-group">
                 <label>Claim Amount *</label>
-                <input type="number" name="claim_amount" />
+                <input
+                  type="number"
+                  name="claim_amount"
+                  value={claimAmount}
+                  onChange={handleClaimAmountChange}
+                />
               </div>
               <div className="form-group">
                 <label>Remaining Sum Insured</label>
                 <input
                   type="number"
-                  value={remainingSum}
-                  // value="100"
+                  value={
+                    remainingSumLast.remainingAmount ||
+                    remainingSumLast.treatmentAmount
+                  }
                 />
               </div>
             </div>
@@ -705,55 +733,55 @@ const navigate = useNavigate()
             <div className="form-group">
               <label>Member's National ID *</label>
               <div className="upload-grid">
-              <div className="upload-box">
-                <label className="upload-label" htmlFor="frontSide">
-                  <div className="file-placeholder">Front Side</div>
-                </label>
-                <input
-                  type="file"
-                  id="frontSide"
-                  className="file-input"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  name="frontImage"
-                  onChange={handleFrontImageChange}
-                />
-                {frontImagePreview && (
-                  <div className="preview-container">
-                    <img 
-                      src={frontImagePreview} 
-                      alt="Front ID Preview" 
-                      className="preview-image"
-                      height="100px"
-                      width="100px"
-                    />
-                  </div>
-                )}
+                <div className="upload-box">
+                  <label className="upload-label" htmlFor="frontSide">
+                    <div className="file-placeholder">Front Side</div>
+                  </label>
+                  <input
+                    type="file"
+                    id="frontSide"
+                    className="file-input"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    name="frontImage"
+                    onChange={handleFrontImageChange}
+                  />
+                  {frontImagePreview && (
+                    <div className="preview-container">
+                      <img
+                        src={frontImagePreview}
+                        alt="Front ID Preview"
+                        className="preview-image"
+                        height="100px"
+                        width="100px"
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="upload-box">
+                  <label className="upload-label" htmlFor="backSide">
+                    <div className="file-placeholder">Back Side</div>
+                  </label>
+                  <input
+                    type="file"
+                    id="backSide"
+                    className="file-input"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    name="backImage"
+                    onChange={handleBackImageChange}
+                  />
+                  {backImagePreview && (
+                    <div className="preview-container">
+                      <img
+                        src={backImagePreview}
+                        alt="Back ID Preview"
+                        className="preview-image"
+                        height="100px"
+                        width="100px"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="upload-box">
-                <label className="upload-label" htmlFor="backSide">
-                  <div className="file-placeholder">Back Side</div>
-                </label>
-                <input
-                  type="file"
-                  id="backSide"
-                  className="file-input"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  name="backImage"
-                  onChange={handleBackImageChange}
-                />
-                {backImagePreview && (
-                  <div className="preview-container">
-                    <img 
-                      src={backImagePreview} 
-                      alt="Back ID Preview" 
-                      className="preview-image"
-                       height="100px"
-                      width="100px"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
               <small className="error-text">This field is required.</small>
             </div>
 

@@ -303,6 +303,7 @@ const ClaimList = () => {
             <button
               onClick={handleSearch}
               className="bg-pink-500 text-white px-4 py-2 rounded-md"
+              style={{background:"black"}}
             >
               Search
             </button>

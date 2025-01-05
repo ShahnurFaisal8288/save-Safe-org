@@ -17,7 +17,7 @@ import useGetCategory from "../hooks/useGetCategory";
 import Swal from "sweetalert2";
 
 function InsuranceForm() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [frontPreview, setFrontPreview] = useState(null);
   const [backPreview, setBackPreview] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -45,7 +45,8 @@ function InsuranceForm() {
   const [coNo, setCollectorNumber] = useState(null);
 
   //insurance form params data start
-  const { id, name, account_number, sex, date_of_birth, project_code } = useParams();
+  const { id, name, account_number, sex, date_of_birth, project_code } =
+    useParams();
   const [isDropdownDisabled, setDropdownDisabled] = useState(false);
   //insurance form params data end
 
@@ -239,7 +240,6 @@ function InsuranceForm() {
       newErrors.validateCategory = "Please Select Category";
     }
 
-  
     // Nominee Name validation
     if (!validateNomineeName || validateNomineeName.trim() === "") {
       valid = false;
@@ -328,8 +328,10 @@ function InsuranceForm() {
               ? event.target.AnyDisease.value
               : "",
             // PolicyName: event.target.PolicyName ? validateCategory : "",
-            PolicyName: event.target.PolicyName ?  event.target.PolicyName.value : "",
-            
+            PolicyName: event.target.PolicyName
+              ? event.target.PolicyName.value
+              : "",
+
             InsuranceType: event.target.InsuranceType
               ? event.target.InsuranceType.value
               : "",
@@ -411,32 +413,31 @@ function InsuranceForm() {
         .then((response) => {
           // console.log("form data 2:", formData);
           if (response.status === 201) {
-                  Swal.fire({
-                    icon: "success",
-                    title: "Data Submission Successful",
-                    text: `Data has been stored successfully!`,
-                    showConfirmButton: true,
-                    confirmButtonText: "OK",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      navigate("/insurance-list")
-                      window.location.href = "/insurance-list"; // Replace with your target URL
-                    }
-                  });
-                }
+            Swal.fire({
+              icon: "success",
+              title: "Data Submission Successful",
+              text: `Data has been stored successfully!`,
+              showConfirmButton: true,
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                navigate("/insurance-list");
+                window.location.href = "/insurance-list"; // Replace with your target URL
+              }
+            });
+          }
 
           // console.log("inserttt data", response.data);
         })
         .catch((error) => {
           console.error("Error creating data:", error.message);
-          
         });
     } catch (error) {
       console.error("Error creating data:", error.message);
       alert("Failed to create data");
     }
   };
-  
+
   useEffect(() => {
     const storedSetCollectorNumber = localStorage.getItem("collector_number");
 
@@ -704,6 +705,27 @@ function InsuranceForm() {
           <h2 className="mb-0">Insurance Application Form</h2>
         </Card.Header>
         <Card.Body>
+          <h5 className="mb-4">Member Info</h5>
+          <Card.Body className="p-4 border rounded bg-light">
+            <div className="mb-3">
+              <strong className="d-block">Member Name: {name}</strong>
+            </div>
+            <div className="mb-3">
+              <strong className="d-block">Project Code: {project_code}</strong>
+            </div>
+            <div className="mb-3">
+              <strong className="d-block">
+                Account Number: {account_number}
+              </strong>
+            </div>
+            <div className="mb-3">
+              <strong className="d-block">Collector ID: {collectorId}</strong>
+            </div>
+            <div>
+              <strong className="d-block">Branch Code: {branchCode}</strong>
+            </div>
+          </Card.Body>
+
           <Form
             noValidate
             // validated={validated}
@@ -795,7 +817,7 @@ function InsuranceForm() {
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="hidden"
+                  type="text"
                   name="ProjectCode"
                   value={project_code}
                   readOnly
