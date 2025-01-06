@@ -60,23 +60,29 @@ const InsuranceList = () => {
   const fetchData = async () => {
     try {
       // Fetch projects
-      const projectResponse = await axios.get("http://localhost:8000/api/projects");
+      const projectResponse = await axios.get(
+        "http://localhost:8000/api/projects"
+      );
       if (projectResponse.data && Array.isArray(projectResponse.data)) {
         setProject(projectResponse.data);
       } else if (projectResponse.data?.error) {
         console.warn("Project Error:", projectResponse.data.error);
       }
-  
+
       // Fetch collectors
-      const poResponse = await axios.get("http://localhost:8000/api/collectors");
+      const poResponse = await axios.get(
+        "http://localhost:8000/api/collectors"
+      );
       if (poResponse.data) {
         setPoNo(poResponse.data);
       } else if (poResponse.data?.error) {
         console.warn("Collector Error:", poResponse.data.error);
       }
-  
+
       // Fetch health insurance list
-      const initialData = await axios.get("http://localhost:8000/api/health_insurance/list");
+      const initialData = await axios.get(
+        "http://localhost:8000/api/health_insurance/list"
+      );
       if (initialData.data) {
         setFilteredData(initialData.data);
       } else if (initialData.data?.error) {
@@ -86,29 +92,28 @@ const InsuranceList = () => {
       console.error("Error fetching data:", error.message);
     }
   };
-  
 
   useEffect(() => {
     fetchData();
   }, []);
 
-// Fetch Members based on PO
-useEffect(() => {
-  const fetchMembers = async () => {
-    try {
-      if (selectedPo) {
-        const response = await axios.get(
-          `http://localhost:8000/api/collector/${selectedPo}/client/information`
-        );
-        setMemberName(response.data || []);
+  // Fetch Members based on PO
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        if (selectedPo) {
+          const response = await axios.get(
+            `http://localhost:8000/api/collector/${selectedPo}/client/information`
+          );
+          setMemberName(response.data || []);
+        }
+      } catch (error) {
+        console.error("Error fetching members:", error.message);
       }
-    } catch (error) {
-      console.error("Error fetching members:", error.message);
-    }
-  };
+    };
 
-  fetchMembers();
-}, [selectedPo]);
+    fetchMembers();
+  }, [selectedPo]);
 
   const handleReset = () => {
     setSearchDate("");
@@ -141,12 +146,12 @@ useEffect(() => {
       setSelectedPo(""); // Reset if no match
     }
   };
- 
+
   const handleSearch = async () => {
     const formattedDate = searchDate
       ? format(new Date(searchDate), "yyyy-MM-dd")
       : "";
-  
+
     const filterParams = {
       date: formattedDate,
       status: Object.keys(statusFilters)
@@ -155,7 +160,7 @@ useEffect(() => {
       account_number: selectedAccountNumber,
       projectCode: selectedProject,
     };
-  
+
     try {
       const response = await axios.get(
         "http://localhost:8000/api/health_insurance/list/search",
@@ -163,7 +168,7 @@ useEffect(() => {
           params: filterParams,
         }
       );
-  
+
       if (response.data) {
         setFilteredData(response.data); // Success data
         setErrorMessage(null); // Clear any previous errors
@@ -177,8 +182,8 @@ useEffect(() => {
   // console.log("selectedPo: ", selectedPo);
   return (
     <>
-    <style>
-      {`
+      <style>
+        {`
       Global styles
 body {
   font-family: Arial, sans-serif;
@@ -188,8 +193,8 @@ body {
 }
 
 .container {
-  width: 90%;
-  margin: 20px auto;
+  width: 100%;
+  margin: 10px auto;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
@@ -200,7 +205,7 @@ body {
 .section {
   margin-bottom: 20px;
   background-color: #ffffff; /* Ensure white background */
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better focus */
 }
@@ -213,6 +218,15 @@ body {
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 15px;
+}
+  .section-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  padding: 10px;
+  color: #fff; /* White text */
+  background-color: #f72b8b; /* Pink background */
+  border-radius: 5px;
 }
 
 .label {
@@ -383,209 +397,216 @@ body {
 }
 
       `}
-    </style>
-    <div className="container mt-5">
-      
-      {/* Project Selection */}
-      <div className="section">
-        <label className="label">
-          Project <span className="required">*</span>
-        </label>
-        <select
-          className="input"
-          value={selectedProject}
-          onChange={(e) => setSelectedProject(e.target.value)}
-        >
-          <option>Choose Project</option>
-          {project.map((item, index) => (
-            <option key={index} value={item.projectCode}>
-              {item.projectCode}-{item.projectTitle}
-            </option>
-          ))}
-        </select>
-      </div>
+      </style>
+      <div className="content-wrapper">
+        <div className="container mt-3">
+        <h2 className="title">Health Insurance List</h2>
 
-      {/* Others Info Section */}
-      <div className="section card">
-        <div className="section-title mb-3">Others Info</div>
-        <div className="form-group">
-          <div className="row">
-            <div className="col-6">
-              <label>PO</label>
-              <input
-                className="input"
-                list="poList"
-                onChange={handlePoChange}
-              />
-              <datalist id="poList">
-                {poNo.map((item, index) => (
-                  <option key={index} value={item.collector_number}>
-                    {item.collector_number}
-                  </option>
-                ))}
-              </datalist>
-            </div>
-            {/* Member Number Input */}
-            <div className="col-6">
-              <label>Member Number</label>
-              <input
-                className="input"
-                list="memberList"
-                value={selectedAccountNumber}
-                onChange={(e) => setSelectedAccountNumber(e.target.value)}
-              />
-              <datalist id="memberList">
-                {memberName.map((item, index) => (
-                  <option key={index} value={item.account_number} />
-                ))}
-              </datalist>
-            </div>
-            <div className="col-6 mt-3">
-              <label>Date</label>
-              <input
-                type="date"
-                name="date"
-                className="input"
-                value={searchDate}
-                onChange={(e) => setSearchDate(e.target.value)}
-              />
-            </div>
-            <div className="col-6 mt-5">
-              <div className="checkbox-group">
-                <div>
+          {/* Project Selection */}
+          <div className="section" style={{marginTop:"50px"}}>
+            <label className="label">
+              Project <span className="required">*</span>
+            </label>
+            <select
+              className="input"
+              value={selectedProject}
+              onChange={(e) => setSelectedProject(e.target.value)}
+            >
+              <option>Choose Project</option>
+              {project.map((item, index) => (
+                <option key={index} value={item.projectCode}>
+                  {item.projectCode}-{item.projectTitle}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Others Info Section */}
+          <div className="section card">
+            <div className="section-title mb-3">Others Info</div>
+            <div className="form-group">
+              <div className="row">
+                <div className="col-6">
+                  <label>PO</label>
                   <input
-                    type="checkbox"
-                    name="allDate"
-                    checked={statusFilters.allDate}
-                    onChange={handleStatusChange}
+                    className="input"
+                    list="poList"
+                    onChange={handlePoChange}
                   />
-                  <label>All Date</label>
+                  <datalist id="poList">
+                    {poNo.map((item, index) => (
+                      <option key={index} value={item.collector_number}>
+                        {item.collector_number}
+                      </option>
+                    ))}
+                  </datalist>
                 </div>
-                <div>
+                {/* Member Number Input */}
+                <div className="col-6">
+                  <label>Member Number</label>
                   <input
-                    type="checkbox"
-                    name="1"
-                    checked={statusFilters.Pending}
-                    onChange={handleStatusChange}
+                    className="input"
+                    list="memberList"
+                    value={selectedAccountNumber}
+                    onChange={(e) => setSelectedAccountNumber(e.target.value)}
                   />
-                  <label>Pending</label>
+                  <datalist id="memberList">
+                    {memberName.map((item, index) => (
+                      <option key={index} value={item.account_number} />
+                    ))}
+                  </datalist>
                 </div>
-                <div>
+                <div className="col-6 mt-3">
+                  <label>Date</label>
                   <input
-                    type="checkbox"
-                    name="2"
-                    checked={statusFilters.Approved}
-                    onChange={handleStatusChange}
+                    type="date"
+                    name="date"
+                    className="input"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
                   />
-                  <label>Approved</label>
                 </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    name="3"
-                    checked={statusFilters.Rejected}
-                    onChange={handleStatusChange}
-                  />
-                  <label>Reject</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    name="4"
-                    checked={statusFilters.Disbursed}
-                    onChange={handleStatusChange}
-                  />
-                  <label>Disbursed</label>
+                <div className="col-6 mt-5">
+                  <div className="checkbox-group">
+                    <div>
+                      <input
+                        type="checkbox"
+                        name="allDate"
+                        checked={statusFilters.allDate}
+                        onChange={handleStatusChange}
+                      />
+                      <label>All Date</label>
+                    </div>
+                    <div>
+                      <input
+                        type="checkbox"
+                        name="1"
+                        checked={statusFilters.Pending}
+                        onChange={handleStatusChange}
+                      />
+                      <label>Pending</label>
+                    </div>
+                    <div>
+                      <input
+                        type="checkbox"
+                        name="2"
+                        checked={statusFilters.Approved}
+                        onChange={handleStatusChange}
+                      />
+                      <label>Approved</label>
+                    </div>
+                    <div>
+                      <input
+                        type="checkbox"
+                        name="3"
+                        checked={statusFilters.Rejected}
+                        onChange={handleStatusChange}
+                      />
+                      <label>Reject</label>
+                    </div>
+                    <div>
+                      <input
+                        type="checkbox"
+                        name="4"
+                        checked={statusFilters.Disbursed}
+                        onChange={handleStatusChange}
+                      />
+                      <label>Disbursed</label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Buttons */}
+            <div className="buttons">
+              <button className="reset-btn" onClick={handleReset}>
+                Reset
+              </button>
+              <button className="search-btn" onClick={handleSearch}>
+                Search
+              </button>
+            </div>
+          </div>
+
+          {/* Enrollment List */}
+          <div className="section card">
+            <div className="section-title">Enrollment List</div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Buffer Id</th>
+                  <th>Date</th>
+                  <th>Member Name</th>
+                  <th>Insurance Product</th>
+                  <th>Status</th>
+                  <th>Enrollment Form</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {errorMessage && (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      style={{ color: "red", textAlign: "center" }}
+                    >
+                      {errorMessage}
+                    </td>
+                  </tr>
+                )}
+                {filteredData.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item?.enrolment_id}</td>
+                    <td>{item?.created_at}</td>
+                    <td>{item?.client.name}</td>
+                    <td>{item?.policy_names}</td>
+                    <td>{item?.statuses}</td>
+                    <td>
+                      <button
+                        className="download-btn"
+                        onClick={() =>
+                          navigate(`/insuranceFormPdf/${item.id}`, {
+                            state: { item },
+                          })
+                        }
+                      >
+                        Download
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="view-btn"
+                        onClick={() =>
+                          navigate(`/approve-insurance-enrollment/${item.id}`, {
+                            state: { item },
+                          })
+                        }
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              ;
+            </table>
+
+            {/* Pagination */}
+            <div className="pagination">
+              <button>&lt;&lt;</button>
+              <button>&lt;</button>
+              <button className="active">1</button>
+              <button>&gt;</button>
+              <button>&gt;&gt;</button>
+              <select>
+                <option>10</option>
+                <option>20</option>
+              </select>
+            </div>
           </div>
         </div>
-
-        {/* Buttons */}
-        <div className="buttons">
-          <button className="reset-btn" onClick={handleReset}>
-            Reset
-          </button>
-          <button className="search-btn" onClick={handleSearch}>
-            Search
-          </button>
-        </div>
       </div>
-
-      {/* Enrollment List */}
-      <div className="section card">
-        <div className="section-title">Enrollment List</div>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Buffer Id</th>
-              <th>Date</th>
-              <th>Member Name</th>
-              <th>Insurance Product</th>
-              <th>Status</th>
-              <th>Enrollment Form</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-  {errorMessage && (
-    <tr>
-      <td colSpan="7" style={{ color: "red", textAlign: "center" }}>
-        {errorMessage}
-      </td>
-    </tr>
-  )}
-  {filteredData.map((item, index) => (
-    <tr key={index}>
-      <td>{item?.enrolment_id}</td>
-      <td>{item?.created_at}</td>
-      <td>{item?.client.name}</td>
-      <td>{item?.policy_names}</td>
-      <td>{item?.statuses}</td>
-      <td>
-        <button
-          className="download-btn"
-          onClick={() =>
-            navigate(`/insuranceFormPdf/${item.id}`, {
-              state: { item },
-            })
-          }
-        >
-          Download
-        </button>
-      </td>
-      <td>
-        <button
-          className="view-btn"
-          onClick={() =>
-            navigate(`/approve-insurance-enrollment/${item.id}`, {
-              state: { item },
-            })
-          }
-        >
-          View
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>;
-        </table>
-
-        {/* Pagination */}
-        <div className="pagination">
-          <button>&lt;&lt;</button>
-          <button>&lt;</button>
-          <button className="active">1</button>
-          <button>&gt;</button>
-          <button>&gt;&gt;</button>
-          <select>
-            <option>10</option>
-            <option>20</option>
-          </select>
-        </div>
-      </div>
-    </div>
     </>
   );
 };

@@ -12345,7 +12345,7 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
 
 .bg-primary, .settings-panel .color-tiles .tiles.primary {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #f72b8b !important;
 }
 
 .bg-secondary {

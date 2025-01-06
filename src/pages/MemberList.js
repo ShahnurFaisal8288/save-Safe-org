@@ -87,7 +87,8 @@ const MemberList = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="container mt-5">
+    <div className="content-wrapper">
+<div className="container mt-5">
       <div className="d-flex justify-content-between my-4">
         <h3>Member List</h3>
       </div>
@@ -145,7 +146,7 @@ const MemberList = () => {
                     className="btn btn-primary"
                     onClick={() =>
                       navigate(
-                        `/insurance-form/${item.id}/${item.name}/${item.account_number}/${item.sex}/${item.date_of_birth}/${item.project_code}`
+                        `/insurance-form/${item.id}/${item.name}/${item.account_number}/${item.sex}/${item.date_of_birth}/${item.project_code}/${item.date_of_birth}/${item.occupation}/${item.present_address}/${item.village_address}/${item.date_in}/${item.date_out}/${item.nominee}/${item.relationship}`
                       )
                     }
                   >
@@ -220,6 +221,8 @@ const MemberList = () => {
         </p>
       </div>
     </div>
+    </div>
+    
   );
 };
 

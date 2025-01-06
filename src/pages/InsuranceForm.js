@@ -45,7 +45,7 @@ function InsuranceForm() {
   const [coNo, setCollectorNumber] = useState(null);
 
   //insurance form params data start
-  const { id, name, account_number, sex, date_of_birth, project_code } =
+  const { id, name, account_number, sex, date_of_birth, project_code,occupation, present_address, village_address, date_in, date_out, nominee, relationship } =
     useParams();
   const [isDropdownDisabled, setDropdownDisabled] = useState(false);
   //insurance form params data end
@@ -65,6 +65,7 @@ function InsuranceForm() {
   const [validateRelation, setValidateRelation] = useState("");
   const [validateFrontImg, setValidateFrontImg] = useState("");
   const [validateBackImg, setValidateBacktImg] = useState("");
+  const [branchCodeLocal, setBranchCodeLocal] = useState("");
   const [errors, setErrors] = useState({});
   //insurance form validation end
 
@@ -437,7 +438,7 @@ function InsuranceForm() {
       alert("Failed to create data");
     }
   };
-
+ 
   useEffect(() => {
     const storedSetCollectorNumber = localStorage.getItem("collector_number");
 
@@ -447,6 +448,12 @@ function InsuranceForm() {
     const storedSetCollectorId = localStorage.getItem("id");
 
     setCollectorId(storedSetCollectorId);
+  }, []);
+
+  useEffect(() => {
+    const setBranchCodeId = localStorage.getItem("branch_code");
+
+    setBranchCodeLocal(setBranchCodeId);
   }, []);
   //branch no
   // useEffect(() => {
@@ -705,25 +712,51 @@ function InsuranceForm() {
           <h2 className="mb-0">Insurance Application Form</h2>
         </Card.Header>
         <Card.Body>
-          <h5 className="mb-4">Member Info</h5>
+          <h3 className="mb-4">Member Info</h3>
           <Card.Body className="p-4 border rounded bg-light">
-            <div className="mb-3">
+           <div className="row">
+           <div className="mb-3 col-6">
               <strong className="d-block">Member Name: {name}</strong>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 col-6">
               <strong className="d-block">Project Code: {project_code}</strong>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 col-6">
               <strong className="d-block">
                 Account Number: {account_number}
               </strong>
             </div>
-            <div className="mb-3">
-              <strong className="d-block">Collector ID: {collectorId}</strong>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Collector ID: {coNo}</strong>
             </div>
-            <div>
-              <strong className="d-block">Branch Code: {branchCode}</strong>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Branch Code: {branchCodeLocal}</strong>
             </div>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Date of Birth: {date_of_birth}</strong>
+            </div>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Occupation: {occupation}</strong>
+            </div>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Present Address: {present_address}</strong>
+            </div>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Village Address: {village_address}</strong>
+            </div>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Nominee: {nominee}</strong>
+            </div>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Relationship: {relationship}</strong>
+            </div>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Date In: {date_in}</strong>
+            </div>
+            <div className="mb-3 col-6">
+              <strong className="d-block">Date Out: {date_out}</strong>
+            </div>
+           </div>
           </Card.Body>
 
           <Form
@@ -817,7 +850,7 @@ function InsuranceForm() {
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="text"
+                  type="hidden"
                   name="ProjectCode"
                   value={project_code}
                   readOnly

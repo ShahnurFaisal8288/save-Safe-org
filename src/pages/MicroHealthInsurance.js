@@ -314,29 +314,51 @@ const MicroHealthInsurance = () => {
       <style>
         {`
       /* General Styles */
+Global styles
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
 .container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 10px auto;
+  background-color: white;
   padding: 20px;
-  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.title {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-/* Section Styles */
+/* Section styling */
 .section {
   margin-bottom: 20px;
-  padding: 20px;
-  background-color: #fff; /* White background for section content */
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #ffffff; /* Ensure white background */
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better focus */
 }
+
+.section-title {
+  background-color: #f72b8b;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.required {
+  color: red;
+}
+
 
 .section-header {
   font-size: 20px;
@@ -540,7 +562,8 @@ const MicroHealthInsurance = () => {
 
       `}
       </style>
-      <div className="container mt-5">
+      <div className="content-wrapper">
+      <div className="container mt-3">
         <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
         <form onSubmit={handleFormSubmit}>
           <div className="form-group">
@@ -848,6 +871,8 @@ const MicroHealthInsurance = () => {
           </div>
         </form>
       </div>
+      </div>
+      
     </>
   );
 };

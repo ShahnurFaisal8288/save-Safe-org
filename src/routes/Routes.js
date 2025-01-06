@@ -29,6 +29,14 @@ import LTSAccount from "../pages/LTSAccount";
 import LTSLoneEntry from "../pages/LTSLoneEntry";
 import ClaimList from "../pages/ClaimList";
 import ClaimFormPdf from "../pages/ClaimFormPdf";
+import OfficeTransactions from "../pages/OfficeTransactions";
+import LeaveEntry from "../pages/LeaveEntry";
+import HandHeld from "../pages/HandHeld";
+import Session from "../pages/Session";
+import ClosingEarnings from "../pages/ClosingEarnings";
+import BusinessRules from "../pages/BusinessRules";
+import PassbookRegister from "../pages/PassbookRegister";
+import ManagerPalm from "../pages/ManagerPalm";
 
 
 
@@ -63,7 +71,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/insurance-form/:id/:name/:account_number/:sex/:date_of_birth/:project_code", // Child route for the dashboard with id and member_name parameters
+        path: "/insurance-form/:id/:name/:account_number/:sex/:date_of_birth/:project_code/:date_of_birth/:occupation/:present_address/:village_address/:date_in/:date_out/:nominee/:relationship",
         element: (
           <PrivateRoute requiredPermission="/insurance-form">
             <InsuranceForm />
@@ -203,6 +211,70 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/claimList">
           <ClaimList />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/office-transactions", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/office-transactions">
+          <OfficeTransactions />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/leave-entry", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/leave-entry">
+          <LeaveEntry />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/hand-held", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/hand-held">
+          <HandHeld />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/session", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/session">
+          <Session />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/closing-earnings-posting", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/closing-earnings-posting">
+          <ClosingEarnings />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/business-rules", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/business-rules">
+          <BusinessRules />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/passbook-register", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/passbook-register">
+          <PassbookRegister />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/manager-palm", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/manager-palm">
+          <ManagerPalm />
           </PrivateRoute>
         ),
       },
