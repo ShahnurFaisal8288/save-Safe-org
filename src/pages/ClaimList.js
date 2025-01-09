@@ -334,6 +334,7 @@ const ClaimList = () => {
                         "Date of Incident",
                         "Claim Amount",
                         "Status",
+                        "Claim Form",
                         "Action",
                       ].map((header) => (
                         <th
@@ -380,6 +381,18 @@ const ClaimList = () => {
                               }
                             >
                               Download
+                            </button>
+                          </td>
+                          <td className="border border-pink-500 p-2">
+                            <button
+                              className="download-btn text-white bg-blue-500 rounded-md py-1 px-4 btn-sm"
+                              onClick={() =>
+                                navigate(`/settled-Claim-form/${row.id}`, {
+                                  state: { row },
+                                })
+                              }
+                            >
+                              View
                             </button>
                           </td>
                         </tr>

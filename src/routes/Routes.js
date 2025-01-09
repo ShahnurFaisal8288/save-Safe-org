@@ -37,6 +37,7 @@ import ClosingEarnings from "../pages/ClosingEarnings";
 import BusinessRules from "../pages/BusinessRules";
 import PassbookRegister from "../pages/PassbookRegister";
 import ManagerPalm from "../pages/ManagerPalm";
+import SettledStatus from "../pages/SettledStatus";
 
 
 
@@ -123,6 +124,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/approve-insurance-enrollment">
           <ApproveStatus />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/settled-Claim-form/:id", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/settled-Claim-form">
+          <SettledStatus />
           </PrivateRoute>
         ),
       },

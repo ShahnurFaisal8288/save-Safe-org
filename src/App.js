@@ -10,6 +10,7 @@ import './index.css';
 
 function App() {
   return (
+    <>
     <div className="container-scroller">
       <Navbar />
       <div
@@ -45,6 +46,8 @@ function App() {
       </div>
       {/* <Footer /> */}
     </div>
+    </>
+    
   );
 }
 
