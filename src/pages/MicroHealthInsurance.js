@@ -268,7 +268,12 @@ const MicroHealthInsurance = () => {
 
     formData.append("frontImage", e.target.frontImage.files[0]);
     formData.append("backImage", e.target.backImage.files[0]);
-    formData.append("documentPath", e.target.documentPath.files[0]);
+    // formData.append("documentPath", e.target.documentPath.files[0]);
+     // Handle multiple files for documentPath
+  const documentFiles = e.target.documentPath.files;
+  for (let i = 0; i < documentFiles.length; i++) {
+    formData.append("documentPath", documentFiles[i]);
+  }
 
     try {
       const response = await axios.post(
@@ -848,6 +853,7 @@ body {
                     accept=".jpg,.jpeg,.png,.pdf"
                     id={documentType}
                     name="documentPath"
+                    multiple
                   />
                   <label className="upload-label" htmlFor={documentType}>
                     Choose a file
