@@ -850,7 +850,7 @@ function InsuranceForm() {
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="hidden"
+                  type="text"
                   name="ProjectCode"
                   value={project_code}
                   readOnly

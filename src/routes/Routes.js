@@ -38,6 +38,7 @@ import BusinessRules from "../pages/BusinessRules";
 import PassbookRegister from "../pages/PassbookRegister";
 import ManagerPalm from "../pages/ManagerPalm";
 import SettledStatus from "../pages/SettledStatus";
+import PolicyReport from "../pages/PolicyReport";
 
 
 
@@ -284,6 +285,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/manager-palm">
           <ManagerPalm />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/policyReport", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/policyReport">
+          <PolicyReport />
           </PrivateRoute>
         ),
       },
