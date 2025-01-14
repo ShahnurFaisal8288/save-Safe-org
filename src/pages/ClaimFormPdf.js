@@ -1,33 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom';
-import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf';
-import axios from 'axios';
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import axios from "axios";
 const ClaimFormPdf = () => {
-    const { id } = useParams();
-  const [data,setData] = useState([]);
+  const { id } = useParams();
+  const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   // const [insuranceTypeId, setInsuranceTypeId] = useState(null);
-  
+
   const formRef = useRef(null);
 
   useEffect(() => {
-      const fetchPostData = async () => {
-        try {
-          const response = await axios.get(
-            `http://localhost:8000/api/health_insurance/claim/${id}`
-          );
-          
-          setData(response.data); // Set data
-          console.log("SingleresponseData:",response.data)
-         
-        } catch (err) {
-          setError("Failed to fetch data");
-        }
-      };
-  
-      fetchPostData();
-    }, [id]);
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/health_insurance/claim/${id}`
+        );
+
+        setData(response.data); // Set data
+        console.log("claim data:", response.data);
+      } catch (err) {
+        setError("Failed to fetch data");
+      }
+    };
+
+    fetchPostData();
+  }, [id]);
   const downloadPDF = async () => {
     if (formRef.current) {
       try {
@@ -35,7 +34,7 @@ const ClaimFormPdf = () => {
         const canvas = await html2canvas(formRef.current, {
           scale: 2,
           logging: false,
-          useCORS: true
+          useCORS: true,
         });
 
         // Calculate dimensions
@@ -43,176 +42,250 @@ const ClaimFormPdf = () => {
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
         // Create PDF
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgData = canvas.toDataURL('image/png');
-        
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-        pdf.save('insurance-form.pdf');
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgData = canvas.toDataURL("image/png");
+
+        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+        pdf.save("claimed.pdf");
       } catch (error) {
-        console.error('Error generating PDF:', error);
-        alert('Failed to generate PDF. Please try again.');
+        console.error("Error generating PDF:", error);
+        alert("Failed to generate PDF. Please try again.");
       }
     }
   };
-    return (
-        <div className="min-h-screen bg-gray-100 p-5">
-          <div className="text-end mb-3">
-        <button 
-          className="btn btn-primary download-btn"
-          onClick={downloadPDF}
-        >
+
+  // Parse the created_at date and add 12 months
+  const createdAt = data?.healthInsurance?.created_at;
+  const extendedDate = createdAt ? new Date(createdAt) : null;
+
+  if (extendedDate) {
+    extendedDate.setMonth(extendedDate.getMonth() + 12); // Add 12 months
+  }
+
+  // Format the extended date (optional: adjust the format to your needs)
+  const formattedExtendedDate = extendedDate
+    ? extendedDate.toISOString().split("T")[0] // Format as YYYY-MM-DD
+    : "";
+
+    // Parse the nominee's birthdate
+const birthdate = data?.healthInsurance?.nominee_birthdate;
+const birthDateObj = birthdate ? new Date(birthdate) : null;
+
+let age = null;
+if (birthDateObj) {
+  // Calculate the difference in years
+  const currentDate = new Date();
+  age = currentDate.getFullYear() - birthDateObj.getFullYear();
+
+  // Adjust age if the birthday hasn't occurred yet this year
+  const monthDiff = currentDate.getMonth() - birthDateObj.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDateObj.getDate())) {
+    age--;
+  }
+}
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-5">
+      <div className="text-end mb-3">
+        <button className="btn btn-primary download-btn" onClick={downloadPDF}>
           Download as PDF
         </button>
       </div>
-          <div className="container mx-auto bg-white p-5 rounded-lg shadow-sm" ref={formRef}>
-            {/* <div className="flex justify-between items-center mb-5">
-              <img src="/api/placeholder/120/40" alt="BRAC logo" className="h-10" />
-              <div className="text-center">
-                <div className="font-sans">System Generated</div>
-                <div className="font-sans">নির্জীবনা স্বাস্থ্য বিমা</div>
-                <div className="font-sans">বিমাদাবি ফর্ম</div>
+      <div className="container mx-auto bg-white p-5 rounded-lg shadow-sm" ref={formRef}>
+        {/* Header */}
+    
+          
+        <div className="row mb-4">
+        <div className="col-4 text-center">
+            <img
+              src="/images/Picture3.png"
+              alt="BRAC Logo"
+              className="img-fluid"
+            />
+          </div>
+          <div className="col-4 text-center">
+            <h1 className="h5 fw-bold">নির্ভাবনা স্বাস্থ্য বিমা
+            </h1>
+            <h2 className="h6">বিমাদাবি ফর্ম</h2>
+          </div>
+          <div className="col-4 text-center">
+            <img
+            height="100px"
+            width="200px"
+              src="/images/Picture1.png"
+              alt="Chartered Life Logo"
+              className="img-fluid"
+            />
+          </div>
+        </div>
+  
+        {/* Policy Information */}
+        <div>
+          <div className="border-top pt-4">
+            <div className="mb-8 w-full">
+              <div className="row mb-3">
+                <div className="col-md-12 mb-2">
+                  <table className="w-full border-collapse border border-gray-300">
+                    <tbody>
+                      <tr>
+                        <td className="border border-gray-300 p-2 w-3/5">Policy ID:</td>
+                        <td className="border border-gray-300 p-2 w-2/5">{data.insurance_policy_no}</td>
+                        <td className="border border-gray-300 p-2 w-3/5">Incident Setup Date:</td>
+                        <td className="border border-gray-300 p-2 w-2/5">{data.created_at}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              <img src="/api/placeholder/120/40" alt="Chartered Life logo" className="h-10" />
-            </div> */}
-            <div className="d-flex justify-content-between align-items-center mb-4">
-          {/* <img src="brac-logo.png" alt="Save Safe Logo" height="40" /> */}
-          <div className="text-center">
-            <h1 className="h4 mb-1">নির্ভাবনা স্বাস্থ্যবিমা</h1>
-            <p className="small mb-0">গ্রাহক নিবন্ধন ফর্ম</p>
-          </div>
-          <div className="text-end">
-            {/* <img src="/api/placeholder/120/40" alt="Chartered Life Logo" height="40" /> */}
-            <div className="border border-dark d-inline-block px-2 small">গ্রাহক কপি </div>
+            </div>
           </div>
         </div>
-    
-            <div className="mb-8">
-              <table className="w-full border-collapse border border-gray-300">
-                <tbody>
-                  <tr>
-                    <td className="border border-gray-300 p-2">Policy ID:</td>
-                    <td className="border border-gray-300 p-2">{data.insurance_policy_no}</td>
-                    <td className="border border-gray-300 p-2">Incident Setup Date:</td>
-                    <td className="border border-gray-300 p-2">{data.created_at}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-    
-            <div className="bg-gray-100 p-2 mb-4 rounded text-center font-bold">
-              বিমাগ্রহীতা সংক্রান্ত তথ্য
-            </div>
-            <table className="w-full border-collapse border border-gray-300 mb-8">
-              <tbody>
-                <tr>
-                  <td className="border border-gray-300 p-2 w-1/5">বিমাগ্রহীতার নাম</td>
-                  <td className="border border-gray-300 p-2 w-1/5">Hena Begum</td>
-                  <td className="border border-gray-300 p-2 w-1/5">প্রজেক্টের নাম</td>
-                  <td className="border border-gray-300 p-2 w-1/6">Microfinance (Dabi) [15]</td>
-                  <td className="border border-gray-300 p-2 w-1/6">VO Code</td>
-                  <td className="border border-gray-300 p-2 w-1/10"></td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 p-2">সদস্য নং</td>
-                  <td className="border border-gray-300 p-2">{data?.healthInsurance?.orgmemno}</td>
-                  <td className="border border-gray-300 p-2">শাখার নাম</td>
-                  <td className="border border-gray-300 p-2">Tikkatoli</td>
-                  <td className="border border-gray-300 p-2">ancholer nam</td>
-                  <td className="border border-gray-300 p-2"></td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 p-2">বিমাগ্রহীতার জন্মতারিখ</td>
-                  <td className="border border-gray-300 p-2">11-02-1978</td>
-                  <td className="border border-gray-300 p-2">শাখার কোড</td>
-                  <td className="border border-gray-300 p-2">Gulshan</td>
-                  <td className="border border-gray-300 p-2">0605</td>
-                  <td className="border border-gray-300 p-2">Dhaka</td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 p-2">জাতীয় পরিচয়পত্র নং</td>
-                  <td className="border border-gray-300 p-2">19782692619487865</td>
-                  <td className="border border-gray-300 p-2">মোবাইল নম্বর</td>
-                  <td className="border border-gray-300 p-2">Gulshan</td>
-                  <td className="border border-gray-300 p-2">01722222222</td>
-                  <td className="border border-gray-300 p-2">Dhaka</td>
-                </tr>
-              </tbody>
-            </table>
-    
-            <div className="bg-gray-100 p-2 mb-4 rounded text-center font-bold">
-              বিমা পলিসি সংক্রান্ত তথ্য
-            </div>
-            <table className="w-full border-collapse border border-gray-300 mb-8">
-              <tbody>
-                <tr>
-                  <td className="border border-gray-300 p-2 w-1/5">বিমা পলিসি</td>
-                  <td className="border border-gray-300 p-2 w-3/10">{data?.insurancePolicy?.policy_name}</td>
-                  <td className="border border-gray-300 p-2 w-1/5">বিমা পলিসি নং</td>
-                  <td className="border border-gray-300 p-2 w-1/5">{data?.insurance_policy_no}</td>
-                  <td className="border border-gray-300 p-2 w-1/6">বিমা Premium</td>
-                  <td className="border border-gray-300 p-2 w-1/6">1200</td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 p-2">বিমা প্যাকেজের ধরন</td>
-                  <td className="border border-gray-300 p-2" colSpan={3}>Shurokha-CAT-2</td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 p-2">বিমা পলিসি গ্রহণের তারিখ</td>
-                  <td className="border border-gray-300 p-2">{data.created_at}</td>
-                  <td className="border border-gray-300 p-2">বিমা মেয়াদ উত্তীর্ণের তারিখ</td>
-                  <td className="border border-gray-300 p-2">25-09-2025</td>
-                </tr>
-              </tbody>
-            </table>
-    
-            <div className="bg-gray-100 p-2 mb-4 rounded text-center font-bold">
-              বিমাদাবি সংক্রান্ত তথ্য
-            </div>
-            <table className="w-full border-collapse border border-gray-300 mb-8">
-              <tbody>
-                <tr>
-                  <td className="border border-gray-300 p-2 w-1/6">বিমাদাবি সিরিয়াল নং</td>
-                  <td className="border border-gray-300 p-2 w-1/6">1</td>
-                  <td className="border border-gray-300 p-2 w-1/5">বিমাদাবির ধরন</td>
-                  <td className="border border-gray-300 p-2 w-1/5">Accidental Death</td>
-                  <td className="border border-gray-300 p-2 w-1/5">Hospital Admission</td>
-                  <td className="border border-gray-300 p-2 w-1/10"></td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 p-2">ইনসিডেন্ট তারিখ</td>
-                  <td className="border border-gray-300 p-2">26-09-2024</td>
-                  <td className="border border-gray-300 p-2">সর্বোচ্চ বিমাদাবির পরিমাণ</td>
-                  <td className="border border-gray-300 p-2">25000.00</td>
-                </tr>
-              </tbody>
-            </table>
-    
-            <div className="bg-gray-100 p-2 mb-4 rounded text-center font-bold">
-              বিমা গ্রহীতার অবর্তমানে আর্থিক সুবিধা গ্রহণকারীর তথ্য
-            </div>
-            <table className="w-full border-collapse border border-gray-300">
-              <tbody>
-                <tr>
-                  <td className="border border-gray-300 p-2 w-1/5">নমিনির নাম</td>
-                  <td className="border border-gray-300 p-2 w-3/10">tanvir mahtab</td>
-                  <td className="border border-gray-300 p-2 w-1/5">বিমাগ্রহীতার সাথে সম্পর্ক</td>
-                  <td className="border border-gray-300 p-2 w-3/10">Mother</td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 p-2">নমিনির বয়স</td>
-                  <td className="border border-gray-300 p-2">19</td>
-                  <td className="border border-gray-300 p-2">নমিনির মোবাইল নম্বর</td>
-                  <td className="border border-gray-300 p-2">01799999999</td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 p-2">নমিনির স্মার্ট কার্ড নং</td>
-                  <td className="border border-gray-300 p-2" colSpan={3}>0175459338</td>
-                </tr>
-              </tbody>
-            </table>
+  
+        {/* Personal Information Section */}
+        <h5 className="fw-bold bg-light p-2 border">বিমাগ্রহীতা সংক্রান্ত তথ্য</h5>
+        <div className="row mb-3">
+          <div className="col-md-4 mb-3">
+            <label className="form-label">বিমাগ্রহীতার নাম</label>
+            <input type="text" value={data?.healthInsurance?.client?.name || ""} className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">প্রজেক্টের নাম</label>
+            <input type="text" value={data?.healthInsurance?.client?.name || ""} className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">ভিও কোড</label>
+            <input type="text"  className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">সদস্য নং</label>
+            <input type="text" value={data?.healthInsurance?.orgmemno || ""} className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">শাখার নাম</label>
+            <input type="text" value={data?.healthInsurance?.branch?.branch_name} className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">এলাকার নাম</label>
+            <input type="text"  className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">বিমাগ্রহীতার জন্মতারিখ</label>
+            <input type="text" value={data?.healthInsurance?.nominee_card_id} className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">শাখার কোড</label>
+            <input type="text" value={data?.healthInsurance?.branch?.branch_code} className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">অঞ্চলের নাম</label>
+            <input type="text" className="form-control" />
+          </div>
+          
+          <div className="col-md-4">
+            <label className="form-label">বিমাগ্রহীতার জাতীয় পরিচয়পত্র নং</label>
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">মোবাইল নম্বর</label>
+            <input type="text" value={data?.healthInsurance?.contact_no} className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">ডিভিশনের নাম</label>
+            <input type="text" className="form-control" />
           </div>
         </div>
-      );
-}
+  
+        {/* Policy Information Section */}
+        <h5 className="fw-bold bg-light p-2 border">বীমা পলিসি সংক্রান্ত তথ্য</h5>
+        <div className="row mb-3">
+          <div className="col-md-4 mb-3">
+            <label className="form-label">বীমা পলিসির ধরন</label>
+            <input type="text" value={data?.InsurancePolicy?.policy_name} className="form-control" />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">বীমা পলিসি নং</label>
+            <input type="text" value={data?.insurance_policy_no} className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">বীমা প্রিমিয়াম</label>
+            <input type="text" value={data?.healthInsurance?.premium_amnt} className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">বিমা প্যাকেজের ধরণ</label>
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">বিমা পলিসি গ্রহনের তারিখ</label>
+            <input type="text" value={data?.healthInsurance?.created_at} className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">বিমা মেয়াদ উত্তীর্ণ তারিখ</label>
+            <input type="text" value={formattedExtendedDate} className="form-control" />
+          </div>
+        </div>
+  
+        {/* Claim Information Section */}
+        <h5 className="fw-bold bg-light p-2 border">বিমাদাবি সংক্রান্ত তথ্য</h5>
+        <div className="row mb-3">
+          <div className="col-md-4 mb-3">
+            <label className="form-label">বিমাদাবি নম্বর</label>
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">বিমাদাবি ধরন</label>
+            <input type="text" value={data?.treatmentType?.type_name} className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">হাসপাতালে ভর্তির সময়কাল (যদি প্রযোজ্য হয়)
+            </label>
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">ইন্সিডেন্ট তারিখ</label>
+            <input type="text" value={data?.date_of_incident} className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">সর্বোচ্চ বিমাদাবির পরিমাণ</label>
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">বর্তমান বিমাদাবির পরিমাণ</label>
+            <input type="text" value={data?.claim_amount} className="form-control" />
+          </div>
+        </div>
+  
+        {/* Nominee Information Section */}
+        <h5 className="fw-bold bg-light p-2 border">
+          বীমা গ্রহীতার অবর্তমানে আর্থিক সুবিধা গ্রহণকারীর তথ্য (যদি প্রযোজ্য হয়)
+        </h5>
+        <div className="row mb-3">
+          <div className="col-md-6 mb-3">
+            <label className="form-label">নমিনির নাম</label>
+            <input type="text" value={data?.healthInsurance?.nominee_name} className="form-control" />
+          </div>
+          <div className="col-md-6 mb-3">
+            <label className="form-label">বিমাগ্রহীতার সাথে সম্পর্ক</label>
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-md-6 mb-3">
+            <label className="form-label">নমিনির বয়স</label>
+            <input type="text" value={age || ''} className="form-control" />
+          </div>
+          <div className="col-md-6 mb-3">
+            <label className="form-label">নমিনির মোবাইল নম্বর</label>
+            <input type="text" value={data?.healthInsurance?.nominee_phone_no} className="form-control" />
+          </div>
+          <div className="col-md-12">
+            <label className="form-label">নমিনির জাতীয় পরিচয়পত্র নং</label>
+            <input type="text" value={data?.healthInsurance?.nominee_card_id} className="form-control" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  
+  
+  
+};
 
-export default ClaimFormPdf
+export default ClaimFormPdf;

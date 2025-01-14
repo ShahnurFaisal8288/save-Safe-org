@@ -504,6 +504,7 @@ body {
             <div className="section-title">Enrollment List</div>
             <div className="d-flex justify-content-end mb-3">
               <ExcelExportButton
+                onClick={handleExport}
                 policyWiseData={policyWiseData}
                 selectedProject={selectedProject}
                 selectedBranch={selectedBranch}

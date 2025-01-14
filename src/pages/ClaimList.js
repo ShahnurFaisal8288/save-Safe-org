@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as XLSX from "xlsx";
+// import { Button } from "react-bootstrap";
+import ExcelClaimButton from "./ExcelClaimButton";
 
 const ClaimList = () => {
   const navigate = useNavigate();
@@ -11,6 +14,13 @@ const ClaimList = () => {
   );
   const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
   const [claimData, setClaimData] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = claimData.slice(startIndex, endIndex);
 
   const handleSearch = async () => {
     try {
@@ -24,7 +34,7 @@ const ClaimList = () => {
       setClaimData([]);
     }
   };
-  console.log("toDate:", toDate);
+  console.log("claimData:", claimData);
   const handleReset = () => {
     setSelectedProject("");
     setFromDate(new Date().toISOString().split("T")[0]);
@@ -322,6 +332,9 @@ const ClaimList = () => {
               <h2 className="text-lg font-semibold text-pink-700">
                 Claim List
               </h2>
+              <div className="d-flex justify-content-end mb-3">
+                <ExcelClaimButton claimData={claimData} />
+              </div>
               <div className="overflow-x-auto">
                 <table className="w-full mt-4 border-collapse border border-pink-500">
                   <thead>
@@ -347,8 +360,8 @@ const ClaimList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {Array.isArray(claimData) && claimData.length > 0 ? (
-                      claimData.map((row, index) => (
+                    {Array.isArray(currentData) && currentData.length > 0 ? (
+                      currentData.map((row, index) => (
                         <tr key={index}>
                           <td className="border border-pink-500 p-2">
                             {row.healthInsurance?.project_code}
@@ -372,16 +385,29 @@ const ClaimList = () => {
                             {row?.status?.status_name}
                           </td>
                           <td className="border border-pink-500 p-2">
-                            <button
-                              className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
-                              onClick={() =>
-                                navigate(`/claimFormPdf/${row.id}`, {
-                                  state: { row },
-                                })
-                              }
-                            >
-                              Download
-                            </button>
+                            {row.status_id !== 6 ? (
+                              <button
+                                className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
+                                onClick={() =>
+                                  navigate(`/claimFormPdf/${row.id}`, {
+                                    state: { row },
+                                  })
+                                }
+                              >
+                                Download
+                              </button>
+                            ) : (
+                              <button
+                                className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
+                                onClick={() =>
+                                  navigate(`/settledPdf/${row.id}`, {
+                                    state: { row },
+                                  })
+                                }
+                              >
+                                Download
+                              </button>
+                            )}
                           </td>
                           <td className="border border-pink-500 p-2">
                             <button
@@ -409,6 +435,40 @@ const ClaimList = () => {
                     )}
                   </tbody>
                 </table>
+              </div>
+              {/* Pagination Controls */}
+              <div className="flex justify-between items-center mt-4">
+                <button
+                  className="py-1 px-3 bg-gray-200 rounded disabled:opacity-50"
+                  disabled={currentPage === 1}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                >
+                  Previous
+                </button>
+
+                <div className="text-sm">
+                  Page {currentPage} of{" "}
+                  {Math.ceil(claimData.length / itemsPerPage)}
+                </div>
+
+                <button
+                  className="py-1 px-3 bg-gray-200 rounded disabled:opacity-50"
+                  disabled={
+                    currentPage === Math.ceil(claimData.length / itemsPerPage)
+                  }
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(
+                        prev + 1,
+                        Math.ceil(claimData.length / itemsPerPage)
+                      )
+                    )
+                  }
+                >
+                  Next
+                </button>
               </div>
             </div>
           </div>

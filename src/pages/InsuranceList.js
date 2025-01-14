@@ -24,6 +24,13 @@ const InsuranceList = () => {
   const [selectedPo, setSelectedPo] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = filteredData.slice(startIndex, endIndex);
+
   // Fetch project, PO, and member data
   // const fetchData = async () => {
   //   try {
@@ -184,226 +191,208 @@ const InsuranceList = () => {
     <>
       <style>
         {`
-      Global styles
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
-  margin: 0;
-  padding: 0;
-}
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+          }
 
-.container {
-  width: 100%;
-  margin: 10px auto;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+          .container {
+            max-width: 1200px;
+            margin: 10px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          }
 
-/* Section styling */
-.section {
-  margin-bottom: 20px;
-  background-color: #ffffff; /* Ensure white background */
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better focus */
-}
+          .section {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
+          }
 
-.section-title {
-  background-color: #f72b8b;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-  .section-header {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  padding: 10px;
-  color: #fff; /* White text */
-  background-color: #f72b8b; /* Pink background */
-  border-radius: 5px;
-}
+          .section-title {
+            background-color: #f72b8b;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+          }
 
-.label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
+          .label {
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
 
-.required {
-  color: red;
-}
+          .required {
+            color: red;
+          }
 
-/* Input fields */
-.input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-}
+          .input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+          }
 
-/* Checkbox group */
-.checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px; /* Space between items */
-}
+          .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+          }
 
-.checkbox-group div {
-  display: flex;
-  align-items: center;
-}
+          .checkbox-group div {
+            display: flex;
+            align-items: center;
+          }
 
-.checkbox-group input {
-  margin-right: 8px;
-}
+          .checkbox-group input {
+            margin-right: 8px;
+          }
 
-/* Buttons */
-.buttons {
-  margin-top: 15px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-}
+          /* Button styling remains unchanged */
+          .buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+          }
 
-.reset-btn,
-.search-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-}
+          .reset-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #f44336;
+            color: white;
+            cursor: pointer;
+          }
 
-.reset-btn {
-  background-color: #f44336;
-  color: white;
-}
+          .reset-btn:hover {
+            background-color: #d32f2f;
+          }
 
-.search-btn {
-  background-color: #4caf50;
-  color: white;
-}
+          .search-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+          }
 
-.reset-btn:hover {
-  background-color: #d32f2f;
-}
+          .search-btn:hover {
+            background-color: #388e3c;
+          }
 
-.search-btn:hover {
-  background-color: #388e3c;
-}
+          .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+          }
 
-/* Table styling */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
+          .table th,
+          .table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+          }
 
-.table th,
-.table td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ddd;
-}
+          .table th {
+            background-color: #f72b8b;
+            color: white;
+          }
 
-.table th {
-  background-color: #f72b8b;
-  color: white;
-}
+          .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+          }
 
-.table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
+          .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+          }
 
-/* Buttons in table */
-.download-btn,
-.view-btn {
-  background-color: #f72b8b;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+          .pagination button {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            cursor: pointer;
+          }
 
-.download-btn:hover,
-.view-btn:hover {
-  background-color: #d02770;
-}
+          .pagination button.active {
+            background-color: #f72b8b;
+            color: white;
+          }
 
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 15px;
-}
+          .pagination select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+          }
 
-.pagination button {
-  padding: 5px 10px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  cursor: pointer;
-}
+          @media (max-width: 768px) {
+            .section {
+              padding: 10px;
+            }
 
-.pagination button.active {
-  background-color: #f72b8b;
-  color: white;
-}
+            .checkbox-group {
+              flex-direction: column;
+              gap: 10px;
+            }
 
-.pagination select {
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-}
+            .buttons {
+              flex-direction: column;
+              gap: 10px;
+              align-items: stretch;
+            }
 
-/* Adjustments for responsiveness */
-@media (max-width: 768px) {
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
+            .reset-btn,
+            .search-btn {
+              width: 100%;
+            }
 
-  .col-6 {
-    flex: 1 1 100%;
-  }
+            .table th,
+            .table td {
+              font-size: 0.9rem;
+              padding: 8px;
+            }
 
-  .buttons {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .reset-btn,
-  .search-btn {
-    width: 100%;
-  }
-    .container {
-  font-size: 0.7rem;
-  transform: scale(0.2);
-}
-
-.container * {
-  font-size: inherit;
-}
-}
-
-      `}
+            .pagination {
+              flex-direction: column;
+              gap: 5px;
+            }
+             /* Buttons in table */
+/* Download button */
+          .download-btn {
+            background-color: rgb(236, 72, 153);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            border: none;
+          }
+          
+          .download-btn:hover {
+            background-color: rgb(219, 39, 119);
+          }
+          }
+        `}
       </style>
       <div className="content-wrapper">
         <div className="container mt-3">
-        <h2 className="title">Health Insurance List</h2>
+          <h2 className="title">Health Insurance List</h2>
 
           {/* Project Selection */}
-          <div className="section" style={{marginTop:"50px"}}>
+          <div className="section" style={{ marginTop: "50px" }}>
             <label className="label">
               Project <span className="required">*</span>
             </label>
@@ -555,7 +544,7 @@ body {
                     </td>
                   </tr>
                 )}
-                {filteredData.map((item, index) => (
+                {currentData.map((item, index) => (
                   <tr key={index}>
                     <td>{item?.enrolment_id}</td>
                     <td>{item?.created_at}</td>
@@ -565,6 +554,9 @@ body {
                     <td>
                       <button
                         className="download-btn"
+                        style={{
+                          backgroundColor: "rgb(236, 72, 153) ! important;",
+                        }}
                         onClick={() =>
                           navigate(`/insuranceFormPdf/${item.id}`, {
                             state: { item },
@@ -589,21 +581,39 @@ body {
                   </tr>
                 ))}
               </tbody>
-              ;
             </table>
+          </div>
+          {/* Pagination Controls */}
+          <div className="flex justify-between items-center mt-4">
+            <button
+              className="py-1 px-3 bg-gray-200 rounded disabled:opacity-50"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            >
+              Previous
+            </button>
 
-            {/* Pagination */}
-            <div className="pagination">
-              <button>&lt;&lt;</button>
-              <button>&lt;</button>
-              <button className="active">1</button>
-              <button>&gt;</button>
-              <button>&gt;&gt;</button>
-              <select>
-                <option>10</option>
-                <option>20</option>
-              </select>
+            <div className="text-sm">
+              Page {currentPage} of{" "}
+              {Math.ceil(filteredData.length / itemsPerPage)}
             </div>
+
+            <button
+              className="py-1 px-3 bg-gray-200 rounded disabled:opacity-50"
+              disabled={
+                currentPage === Math.ceil(filteredData.length / itemsPerPage)
+              }
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  Math.min(
+                    prev + 1,
+                    Math.ceil(filteredData.length / itemsPerPage)
+                  )
+                )
+              }
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>

@@ -39,6 +39,7 @@ import PassbookRegister from "../pages/PassbookRegister";
 import ManagerPalm from "../pages/ManagerPalm";
 import SettledStatus from "../pages/SettledStatus";
 import PolicyReport from "../pages/PolicyReport";
+import SettledPdf from "../pages/SettledPdf";
 
 
 
@@ -149,6 +150,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/claimFormPdf">
           <ClaimFormPdf />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/settledPdf/:id", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/settledPdf">
+          <SettledPdf />
           </PrivateRoute>
         ),
       },
