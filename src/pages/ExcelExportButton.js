@@ -19,7 +19,7 @@ const ExcelExportButton = ({
     
     // Create the data structure exactly matching the image
     const data = [
-      ['', 'BRAC', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', { t: 's', v: '', l: { Target: '/images/Picture3.png', Tooltip: 'BRAC Logo' } }, '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       ['', '', 'Nirvabona Health Insurance Policy Information Report', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       ['', '', `From ${fromDate || 'DD-MM-YYYY'} To ${toDate || 'DD-MM-YYYY'}`, '', '', '', '', '', '', '', '', '', '', '', '', ''],
       [''],

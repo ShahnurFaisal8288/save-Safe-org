@@ -40,6 +40,7 @@ import ManagerPalm from "../pages/ManagerPalm";
 import SettledStatus from "../pages/SettledStatus";
 import PolicyReport from "../pages/PolicyReport";
 import SettledPdf from "../pages/SettledPdf";
+import RenewInsuranceForm from "../pages/RenewInsuranceForm";
 
 
 
@@ -78,6 +79,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/insurance-form">
             <InsuranceForm />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/insurance-form-renew",
+        element: (
+          <PrivateRoute requiredPermission="/insurance-form-renew">
+            <RenewInsuranceForm />
           </PrivateRoute>
         ),
       },

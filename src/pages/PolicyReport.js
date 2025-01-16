@@ -536,10 +536,10 @@ body {
                       <td>{item?.orgmemno}</td>
                       {/* <td>{item?.client.name}</td> */}
                       <td>{item?.enrolment_id}</td>
-                      <td>{item?.insurancePolicy.policy_name}</td>
-                      <td>{item?.insurancePolicy.title}</td>
+                      <td>{item?.health_configurations?.policy_name}</td>
+                      <td>{item?.health_configurations?.title}</td>
                       <td>{item?.nominee_name}</td>
-                      <td>{item?.statusDetails.status_name}</td>
+                      <td>{item?.statuses?.status_name}</td>
                       {/* <td>
                       <button
                         className="download-btn"
@@ -571,17 +571,7 @@ body {
             </div>
 
             {/* Pagination */}
-            <div className="pagination">
-              <button>&lt;&lt;</button>
-              <button>&lt;</button>
-              <button className="active">1</button>
-              <button>&gt;</button>
-              <button>&gt;&gt;</button>
-              <select>
-                <option>10</option>
-                <option>20</option>
-              </select>
-            </div>
+           
           </div>
         </div>
       </div>

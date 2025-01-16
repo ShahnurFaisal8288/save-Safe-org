@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import * as XLSX from 'xlsx';
 
 const ExcelExportButton = ({ claimData }) => {
+  
   const handleExport = () => {
     // Create a new workbook
     const wb = XLSX.utils.book_new();
@@ -55,16 +56,16 @@ const ExcelExportButton = ({ claimData }) => {
     if (claimData && claimData.length > 0) {
       claimData.forEach((item) => {
         data.push([
-          item.branch_name || '',
-          item.branch_code || '',
+          item.healthInsurance?.branch?.branch_name || '',
+          item.healthInsurance?.branch?.branch_code || '',
           item.area_name || '',
           item.region_name || '',
           item.division_name || '',
           item.healthInsurance?.project_code || '',
-          '', // Policy Taken Date (not provided in the data)
+          item.healthInsurance?.created_at || '',
           item.date_of_incident || '',
           '', // Incident Setup Date (not provided in the data)
-          '', // Package Type (not provided in the data)
+          item.InsurancePolicy.title || '',
           item.InsurancePolicy?.policy_name || '',
           item.treatmentType?.type_name || '',
           item.claim_amount || '',
@@ -75,24 +76,27 @@ const ExcelExportButton = ({ claimData }) => {
           '', // Claim Paid Amount (not provided in the data)
           '', // Rejected Claim Amount (not provided in the data)
           item.insurance_policy_no || '',
-          '', // Policy Holder's Name (not provided in the data)
+          item.healthInsurance?.client?.name || '',
           item.healthInsurance?.orgmemno || '',
-          '', // Policy Holder's Mobile Number (not provided in the data)
+          item.healthInsurance?.contact_no || '',
           '', // Policy Holder's NID (not provided in the data)
           '', // Policy Holder's Smart NID (not provided in the data)
           '', // Policy Holder's Birth Certificate (not provided in the data)
           '', // Policy Holder's Passport No (not provided in the data)
           '', // Policy Holder's Driving License (not provided in the data)
-          '', // Nominee Name (not provided in the data)
-          '', // Nominee Age (not provided in the data)
-          '', // Nominee Smart NID (not provided in the data)
-          '', // Nominee Birth Certificate (not provided in the data)
-          '', // Nominee Passport No (not provided in the data)
-          '', // Nominee Driving License (not provided in the data)
-          '', // Nominee Relation with Policy Holder (not provided in the data)
-          '', // Nominee Mobile Number (not provided in the data)
-          item.enrollment_id || '',
-          '', // Claim Payment Date (not provided in the data)
+          item.healthInsurance?.nominee_name || '',
+          // item.healthInsurance?.nominee_birthdate || '',
+            item.healthInsurance?.nominee_birthdate
+            ? Math.floor((new Date() - new Date(item.healthInsurance.nominee_birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
+            : '',
+          item.healthInsurance?.nominee_card_id || '',
+          item.healthInsurance?.nominee_card_id || '',
+          item.healthInsurance?.nominee_card_id || '',
+          item.healthInsurance?.nominee_card_id || '',
+          item.healthInsurance?.nomineeRelation?.data_name || '',
+          item.healthInsurance?.nominee_phone_no || '',
+          '',
+          item.created_at || '',
         ]);
       });
     } else {

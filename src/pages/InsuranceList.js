@@ -26,10 +26,11 @@ const InsuranceList = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = filteredData.slice(startIndex, endIndex);
+  const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   // Fetch project, PO, and member data
   // const fetchData = async () => {
@@ -186,6 +187,33 @@ const InsuranceList = () => {
       setFilteredData([]); // Clear data on error
     }
   };
+
+  // Helper function to generate page numbers
+  const getPageNumbers = () => {
+    const delta = 1; // Show one number on each side of current page
+    const range = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 || // First page
+        i === totalPages || // Last page
+        (i >= currentPage - delta && i <= currentPage + delta) // Pages around current
+      ) {
+        range.push(i);
+      } else if (range[range.length - 1] !== "...") {
+        range.push("...");
+      }
+    }
+
+    return range;
+  };
+
+  const handlePageChange = (pageNum) => {
+    if (typeof pageNum === "number" && pageNum >= 1 && pageNum <= totalPages) {
+      setCurrentPage(pageNum);
+    }
+  };
+
   // console.log("selectedPo: ", selectedPo);
   return (
     <>
@@ -255,8 +283,6 @@ const InsuranceList = () => {
           .checkbox-group input {
             margin-right: 8px;
           }
-
-          /* Button styling remains unchanged */
           .buttons {
             margin-top: 15px;
             display: flex;
@@ -303,6 +329,9 @@ const InsuranceList = () => {
             padding: 10px;
             text-align: center;
             border: 1px solid #ddd;
+          }
+            .space-x-4 > * + * {
+            margin-left: 1rem;
           }
 
           .table th {
@@ -371,8 +400,6 @@ const InsuranceList = () => {
               flex-direction: column;
               gap: 5px;
             }
-             /* Buttons in table */
-/* Download button */
           .download-btn {
             background-color: rgb(236, 72, 153);
             color: white;
@@ -384,6 +411,7 @@ const InsuranceList = () => {
           .download-btn:hover {
             background-color: rgb(219, 39, 119);
           }
+          
           }
         `}
       </style>
@@ -582,39 +610,56 @@ const InsuranceList = () => {
                 ))}
               </tbody>
             </table>
-          </div>
-          {/* Pagination Controls */}
-          <div className="flex justify-between items-center mt-4">
-            <button
-              className="py-1 px-3 bg-gray-200 rounded disabled:opacity-50"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            >
-              Previous
-            </button>
+            {/* Pagination Controls */}
+            {filteredData.length > 0 && (
+              <div className="flex flex-col items-center space-y-4 my-6 p-4 bg-white rounded-xl shadow-lg">
+                <div className="flex items-center space-x-4 gap-1">
+                  {/* Previous Button with better styling */}
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50"
+                    aria-label="Previous page"
+                  >
+                    ◄
+                  </button>
 
-            <div className="text-sm">
-              Page {currentPage} of{" "}
-              {Math.ceil(filteredData.length / itemsPerPage)}
-            </div>
+                  {/* Current Page */}
+                  <button className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded">
+                    {currentPage}
+                  </button>
 
-            <button
-              className="py-1 px-3 bg-gray-200 rounded disabled:opacity-50"
-              disabled={
-                currentPage === Math.ceil(filteredData.length / itemsPerPage)
-              }
-              onClick={() =>
-                setCurrentPage((prev) =>
-                  Math.min(
-                    prev + 1,
-                    Math.ceil(filteredData.length / itemsPerPage)
-                  )
-                )
-              }
-            >
-              Next
-            </button>
+                  {/* Next Page */}
+                  <button
+                    className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    {currentPage + 1}
+                  </button>
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50"
+                    aria-label="Next page"
+                  >
+                    ►
+                  </button>
+                </div>
+
+                {/* Page info with better styling */}
+                <div className="px-4 py-2 text-sm text-gray-600 bg-gray-50 rounded-full shadow-sm">
+                  Showing page {currentPage} of {totalPages}
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* <div className="mt-2 text-center text-sm text-gray-600">
+            Showing page {currentPage} of {totalPages}
+          </div> */}
         </div>
       </div>
     </>

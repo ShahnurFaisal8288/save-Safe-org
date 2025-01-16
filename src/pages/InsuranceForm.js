@@ -45,8 +45,21 @@ function InsuranceForm() {
   const [coNo, setCollectorNumber] = useState(null);
 
   //insurance form params data start
-  const { id, name, account_number, sex, date_of_birth, project_code,occupation, present_address, village_address, date_in, date_out, nominee, relationship } =
-    useParams();
+  const {
+    id,
+    name,
+    account_number,
+    sex,
+    date_of_birth,
+    project_code,
+    occupation,
+    present_address,
+    village_address,
+    date_in,
+    date_out,
+    nominee,
+    relationship,
+  } = useParams();
   const [isDropdownDisabled, setDropdownDisabled] = useState(false);
   //insurance form params data end
 
@@ -346,9 +359,8 @@ function InsuranceForm() {
             NomineeName: event.target.NomineeName
               ? event.target.NomineeName.value
               : "",
-            NomineePhone: event.target.NomineePhone
-              ? event.target.NomineePhone.value
-              : "",
+            NomineePhone: event.target.NomineePhone ? event.target.NomineePhone.value : "",
+            // NomineePhone: nomineePhone || "",
             NomineeDOB: event.target.NomineeDOB
               ? event.target.NomineeDOB.value
               : "",
@@ -438,7 +450,7 @@ function InsuranceForm() {
       alert("Failed to create data");
     }
   };
- 
+
   useEffect(() => {
     const storedSetCollectorNumber = localStorage.getItem("collector_number");
 
@@ -704,6 +716,7 @@ function InsuranceForm() {
   console.log("validateCategory", validateCategory);
   console.log("category", category);
   console.log("selectedPolicy", selectedPolicy);
+  console.log("nomineePhone", nomineePhone);
 
   return (
     <Container className="py-5">
@@ -714,49 +727,61 @@ function InsuranceForm() {
         <Card.Body>
           <h3 className="mb-4">Member Info</h3>
           <Card.Body className="p-4 border rounded bg-light">
-           <div className="row">
-           <div className="mb-3 col-6">
-              <strong className="d-block">Member Name: {name}</strong>
+            <div className="row">
+              <div className="mb-3 col-6">
+                <strong className="d-block">Member Name: {name}</strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">
+                  Project Code: {project_code}
+                </strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">
+                  Account Number: {account_number}
+                </strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">Collector ID: {coNo}</strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">
+                  Branch Code: {branchCodeLocal}
+                </strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">
+                  Date of Birth: {date_of_birth}
+                </strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">Occupation: {occupation}</strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">
+                  Present Address: {present_address}
+                </strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">
+                  Village Address: {village_address}
+                </strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">Nominee: {nominee}</strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">
+                  Relationship: {relationship}
+                </strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">Date In: {date_in}</strong>
+              </div>
+              <div className="mb-3 col-6">
+                <strong className="d-block">Date Out: {date_out}</strong>
+              </div>
             </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Project Code: {project_code}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">
-                Account Number: {account_number}
-              </strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Collector ID: {coNo}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Branch Code: {branchCodeLocal}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Date of Birth: {date_of_birth}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Occupation: {occupation}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Present Address: {present_address}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Village Address: {village_address}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Nominee: {nominee}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Relationship: {relationship}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Date In: {date_in}</strong>
-            </div>
-            <div className="mb-3 col-6">
-              <strong className="d-block">Date Out: {date_out}</strong>
-            </div>
-           </div>
           </Card.Body>
 
           <Form
@@ -1087,7 +1112,6 @@ function InsuranceForm() {
                       <Col md={6}>
                         <Form.Group>
                           <Form.Label>Phone Number</Form.Label>
-
                           <Form.Control
                             type="tel"
                             name="NomineePhone"

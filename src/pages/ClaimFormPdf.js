@@ -67,22 +67,11 @@ const ClaimFormPdf = () => {
     ? extendedDate.toISOString().split("T")[0] // Format as YYYY-MM-DD
     : "";
 
-    // Parse the nominee's birthdate
-const birthdate = data?.healthInsurance?.nominee_birthdate;
-const birthDateObj = birthdate ? new Date(birthdate) : null;
-
-let age = null;
-if (birthDateObj) {
-  // Calculate the difference in years
-  const currentDate = new Date();
-  age = currentDate.getFullYear() - birthDateObj.getFullYear();
-
-  // Adjust age if the birthday hasn't occurred yet this year
-  const monthDiff = currentDate.getMonth() - birthDateObj.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDateObj.getDate())) {
-    age--;
-  }
-}
+    // Calculate the nominee's age
+    const birthdate = data?.healthInsurance?.nominee_birthdate;
+    const age = birthdate
+      ? Math.floor((new Date() - new Date(birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
+      : '';
 
   return (
     <div className="min-h-screen bg-gray-100 p-5">
@@ -212,7 +201,7 @@ if (birthDateObj) {
           </div>
           <div className="col-md-4">
             <label className="form-label">বিমা প্যাকেজের ধরণ</label>
-            <input type="text" className="form-control" />
+            <input type="text" value={data?.InsurancePolicy?.title} className="form-control" />
           </div>
           <div className="col-md-4">
             <label className="form-label">বিমা পলিসি গ্রহনের তারিখ</label>
@@ -265,7 +254,7 @@ if (birthDateObj) {
           </div>
           <div className="col-md-6 mb-3">
             <label className="form-label">বিমাগ্রহীতার সাথে সম্পর্ক</label>
-            <input type="text" className="form-control" />
+            <input type="text" value={data?.healthInsurance?.nomineeRelation?.data_name} className="form-control" />
           </div>
           <div className="col-md-6 mb-3">
             <label className="form-label">নমিনির বয়স</label>
