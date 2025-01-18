@@ -69,7 +69,7 @@ const PolicyReport = () => {
   useEffect(() => {
     setSelectedCategory("");
   }, [selectedPolicy]);
-
+// console.log(selectedPolicy);
   const handleSearch = async () => {
     try {
       const response = await axios.get(

@@ -39,19 +39,19 @@ const ExcelExportButton = ({
         data.push(['',
           item?.insurance_policy_no || '',
           item?.orgmemno || '',
-          item?.client?.name || '',
+          item?.clients?.name || '',
           item?.enrolment_id || '',
-          item?.insurancePolicy?.policy_name || '',
-          item?.insurancePolicy?.title || '',
+          item?.health_configurations?.policy_name || '',
+          item?.health_configurations?.title || '',
           item?.nominee_name || '',
           item?.nominee_card_id || '',
-          item?.nominee_relation || '',
+          item?.relationships?.data_name || '',
           item?.insurance_tenure || '',
           item?.created_at || '',
           new Date(item?.created_at ? new Date(item.created_at).setMonth(new Date(item.created_at).getMonth() + 12) : '').toISOString().slice(0, 10),
           item?.premium_amnt || '',
-          item?.claim_value || '',
-          item?.statusDetails?.status_name || ''
+          item?.total_claim_amount || '',
+          item?.statuses?.status_name || ''
         ]);
       });
     } else {

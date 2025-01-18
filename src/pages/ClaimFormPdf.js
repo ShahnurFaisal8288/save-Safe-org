@@ -258,7 +258,7 @@ const ClaimFormPdf = () => {
           </div>
           <div className="col-md-6 mb-3">
             <label className="form-label">নমিনির বয়স</label>
-            <input type="text" value={age || ''} className="form-control" />
+            <input type="text" value={age} className="form-control" />
           </div>
           <div className="col-md-6 mb-3">
             <label className="form-label">নমিনির মোবাইল নম্বর</label>

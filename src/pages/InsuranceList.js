@@ -612,48 +612,44 @@ const InsuranceList = () => {
             </table>
             {/* Pagination Controls */}
             {filteredData.length > 0 && (
-              <div className="flex flex-col items-center space-y-4 my-6 p-4 bg-white rounded-xl shadow-lg">
-                <div className="flex items-center space-x-4 gap-1">
-                  {/* Previous Button with better styling */}
-                  {/* Previous Button */}
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50"
-                    aria-label="Previous page"
-                  >
-                    ◄
-                  </button>
-
-                  {/* Current Page */}
-                  <button className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded">
-                    {currentPage}
-                  </button>
-
-                  {/* Next Page */}
-                  <button
-                    className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                  >
-                    {currentPage + 1}
-                  </button>
-
-                  {/* Next Button */}
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50"
-                    aria-label="Next page"
-                  >
-                    ►
-                  </button>
-                </div>
-
-                {/* Page info with better styling */}
-                <div className="px-4 py-2 text-sm text-gray-600 bg-gray-50 rounded-full shadow-sm">
-                  Showing page {currentPage} of {totalPages}
-                </div>
+              <div className="mt-2 d-flex justify-content-between align-items-center">
+              <div className="d-flex gap-2">
+                {/* Previous Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="btn btn-outline-secondary btn-sm"
+                >
+                  ◄
+                </button>
+            
+                {/* Current Page */}
+                <button className="btn btn-outline-secondary btn-sm">
+                  {currentPage}
+                </button>
+            
+                {/* Next Page */}
+                <button
+                  className="btn btn-outline-secondary btn-sm"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
+                  {currentPage + 1}
+                </button>
+            
+                {/* Next Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="btn btn-outline-secondary btn-sm"
+                >
+                  ►
+                </button>
               </div>
+            
+              <div>
+                Showing page {currentPage} of {totalPages}
+              </div>
+            </div>
             )}
           </div>
 

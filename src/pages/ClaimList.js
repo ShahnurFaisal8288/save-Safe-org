@@ -392,7 +392,7 @@ const ClaimList = () => {
                             {row?.status?.status_name}
                           </td>
                           <td className="border border-pink-500 p-2">
-                            {row.status_id !== 6 ? (
+                            {row.status_id !== 6 && row.status_id === 1 ? (
                               <button
                                 className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
                                 onClick={() =>
@@ -443,49 +443,44 @@ const ClaimList = () => {
                   </tbody>
                 </table>
                 {claimData.length > 0 && (
-                  <div className="flex flex-col items-center space-y-4 my-6 p-4 bg-white rounded-xl shadow-lg">
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center space-x-4 gap-1">
-                        {/* Previous Button */}
-                        <button
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
-                          className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50"
-                          aria-label="Previous page"
-                        >
-                          ◄
-                        </button>
-
-                        {/* Current Page */}
-                        <button className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded">
-                          {currentPage}
-                        </button>
-
-                        {/* Next Page */}
-                        <button
-                          className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50"
-                          onClick={() => handlePageChange(currentPage + 1)}
-                        >
-                          {currentPage + 1}
-                        </button>
-
-                        {/* Next Button */}
-                        <button
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPages}
-                          className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50"
-                          aria-label="Next page"
-                        >
-                          ►
-                        </button>
-                      </div>
-
-                      {/* Page info */}
-                      <div className="px-4 py-2 text-sm text-gray-600 bg-gray-50 rounded-full shadow-sm ml-4">
-                        Showing page {currentPage} of {totalPages}
-                      </div>
-                    </div>
+                  <div className="mt-2 d-flex justify-content-between align-items-center">
+                  <div className="d-flex gap-2">
+                    {/* Previous Button */}
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="btn btn-outline-secondary btn-sm"
+                    >
+                      ◄
+                    </button>
+                
+                    {/* Current Page */}
+                    <button className="btn btn-outline-secondary btn-sm">
+                      {currentPage}
+                    </button>
+                
+                    {/* Next Page */}
+                    <button
+                      className="btn btn-outline-secondary btn-sm"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                      {currentPage + 1}
+                    </button>
+                
+                    {/* Next Button */}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="btn btn-outline-secondary btn-sm"
+                    >
+                      ►
+                    </button>
                   </div>
+                
+                  <div>
+                    Showing page {currentPage} of {totalPages}
+                  </div>
+                </div>
                 )}
               </div>
             </div>

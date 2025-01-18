@@ -61,10 +61,10 @@ const ExcelExportButton = ({ claimData }) => {
           item.area_name || '',
           item.region_name || '',
           item.division_name || '',
-          item.healthInsurance?.project_code || '',
+          item.healthInsurance?.project?.projectTitle || '',
           item.healthInsurance?.created_at || '',
           item.date_of_incident || '',
-          '', // Incident Setup Date (not provided in the data)
+          item.date_of_incident || '',
           item.InsurancePolicy.title || '',
           item.InsurancePolicy?.policy_name || '',
           item.treatmentType?.type_name || '',
