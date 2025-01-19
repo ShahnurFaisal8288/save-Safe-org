@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-import "../InsuranceList.css";
+import "../../InsuranceList.css";
 import { useNavigate } from "react-router-dom";
 
 const InsuranceList = () => {
@@ -32,39 +32,7 @@ const InsuranceList = () => {
 
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Fetch project, PO, and member data
-  // const fetchData = async () => {
-  //   try {
-  //     const projectResponse = await axios.get(
-  //       "http://localhost:8000/api/projects"
-  //     );
-  //     if (projectResponse.data && Array.isArray(projectResponse.data)) {
-  //       setProject(projectResponse.data);
-  //     }
-
-  //     const poResponse = await axios.get(
-  //       "http://localhost:8000/api/collectors"
-  //     );
-  //     if (poResponse.data) {
-  //       setPoNo(poResponse.data);
-  //     }
-
-  //     // const memberResponse = await axios.get(
-  //     //   `http://localhost:8000/api/collector/${selectedPo}/client/information`
-  //     // );
-  //     // if (memberResponse.data) {
-  //     //   setMemberName(memberResponse.data);
-  //     // }
-
-  //     // Set initial data for display (could be fetched from a separate API for insurance list)
-  //     const initialData = await axios.get(
-  //       "http://localhost:8000/api/health_insurance/list"
-  //     );
-  //     setFilteredData(initialData.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error.message);
-  //   }
-  // };
+  
   const fetchData = async () => {
     try {
       // Fetch projects
@@ -189,24 +157,24 @@ const InsuranceList = () => {
   };
 
   // Helper function to generate page numbers
-  const getPageNumbers = () => {
-    const delta = 1; // Show one number on each side of current page
-    const range = [];
+  // const getPageNumbers = () => {
+  //   const delta = 1; // Show one number on each side of current page
+  //   const range = [];
 
-    for (let i = 1; i <= totalPages; i++) {
-      if (
-        i === 1 || // First page
-        i === totalPages || // Last page
-        (i >= currentPage - delta && i <= currentPage + delta) // Pages around current
-      ) {
-        range.push(i);
-      } else if (range[range.length - 1] !== "...") {
-        range.push("...");
-      }
-    }
+  //   for (let i = 1; i <= totalPages; i++) {
+  //     if (
+  //       i === 1 || // First page
+  //       i === totalPages || // Last page
+  //       (i >= currentPage - delta && i <= currentPage + delta) // Pages around current
+  //     ) {
+  //       range.push(i);
+  //     } else if (range[range.length - 1] !== "...") {
+  //       range.push("...");
+  //     }
+  //   }
 
-    return range;
-  };
+  //   return range;
+  // };
 
   const handlePageChange = (pageNum) => {
     if (typeof pageNum === "number" && pageNum >= 1 && pageNum <= totalPages) {
@@ -400,7 +368,8 @@ const InsuranceList = () => {
               flex-direction: column;
               gap: 5px;
             }
-          .download-btn {
+          }
+             .download-btn {
             background-color: rgb(236, 72, 153);
             color: white;
             padding: 0.25rem 0.75rem;
@@ -410,8 +379,6 @@ const InsuranceList = () => {
           
           .download-btn:hover {
             background-color: rgb(219, 39, 119);
-          }
-          
           }
         `}
       </style>
@@ -581,7 +548,7 @@ const InsuranceList = () => {
                     <td>{item?.statuses}</td>
                     <td>
                       <button
-                        className="download-btn"
+                        className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
                         style={{
                           backgroundColor: "rgb(236, 72, 153) ! important;",
                         }}
@@ -596,7 +563,7 @@ const InsuranceList = () => {
                     </td>
                     <td>
                       <button
-                        className="view-btn"
+                        className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
                         onClick={() =>
                           navigate(`/approve-insurance-enrollment/${item.id}`, {
                             state: { item },
@@ -629,12 +596,12 @@ const InsuranceList = () => {
                 </button>
             
                 {/* Next Page */}
-                <button
+                {/* <button
                   className="btn btn-outline-secondary btn-sm"
                   onClick={() => handlePageChange(currentPage + 1)}
                 >
                   {currentPage + 1}
-                </button>
+                </button> */}
             
                 {/* Next Button */}
                 <button

@@ -76,22 +76,22 @@ function Sidebar({ data = [] }) {
           </a> */}
         </li>
 
-        <li className="nav-item nav-profile">
+        {/* <li className="nav-item nav-profile">
           <a href="#" className="nav-link">
-            {/* <div className="profile-image">
+            <div className="profile-image">
               <img className="img-xs rounded-circle" src="../../../assets/images/faces/face8.jpg" alt="profile image" />
               <div className="dot-indicator bg-success" />
-            </div> */}
-            {/* <div className="text-wrapper">
+            </div>
+            <div className="text-wrapper">
               <p className="profile-name">{name}</p>
               <p className="designation">Administrator</p>
-            </div> */}
-            {/* <div className="icon-container">
+            </div>
+            <div className="icon-container">
               <i className="icon-bubbles" />
               <div className="dot-indicator bg-danger" />
-            </div> */}
+            </div>
           </a>
-        </li>
+        </li> */}
 
         <li className="nav-item nav-category">
           <span className="nav-link">Dashboard</span>

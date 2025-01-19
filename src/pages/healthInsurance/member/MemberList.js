@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import "../index.css";
+import "../../../index.css";
 
 const buttonStyle = {
   color: "white",

@@ -19058,7 +19058,7 @@ select.form-select {
   padding: 0.4375rem 0.75rem;
   border: 0;
   outline: 1px solid #e8e5e5;
-  color: #c9c8c8;
+  /* color: #c9c8c8; */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -25539,7 +25539,7 @@ div.tagsinput span.tag a {
 }
 .sidebar .nav.sub-menu .nav-item .nav-link {
   color: #ffffff;
-  padding: 0.75rem 2rem 0.75rem 2rem;
+  /* padding: 0.75rem 2rem 0.75rem 2rem; */
   position: relative;
   font-size: 0.8125rem;
   line-height: 1;
@@ -25547,7 +25547,7 @@ div.tagsinput span.tag a {
   border-top: 0;
 }
 .sidebar .nav.sub-menu .nav-item .nav-link:before {
-  content: "\e606";
+  /* content: "\e606"; */
   font-family: "simple-line-icons";
   display: block;
   position: absolute;

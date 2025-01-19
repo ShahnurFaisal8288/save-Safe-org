@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../MicroHealthInsurance.css";
+// import "../../MicroHealthInsurance.css";
+import "../../../MicroHealthInsurance.css";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -241,7 +242,8 @@ const MicroHealthInsurance = () => {
     setClaimAmount(newClaimAmount);
 
     // Calculate the new remaining sum insured (ensure it doesn't go below zero)
-    const newRemainingSum = remainingSumLast.treatmentAmount - parseFloat(newClaimAmount || 0);
+    const newRemainingSum =
+      remainingSumLast.treatmentAmount - parseFloat(newClaimAmount || 0);
     setRemainingSumLast((prev) => ({
       ...prev,
       remainingAmount: newRemainingSum >= 0 ? newRemainingSum : 0, // Ensure non-negative value
@@ -269,11 +271,11 @@ const MicroHealthInsurance = () => {
     formData.append("frontImage", e.target.frontImage.files[0]);
     formData.append("backImage", e.target.backImage.files[0]);
     // formData.append("documentPath", e.target.documentPath.files[0]);
-     // Handle multiple files for documentPath
-  const documentFiles = e.target.documentPath.files;
-  for (let i = 0; i < documentFiles.length; i++) {
-    formData.append("documentPath", documentFiles[i]);
-  }
+    // Handle multiple files for documentPath
+    const documentFiles = e.target.documentPath.files;
+    for (let i = 0; i < documentFiles.length; i++) {
+      formData.append("documentPath", documentFiles[i]);
+    }
 
     try {
       const response = await axios.post(
@@ -568,317 +570,317 @@ body {
       `}
       </style>
       <div className="content-wrapper">
-      <div className="container mt-3">
-        <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
-        <form onSubmit={handleFormSubmit}>
-          <div className="form-group">
-            {/* <label>Mapped Health Insurance ID</label> */}
-            <input
-              type="hidden"
-              name="health_insurance_id"
-              value={selectedInsuranceId}
-              // value="3"
-              readOnly
-            />
-          </div>
-          <div className="form-group">
-            {/* <label>Enrollment ID</label> */}
-            <input
-              type="hidden"
-              name="enrollment_id"
-              value="123e4567-e89b-12d3-a456-426614174000"
-              readOnly
-            />
-          </div>
-          <div className="form-group">
-            {/* <label>Insurance Policy id</label> */}
-            <input
-              type="hidden"
-              name="insurance_policy_id"
-              value={selectedCategoryId}
-              readOnly
-            />
-          </div>
-
-          {/* Project Section */}
-          <div className="section">
-            {/* <div className="section-header">Project</div> */}
+        <div className="container mt-3">
+          <h2 className="title">Micro Health Insurance Claim Benefit Setup</h2>
+          <form onSubmit={handleFormSubmit}>
             <div className="form-group">
-              <label>Project *</label>
-              <select>
-                <option>Choose</option>
-                {project.map((item, index) => (
-                  <option key={index} value={item.id}>
-                    {item.projectTitle}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Member Information Section */}
-          <div className="section">
-            <div className="section-header">Member Information</div>
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Member Number *</label>
-                <div className="search-box">
-                  <input
-                    type="text"
-                    list="memberNumbers"
-                    onChange={handleMemberChange}
-                    placeholder="Member Number"
-                  />
-                  <datalist id="memberNumbers">
-                    {memberNo.map((item, index) => (
-                      <option key={index} value={item.account_number}>
-                        {item.account_number}
-                      </option>
-                    ))}
-                  </datalist>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Member Name</label>
-                <input
-                  type="text"
-                  value={selectedMemberId ? selectedMemberId.name : ""}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Member Mobile Number</label>
-                <input
-                  type="text"
-                  value={
-                    selectedMemberId ? selectedMemberId.contact_number : ""
-                  }
-                />
-              </div>
-              <div className="form-group">
-                <label>Age</label>
-                <input
-                  type="text"
-                  value={
-                    selectedMemberId && selectedMemberId.date_of_birth
-                      ? calculateAge(selectedMemberId.date_of_birth)
-                      : ""
-                  }
-                  readOnly
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Incident Information Section */}
-          <div className="section">
-            <div className="section-header">Incident Information</div>
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Product *</label>
-                <select onChange={handleProductChange}>
-                  <option>Select Product</option>
-                  {product.map((item, index) => (
-                    <option key={index} value={item.policy_name}>
-                      {item.policy_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Select Policy No *</label>
-                <select
-                  onChange={handlePolicyNoChange}
-                  name="insurance_policy_no"
-                >
-                  <option>Select Policy Number</option>
-                  {policy_number_options?.map((item, index) => (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Treatment Type *</label>
-                <select onChange={handleTreatmentChange}>
-                  <option>Select Policy No</option>
-                  {treatmentType.map((item, index) => (
-                    <option
-                      key={index}
-                      value={JSON.stringify({
-                        id: item.id,
-                        column_name: item.column_name,
-                      })}
-                    >
-                      {item.column_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* <div className="form-group"> */}
+              {/* <label>Mapped Health Insurance ID</label> */}
               <input
                 type="hidden"
-                name="treatment_type_id"
-                value={treatmentTypeId}
+                name="health_insurance_id"
+                value={selectedInsuranceId}
+                // value="3"
                 readOnly
               />
-              {/* </div> */}
-              <div className="form-group">
-                <label>Date of Incident *</label>
-                <div className="date-box">
-                  <input type="date" name="date_of_incident" />
-                  <button className="calendar-button">📅</button>
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Claim Amount *</label>
-                <input
-                  type="number"
-                  name="claim_amount"
-                  value={claimAmount}
-                  onChange={handleClaimAmountChange}
-                />
-              </div>
-              <div className="form-group">
-                <label>Remaining Sum Insured</label>
-                <input
-                  type="number"
-                  value={
-                    remainingSumLast.remainingAmount ||
-                    remainingSumLast.treatmentAmount
-                  }
-                />
-              </div>
             </div>
-          </div>
-
-          {/* Document Upload Section */}
-          {/* Document Upload Section */}
-          <div className="section">
-            <div className="section-header">Document Upload</div>
             <div className="form-group">
-              <label>Member's National ID *</label>
-              <div className="upload-grid">
-                <div className="upload-box">
-                  <label className="upload-label" htmlFor="frontSide">
-                    <div className="file-placeholder">Front Side</div>
-                  </label>
-                  <input
-                    type="file"
-                    id="frontSide"
-                    className="file-input"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    name="frontImage"
-                    onChange={handleFrontImageChange}
-                  />
-                  {frontImagePreview && (
-                    <div className="preview-container">
-                      <img
-                        src={frontImagePreview}
-                        alt="Front ID Preview"
-                        className="preview-image"
-                        height="100px"
-                        width="100px"
-                      />
-                    </div>
-                  )}
-                </div>
-                <div className="upload-box">
-                  <label className="upload-label" htmlFor="backSide">
-                    <div className="file-placeholder">Back Side</div>
-                  </label>
-                  <input
-                    type="file"
-                    id="backSide"
-                    className="file-input"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    name="backImage"
-                    onChange={handleBackImageChange}
-                  />
-                  {backImagePreview && (
-                    <div className="preview-container">
-                      <img
-                        src={backImagePreview}
-                        alt="Back ID Preview"
-                        className="preview-image"
-                        height="100px"
-                        width="100px"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-              <small className="error-text">This field is required.</small>
+              {/* <label>Enrollment ID</label> */}
+              <input
+                type="hidden"
+                name="enrollment_id"
+                value="123e4567-e89b-12d3-a456-426614174000"
+                readOnly
+              />
+            </div>
+            <div className="form-group">
+              {/* <label>Insurance Policy id</label> */}
+              <input
+                type="hidden"
+                name="insurance_policy_id"
+                value={selectedCategoryId}
+                readOnly
+              />
             </div>
 
-            {/* <div className="form-group">
+            {/* Project Section */}
+            <div className="col-4">
+              <div className="section">
+                <div className="form-group">
+                  <label>Project *</label>
+                  <select className="form-select">
+                    <option>Choose</option>
+                    {project.map((item, index) => (
+                      <option key={index} value={item.id}>
+                        {item.projectTitle}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Member Information Section */}
+            <div className="section">
+              <div className="section-header">Member Information</div>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Member Number *</label>
+                  <div className="search-box">
+                    <input
+                      type="text"
+                      list="memberNumbers"
+                      onChange={handleMemberChange}
+                      placeholder="Member Number"
+                    />
+                    <datalist id="memberNumbers">
+                      {memberNo.map((item, index) => (
+                        <option key={index} value={item.account_number}>
+                          {item.account_number}
+                        </option>
+                      ))}
+                    </datalist>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Member Name</label>
+                  <input
+                    type="text"
+                    value={selectedMemberId ? selectedMemberId.name : ""}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Member Mobile Number</label>
+                  <input
+                    type="text"
+                    value={
+                      selectedMemberId ? selectedMemberId.contact_number : ""
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Age</label>
+                  <input
+                    type="text"
+                    value={
+                      selectedMemberId && selectedMemberId.date_of_birth
+                        ? calculateAge(selectedMemberId.date_of_birth)
+                        : ""
+                    }
+                    readOnly
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Incident Information Section */}
+            <div className="section">
+              <div className="section-header">Incident Information</div>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Product *</label>
+                  <select onChange={handleProductChange}>
+                    <option>Select Product</option>
+                    {product.map((item, index) => (
+                      <option key={index} value={item.policy_name}>
+                        {item.policy_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Select Policy No *</label>
+                  <select
+                    onChange={handlePolicyNoChange}
+                    name="insurance_policy_no"
+                  >
+                    <option>Select Policy Number</option>
+                    {policy_number_options?.map((item, index) => (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Treatment Type *</label>
+                  <select onChange={handleTreatmentChange}>
+                    <option>Select Policy No</option>
+                    {treatmentType.map((item, index) => (
+                      <option
+                        key={index}
+                        value={JSON.stringify({
+                          id: item.id,
+                          column_name: item.column_name,
+                        })}
+                      >
+                        {item.column_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* <div className="form-group"> */}
+                <input
+                  type="hidden"
+                  name="treatment_type_id"
+                  value={treatmentTypeId}
+                  readOnly
+                />
+                {/* </div> */}
+                <div className="form-group">
+                  <label>Date of Incident *</label>
+                  <div className="date-box">
+                    <input type="date" name="date_of_incident" />
+                    <button className="calendar-button">📅</button>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label>Claim Amount *</label>
+                  <input
+                    type="number"
+                    name="claim_amount"
+                    value={claimAmount}
+                    onChange={handleClaimAmountChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Remaining Sum Insured</label>
+                  <input
+                    type="number"
+                    value={
+                      remainingSumLast.remainingAmount ||
+                      remainingSumLast.treatmentAmount
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Document Upload Section */}
+            {/* Document Upload Section */}
+            <div className="section">
+              <div className="section-header">Document Upload</div>
+              <div className="form-group">
+                <label>Member's National ID *</label>
+                <div className="upload-grid">
+                  <div className="upload-box">
+                    <label className="upload-label" htmlFor="frontSide">
+                      <div className="file-placeholder">Front Side</div>
+                    </label>
+                    <input
+                      type="file"
+                      id="frontSide"
+                      className="file-input"
+                      accept=".jpg,.jpeg,.png,.pdf"
+                      name="frontImage"
+                      onChange={handleFrontImageChange}
+                    />
+                    {frontImagePreview && (
+                      <div className="preview-container">
+                        <img
+                          src={frontImagePreview}
+                          alt="Front ID Preview"
+                          className="preview-image"
+                          height="100px"
+                          width="100px"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="upload-box">
+                    <label className="upload-label" htmlFor="backSide">
+                      <div className="file-placeholder">Back Side</div>
+                    </label>
+                    <input
+                      type="file"
+                      id="backSide"
+                      className="file-input"
+                      accept=".jpg,.jpeg,.png,.pdf"
+                      name="backImage"
+                      onChange={handleBackImageChange}
+                    />
+                    {backImagePreview && (
+                      <div className="preview-container">
+                        <img
+                          src={backImagePreview}
+                          alt="Back ID Preview"
+                          className="preview-image"
+                          height="100px"
+                          width="100px"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* <small className="error-text">This field is required.</small> */}
+              </div>
+
+              {/* <div className="form-group">
           <label>Document Type *</label>
           <select >
             <option>Select a Document Type</option>
           </select>
         </div> */}
-            <div className="form-group">
-              <label>Document Type *</label>
-              <select
-                value={documentType}
-                name="document_type"
-                onChange={(e) => setDocumentType(e.target.value)}
-              >
-                <option value="">Select a Document Type</option>
-                {getDocumentTypeOptions().map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              <div className="form-group">
+                <label>Document Type *</label>
+                <select
+                  value={documentType}
+                  name="document_type"
+                  onChange={(e) => setDocumentType(e.target.value)}
+                >
+                  <option value="">Select a Document Type</option>
+                  {getDocumentTypeOptions().map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Dynamic Document Upload Section */}
+              {documentType && (
+                <div className="form-group">
+                  <label>
+                    {
+                      getDocumentTypeOptions().find(
+                        (opt) => opt.value === documentType
+                      )?.label
+                    }{" "}
+                    *
+                  </label>
+                  <div className="upload-box">
+                    <input
+                      type="file"
+                      className="file-input"
+                      accept=".jpg,.jpeg,.png,.pdf"
+                      id={documentType}
+                      name="documentPath"
+                      multiple
+                    />
+                    <label className="upload-label" htmlFor={documentType}>
+                      Choose a file
+                    </label>
+                  </div>
+                </div>
+              )}
+              <p className="note">
+                <strong>N.B:</strong> If multiple document upload needed, please
+                attach all the documents in a single PDF. Then select{" "}
+                <strong>"Other documents"</strong> and upload the PDF.
+              </p>
             </div>
 
-            {/* Dynamic Document Upload Section */}
-            {documentType && (
-              <div className="form-group">
-                <label>
-                  {
-                    getDocumentTypeOptions().find(
-                      (opt) => opt.value === documentType
-                    )?.label
-                  }{" "}
-                  *
-                </label>
-                <div className="upload-box">
-                  <input
-                    type="file"
-                    className="file-input"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    id={documentType}
-                    name="documentPath"
-                    multiple
-                  />
-                  <label className="upload-label" htmlFor={documentType}>
-                    Choose a file
-                  </label>
-                </div>
-              </div>
-            )}
-            <p className="note">
-              <strong>N.B:</strong> If multiple document upload needed, please
-              attach all the documents in a single PDF. Then select{" "}
-              <strong>"Other documents"</strong> and upload the PDF.
-            </p>
-          </div>
-
-          {/* Buttons */}
-          <div className="button-group">
-            <button className="reset-button">Reset ❌</button>
-            <button type="submit" className="claim-button">
-              Claim 🗂
-            </button>
-          </div>
-        </form>
+            {/* Buttons */}
+            <div className="button-group">
+              <button className="reset-button">Reset ❌</button>
+              <button type="submit" className="claim-button">
+                Claim 🗂
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      </div>
-      
     </>
   );
 };

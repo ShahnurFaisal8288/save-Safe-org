@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 // import { Button } from "react-bootstrap";
+// import ExcelClaimButton from "./ExcelClaimButton";
 import ExcelClaimButton from "./ExcelClaimButton";
 
 const ClaimList = () => {
@@ -57,24 +58,24 @@ const ClaimList = () => {
   }, []);
 
   // Helper function to generate page numbers
-  const getPageNumbers = () => {
-    const delta = 1; // Show one number on each side of current page
-    const range = [];
+  // const getPageNumbers = () => {
+  //   const delta = 1; // Show one number on each side of current page
+  //   const range = [];
 
-    for (let i = 1; i <= totalPages; i++) {
-      if (
-        i === 1 || // First page
-        i === totalPages || // Last page
-        (i >= currentPage - delta && i <= currentPage + delta) // Pages around current
-      ) {
-        range.push(i);
-      } else if (range[range.length - 1] !== "...") {
-        range.push("...");
-      }
-    }
+  //   for (let i = 1; i <= totalPages; i++) {
+  //     if (
+  //       i === 1 || // First page
+  //       i === totalPages || // Last page
+  //       (i >= currentPage - delta && i <= currentPage + delta) // Pages around current
+  //     ) {
+  //       range.push(i);
+  //     } else if (range[range.length - 1] !== "...") {
+  //       range.push("...");
+  //     }
+  //   }
 
-    return range;
-  };
+  //   return range;
+  // };
 
   const handlePageChange = (pageNum) => {
     if (typeof pageNum === "number" && pageNum >= 1 && pageNum <= totalPages) {
@@ -85,9 +86,7 @@ const ClaimList = () => {
     <>
       <style>
         {`
-          .p-6 {
-            padding: 1.5rem;
-          }
+          
           
           
           .text-2xl {
@@ -217,6 +216,14 @@ const ClaimList = () => {
           button:hover {
             opacity: 0.9;
           }
+            .container {
+    width: 100%;
+    margin: 10px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
           
           /* Table styles */
           table {
@@ -228,6 +235,22 @@ const ClaimList = () => {
             padding: 0.75rem;
             border: 1px solid rgb(236, 72, 153);
           }
+            .section {
+  margin-bottom: 20px;
+  background-color: #ffffff; /* Ensure white background */
+  padding: 10px ! important;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better focus */
+}
+            .section-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  padding: 10px;
+  color: #fff; /* White text */
+  background-color: #f72b8b; /* Pink background */
+  border-radius: 5px;
+}
           
           /* Responsive styles */
           @media (min-width: 768px) {
@@ -275,34 +298,33 @@ const ClaimList = () => {
       </style>
       <div className="content-wrapper">
         <div className="container mt-3">
-          <div className="p-6 mt-5">
-            <h1 className="text-2xl font-bold mb-4">
-              Micro Health Insurance Claim List
-            </h1>
+          <div>
+            <h2 className="title">Micro Health Insurance Claim List</h2>
 
             {/* Project Section */}
-            <div className="section card bg-pink-100 p-4 rounded-md mb-6">
-              <h2 className="text-lg font-semibold text-pink-700">Project</h2>
-              <select
-                className="w-full p-2 mt-2 border rounded-md"
-                value={selectedProject}
-                onChange={(e) => setSelectedProject(e.target.value)}
-              >
-                <option value="">Select Project</option>
-                {Array.isArray(projectData) &&
-                  projectData.map((item) => (
-                    <option key={item.id} value={item.projectCode}>
-                      {item.projectCode} - {item.projectTitle}
-                    </option>
-                  ))}
-              </select>
-            </div>
+            <div className="col-4">
+  <div className="card bg-light p-4 rounded mt-3">
+    <p className="fw-semibold">Project*</p>
+    <select
+      className="form-select"
+      value={selectedProject}
+      onChange={(e) => setSelectedProject(e.target.value)}
+    >
+      <option value="">Select Project</option>
+      {Array.isArray(projectData) &&
+        projectData.map((item) => (
+          <option key={item.id} value={item.projectCode}>
+            {item.projectCode} - {item.projectTitle}
+          </option>
+        ))}
+    </select>
+  </div>
+</div>
+
 
             {/* Date Range Section */}
             <div className="section card bg-pink-100 p-4 rounded-md mb-6">
-              <h2 className="text-lg font-semibold text-pink-700">
-                Others Info
-              </h2>
+              <div className="section-header">Others Info</div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                 <input
                   type="date"
@@ -336,7 +358,7 @@ const ClaimList = () => {
 
             {/* Claims Table Section */}
             <div className=" section card bg-pink-100 p-4 rounded-md">
-              <h2 className="text-lg font-semibold text-pink-700">
+              <h2 className="section-header">
                 Claim List
               </h2>
               <div className="d-flex justify-content-end mb-3">
@@ -444,43 +466,43 @@ const ClaimList = () => {
                 </table>
                 {claimData.length > 0 && (
                   <div className="mt-2 d-flex justify-content-between align-items-center">
-                  <div className="d-flex gap-2">
-                    {/* Previous Button */}
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="btn btn-outline-secondary btn-sm"
-                    >
-                      ◄
-                    </button>
-                
-                    {/* Current Page */}
-                    <button className="btn btn-outline-secondary btn-sm">
-                      {currentPage}
-                    </button>
-                
-                    {/* Next Page */}
-                    <button
+                    <div className="d-flex gap-2">
+                      {/* Previous Button */}
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="btn btn-outline-secondary btn-sm"
+                      >
+                        ◄
+                      </button>
+
+                      {/* Current Page */}
+                      <button className="btn btn-outline-secondary btn-sm">
+                        {currentPage}
+                      </button>
+
+                      {/* Next Page */}
+                      {/* <button
                       className="btn btn-outline-secondary btn-sm"
                       onClick={() => handlePageChange(currentPage + 1)}
                     >
                       {currentPage + 1}
-                    </button>
-                
-                    {/* Next Button */}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className="btn btn-outline-secondary btn-sm"
-                    >
-                      ►
-                    </button>
+                    </button> */}
+
+                      {/* Next Button */}
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="btn btn-outline-secondary btn-sm"
+                      >
+                        ►
+                      </button>
+                    </div>
+
+                    <div>
+                      Showing page {currentPage} of {totalPages}
+                    </div>
                   </div>
-                
-                  <div>
-                    Showing page {currentPage} of {totalPages}
-                  </div>
-                </div>
                 )}
               </div>
             </div>

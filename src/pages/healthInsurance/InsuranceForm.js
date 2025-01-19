@@ -12,8 +12,8 @@ import {
 } from "react-bootstrap";
 import { Camera, CheckCircle } from "lucide-react";
 import axios from "axios";
-import reportWebVitals from "./../reportWebVitals";
-import useGetCategory from "../hooks/useGetCategory";
+import reportWebVitals from "./../../reportWebVitals";
+import useGetCategory from "../../hooks/useGetCategory";
 import Swal from "sweetalert2";
 
 function InsuranceForm() {
@@ -859,23 +859,12 @@ function InsuranceForm() {
                   value={insuranceId}
                   readOnly
                 />
-                {/* <Button onClick={handleSetInsuranceId}>Generate Insurance ID</Button> */}
               </Form.Group>
             </Col>
-            {/* <Col md={6}>
-              <Form.Group>
-                <Form.Control
-                  type="hidden"
-                  name="ErpMemId"
-                  value="ERP123"
-                  readOnly
-                />
-              </Form.Group>
-            </Col> */}
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="text"
+                  type="hidden"
                   name="ProjectCode"
                   value={project_code}
                   readOnly
