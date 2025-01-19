@@ -1,6 +1,71 @@
-import React from 'react'
-
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 const RenewInsuranceForm = () => {
+  const [project,setProject] = useState([]);
+  const [member,setMember] = useState([]);
+  const [selectedMember,setSelectedMember] = useState("");
+  const [selectedMemberDetails,setSelectedMemberDetails] = useState("");
+  const [policy,setPolicy] = useState([]);
+  const [selectedPolicy, setSelectedPolicy] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  
+
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/projects")
+        setProject(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProject();
+  }, []);
+
+  useEffect(() => {
+    const fetchMember = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/client")
+        setMember(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchMember();
+  },[]);
+
+  useEffect(() => {
+    const selected = member.find((item) => item.account_number === selectedMember);
+    setSelectedMemberDetails(selected);
+  },[selectedMember,member]);
+
+  useEffect(() => {
+    const fetchMember = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/insurance/category")
+        setPolicy(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchMember();
+  },[]);
+
+  useEffect(() => {
+    // Add console.log to debug the values
+    console.log('selectedPolicy:', selectedPolicy);
+    console.log('policy:', policy);
+  
+    // Ensure policy is an array and selectedPolicy is a number
+    if (Array.isArray(policy) && selectedPolicy) {
+      const selected = policy.find((p) => p.insurance_product_id === Number(selectedPolicy));
+      console.log('selected:', selected);
+      setSelectedCategories(selected ? selected.category : []);
+    }
+  }, [selectedPolicy, policy]);
+
+  // console.log(selectedPolicy);
   return (
     <div>
       return (
@@ -296,11 +361,11 @@ body {
               <label>Project *</label>
               <select>
                 <option>Choose</option>
-                {/* {project.map((item, index) => (
+                {project.map((item, index) => (
                   <option key={index} value={item.id}>
                     {item.projectTitle}
                   </option>
-                ))} */}
+                ))}
               </select>
             </div>
           </div>
@@ -314,98 +379,113 @@ body {
                 <div className="search-box">
                   <input
                     type="text"
+                    name="orgmemno"
                     list="memberNumbers"
                     placeholder="Member Number"
+                    onChange={(e) => setSelectedMember(e.target.value)}
                   />
                   <datalist id="memberNumbers">
-                   
-                  </datalist>
-                </div>
-              </div>
-              <div className="form-group">
-                <label>ERP Member Number *</label>
-                <div className="search-box">
-                  <input
+                   {member.map((item, index) => {
+                    return (
+                      <option key={index} value={item?.account_number}>
+                        {item?.account_number}
+                      </option>
+                    );
+                     })}
+                    </datalist>
+                  </div>
+                  </div>
+                  <div className="form-group">
+                  <label>ERP Member Number *</label>
+                  <div className="search-box">
+                    <input
                     type="text"
                     list="memberNumbers"
                     placeholder="Member Number"
-                  />
-                  <datalist id="memberNumbers">
-                   
-                  </datalist>
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Member Category</label>
-                <div className="search-box">
-                  <input
+                    />
+                    <datalist id="memberNumbers">
+                     
+                    </datalist>
+                  </div>
+                  </div>
+                  <div className="form-group">
+                  <label>Member Category</label>
+                  <div className="search-box">
+                    <input
                     type="text"
                     list="memberNumbers"
                     placeholder="Member Number"
+                    />
+                    <datalist id="memberNumbers">
+                     
+                    </datalist>
+                  </div>
+                  </div>
+                  <div className="form-group">
+                  <label>Member Mobile Number</label>
+                  <input
+                    name="contact_number"
+                    type="text"
+                    value={selectedMemberDetails?.contact_number}
                   />
-                  <datalist id="memberNumbers">
-                   
-                  </datalist>
+                  </div>
+                  <div className="form-group">
+                  <label>Member Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={selectedMemberDetails?.name}
+                  />
+                  </div>
+
+                  <div className="form-group">
+                  <label>Age</label>
+                  <input 
+                    name="date_of_birth"
+                    type="text"
+                    value={selectedMemberDetails?.date_of_birth ? Math.floor((new Date() - new Date(selectedMemberDetails.date_of_birth).getTime()) / 3.15576e+10) : ""}
+                    readOnly
+                  />
+                  </div>
+                  <div className="form-group">
+                  <label>National ID</label>
+                  <input
+                    type="text"
+                    readOnly
+                  />
+                  </div>
                 </div>
-              </div>
-              <div className="form-group">
-                <label>Member Mobile Number</label>
-                <input
-                  type="text"
-                />
-              </div>
-              <div className="form-group">
-                <label>Member Name</label>
-                <input
-                  type="text"
-                />
-              </div>
+                </div>
 
-              
-              <div className="form-group">
-                <label>Age</label>
-                <input
-                  type="text"
-                  readOnly
-                />
-              </div>
-              <div className="form-group">
-                <label>National ID</label>
-                <input
-                  type="text"
-                  readOnly
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Incident Information Section */}
+                {/* Incident Information Section */}
           <div className="section">
             <div className="section-header">Insurance Information</div>
             <div className="form-grid">
               <div className="form-group">
                 <label>Policy ID</label>
-                <select >
+                <select onChange={(e) => setSelectedPolicy(e.target.value)}>
                   <option>Select Policy ID</option>
-                 
+                 {policy.map((item, index) => {
+                    return (
+                      <option key={index} value={item?.insurance_product_id}>
+                        {item?.policy_name}
+                      </option>
+                    );
+                  }
+                  )
+                 }
                 </select>
               </div>
               <div className="form-group">
-                <label>Select Policy No *</label>
-                <select
-              
-                  name="insurance_policy_no"
-                >
-                  <option>Select Policy Number</option>
-                  
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Category*</label>
+                <label>Select Policy Category *</label>
                 <select>
-                  <option>Select Policy No</option>
-                  
-                </select>
+                {selectedCategories.map((category) => (
+    <option key={category.id} value={category.id}>
+      {category.title}
+    </option>
+  ))}
+         
+        </select>
               </div>
              
               <div className="form-group">
