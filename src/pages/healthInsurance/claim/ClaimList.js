@@ -414,28 +414,29 @@ const ClaimList = () => {
                             {row?.status?.status_name}
                           </td>
                           <td className="border border-pink-500 p-2">
-                            {row.status_id !== 6 && row.status_id === 1 ? (
-                              <button
-                                className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
-                                onClick={() =>
-                                  navigate(`/claimFormPdf/${row.id}`, {
-                                    state: { row },
-                                  })
-                                }
-                              >
-                                Download
-                              </button>
+                            {row.status_id === 6  ? (
+                             
+                               <button
+                               className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
+                               onClick={() =>
+                                 navigate(`/settledPdf/${row.id}`, {
+                                   state: { row },
+                                 })
+                               }
+                             >
+                               Download
+                             </button>
                             ) : (
                               <button
-                                className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
-                                onClick={() =>
-                                  navigate(`/settledPdf/${row.id}`, {
-                                    state: { row },
-                                  })
-                                }
-                              >
-                                Download
-                              </button>
+                              className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
+                              onClick={() =>
+                                navigate(`/claimFormPdf/${row.id}`, {
+                                  state: { row },
+                                })
+                              }
+                            >
+                              Download
+                            </button>
                             )}
                           </td>
                           <td className="border border-pink-500 p-2">

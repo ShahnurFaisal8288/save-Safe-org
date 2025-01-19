@@ -46,7 +46,7 @@ const Navbar = () => {
         <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a className="navbar-brand brand-logo" href="index-2.html">
-                    <h5 className="logo-dark" style={{color:"white"}}>Save Safe</h5>
+                    <h5 className="logo-dark" style={{color:"white"}}>SafeSave</h5>
                     {/* <h5 className="logo-light">Save Safe</h5> */}
                 </a>
                 <a className="navbar-brand brand-logo-mini" href="index-2.html"><img src="https://images.app.goo.gl/Y331S72X99K5Maqi8" alt="logo" /></a>

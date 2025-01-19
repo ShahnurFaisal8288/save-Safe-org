@@ -37,7 +37,7 @@ import ClosingEarnings from "../pages/ClosingEarnings";
 import BusinessRules from "../pages/BusinessRules";
 import PassbookRegister from "../pages/PassbookRegister";
 import ManagerPalm from "../pages/ManagerPalm";
-import SettledStatus from "../pages/settle/SettledStatus";
+import SettledStatus from "../pages/healthInsurance/settle/SettledStatus";
 import PolicyReport from "../pages/healthInsurance/policyReport/PolicyReport";
 import SettledPdf from "../pages/healthInsurance/settle/SettledPdf";
 import RenewInsuranceForm from "../pages/RenewInsuranceForm";
