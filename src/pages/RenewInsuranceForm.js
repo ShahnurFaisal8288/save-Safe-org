@@ -31,6 +31,8 @@ const RenewInsuranceForm = () => {
   const [nomineeRelationId, setNomineeRelationId] = useState("");
   const [nomineePhone, setNomineePhone] = useState("");
   const [premiumAmount, setPremiumAmount] = useState("");
+  const [frontImagePreview, setFrontImagePreview] = useState(null);
+  const [backImagePreview, setBackImagePreview] = useState(null);
 
   console.log(selectedCategory);
   console.log(selectedPolicy);
@@ -324,7 +326,35 @@ const RenewInsuranceForm = () => {
     }
   }, [selectedCategory, selectedPolicy, selectedMember]);
 
-  console.log(filterData);
+
+
+  const handleFrontImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFrontImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFrontImagePreview(null);
+    }
+  };
+  
+  const handleBackImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBackImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setBackImagePreview(null);
+    }
+  };
+
+  // console.log(filterData);
 
   return (
     <div>
@@ -585,11 +615,11 @@ body {
           <div className="container mt-3">
             <h2 className="title">Micro Health Insurance Renew Setup</h2>
             <form onSubmit={handleSubmitForm}>
-              <div className="form-group">
+              <div>
                 {/* <label>Mapped Health Insurance ID</label> */}
                 <input type="hidden" name="OrgNo" value="null" readOnly />
               </div>
-              <div className="form-group">
+              <div>
                 {/* <label>Mapped Health Insurance ID</label> */}
                 <input
                   type="hidden"
@@ -598,7 +628,7 @@ body {
                   readOnly
                 />
               </div>
-              <div className="form-group">
+              <div>
                 {/* <label>Mapped Health Insurance ID</label> */}
                 <input
                   type="hidden"
@@ -607,7 +637,7 @@ body {
                   readOnly
                 />
               </div>
-              <div className="form-group">
+              <div>
                 {/* <label>Enrollment ID</label> */}
                 <input
                   type="hidden"
@@ -617,16 +647,15 @@ body {
                   readOnly
                 />
               </div>
-              <div className="form-group">
+              <div>
                 {/* <label>Enrollment ID</label> */}
                 <input type="hidden" name="AnyDisease" value="1" readOnly />
               </div>
-              <div className="form-group">
+              <div>
                 {/* <label>Enrollment ID</label> */}
                 <input type="hidden" name="InsuranceType" value="2" readOnly />
               </div>
               <div className="form-group">
-                <label>Premium Amount Total</label>
                 <input
                   name="PremiumAmount"
                   type="hidden"
@@ -914,37 +943,61 @@ body {
                   </div>
 
                   <div className="form-group">
-                    <label>Member's National ID *</label>
-                    <div className="upload-grid">
-                      <div className="upload-box">
-                        <label className="upload-label" htmlFor="frontSide">
-                          <div className="file-placeholder">Front Side</div>
-                        </label>
-                        <input
-                          name="nomineeImageFront"
-                          type="file"
-                          id="frontSide"
-                          className="file-input"
-                          accept=".jpg,.jpeg,.png,.pdf"
-                        />
-                      </div>
-                      <div className="upload-box">
-                        <label className="upload-label" htmlFor="backSide">
-                          <div className="file-placeholder">Back Side</div>
-                        </label>
-                        <input
-                          name="nomineeImageBack"
-                          type="file"
-                          id="backSide"
-                          className="file-input"
-                          accept=".jpg,.jpeg,.png,.pdf"
-                        />
-                      </div>
-                    </div>
-                    <small className="error-text">
-                      This field is required.
-                    </small>
-                  </div>
+  <label>Member's National ID *</label>
+  <div className="upload-grid">
+    <div className="upload-box">
+      <label className="upload-label" htmlFor="frontSide">
+        <div className="file-placeholder">Front Side</div>
+      </label>
+      <input
+        name="nomineeImageFront"
+        type="file"
+        id="frontSide"
+        className="file-input"
+        accept=".jpg,.jpeg,.png,.pdf"
+        onChange={handleFrontImageChange}
+      />
+      {frontImagePreview && (
+        <div className="preview-container">
+          <img
+            src={frontImagePreview}
+            alt="Front ID Preview"
+            className="preview-image"
+            height="100px"
+            width="100px"
+          />
+        </div>
+      )}
+    </div>
+    <div className="upload-box">
+      <label className="upload-label" htmlFor="backSide">
+        <div className="file-placeholder">Back Side</div>
+      </label>
+      <input
+        name="nomineeImageBack"
+        type="file"
+        id="backSide"
+        className="file-input"
+        accept=".jpg,.jpeg,.png,.pdf"
+        onChange={handleBackImageChange}
+      />
+      {backImagePreview && (
+        <div className="preview-container">
+          <img
+            src={backImagePreview}
+            alt="Back ID Preview"
+            className="preview-image"
+            height="100px"
+            width="100px"
+          />
+        </div>
+      )}
+    </div>
+  </div>
+  <small className="error-text">
+    This field is required.
+  </small>
+</div>
                 </div>
 
                 {/* Dynamic Document Upload Section */}
