@@ -467,14 +467,9 @@ function InsuranceForm() {
 
     setBranchCodeLocal(setBranchCodeId);
   }, []);
-  //branch no
-  // useEffect(() => {
-  //   const branch_code = localStorage.getItem("branch_code");
 
-  //   setBranchCode(branch_code);
-  // }, []);
   useEffect(() => {
-    const branch_code = localStorage.getItem("id");
+    const branch_code = localStorage.getItem("branch_id");
 
     // Add null/empty checks
     if (branch_code && branch_code !== "null") {
@@ -487,7 +482,7 @@ function InsuranceForm() {
   const handleSetBranchCode = (code) => {
     if (code) {
       localStorage.setItem("branch_code", code);
-      setBranchCode(code);
+      setBranchCode(code); 
     }
   };
 

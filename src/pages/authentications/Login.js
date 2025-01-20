@@ -39,7 +39,7 @@ function Login() {
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem(
-          "id",
+          "branch_id",
           response.data.collector.branch.id
         );
         localStorage.setItem(
