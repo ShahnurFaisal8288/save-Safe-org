@@ -866,24 +866,24 @@ body {
               <div className="section">
                 <div className="section-header">Nominee Information</div>
                 <div className="form-grid">
-                  <div className="form-group">
-                    <label>Name</label>
-                    <input
-                      type="text"
-                      value={nomineeName}
-                      name="NomineeName"
-                      onChange={(e) => setNomineeName(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Date Of Birth</label>
-                    <input
-                      type="date"
-                      value={nomineeDOB}
-                      name="NomineeDOB"
-                      onChange={(e) => setNomineeDOB(e.target.value)}
-                    />
-                  </div>
+                <div className="form-group">
+  <label>Name</label>
+  <input
+    type="text"
+    value={nomineeName}
+    name="NomineeName"
+    onChange={(e) => setNomineeName(e.target.value)}
+  />
+</div>
+<div className="form-group">
+  <label>Date Of Birth</label>
+  <input
+    type="date"
+    value={nomineeDOB}
+    name="NomineeDOB"
+    onChange={(e) => setNomineeDOB(e.target.value)}
+  />
+</div>
 
                   <div className="form-group">
                     <label>Relationship</label>
@@ -897,41 +897,41 @@ body {
                     <input type="text" value={nomineeRelation} readOnly />
                   </div>
                   <div className="form-group">
-                    <label>National ID</label>
-                    <input
-                      type="text"
-                      name="NomineeIDNumber"
-                      value={nomineeIDType === 2 ? nomineeIDNumber : ""}
-                      onChange={(e) => handleInputChange(e, "nationalID")}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Birth Certificate Number</label>
-                    <input
-                      type="text"
-                      name="NomineeIDNumber"
-                      value={nomineeIDType === 1 ? nomineeIDNumber : ""}
-                      onChange={(e) => handleInputChange(e, "birthCertificate")}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Passport Number</label>
-                    <input
-                      type="text"
-                      name="NomineeIDNumber"
-                      value={nomineeIDType === 3 ? nomineeIDNumber : ""}
-                      onChange={(e) => handleInputChange(e, "passport")}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Smart Card ID</label>
-                    <input
-                      type="text"
-                      name="NomineeIDNumber"
-                      value={nomineeIDType === 5 ? nomineeIDNumber : ""}
-                      onChange={(e) => handleInputChange(e, "smartCard")}
-                    />
-                  </div>
+  <label>National ID</label>
+  <input
+    type="text"
+    name="NomineeIDNumber"
+    value={nomineeIDType === 2 ? nomineeIDNumber : ""}
+    onChange={(e) => handleInputChange(e, "nationalID")}
+  />
+</div>
+<div className="form-group">
+  <label>Birth Certificate Number</label>
+  <input
+    type="text"
+    name="NomineeIDNumber"
+    value={nomineeIDType === 1 ? nomineeIDNumber : ""}
+    onChange={(e) => handleInputChange(e, "birthCertificate")}
+  />
+</div>
+<div className="form-group">
+  <label>Passport Number</label>
+  <input
+    type="text"
+    name="NomineeIDNumber"
+    value={nomineeIDType === 3 ? nomineeIDNumber : ""}
+    onChange={(e) => handleInputChange(e, "passport")}
+  />
+</div>
+<div className="form-group">
+  <label>Smart Card ID</label>
+  <input
+    type="text"
+    name="NomineeIDNumber"
+    value={nomineeIDType === 5 ? nomineeIDNumber : ""}
+    onChange={(e) => handleInputChange(e, "smartCard")}
+  />
+</div>
                   <div className="form-group">
                     <label>Phone</label>
                     <input
