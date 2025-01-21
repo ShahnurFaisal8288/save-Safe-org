@@ -16,7 +16,7 @@ const ClaimFormPdf = () => {
     const fetchPostData = async () => {
       try {
         const response = await axiosInstance.get(
-          `health_insurance/claim/${id}`
+          `health_insurance/claim/${id}`,
         );
 
         setData(response.data); // Set data

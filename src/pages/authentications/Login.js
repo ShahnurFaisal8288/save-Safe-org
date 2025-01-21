@@ -102,7 +102,7 @@ function Login() {
             <div className="col-lg-4 mx-auto">
               <div className="auth-form-light text-left p-5">
                 <div className="brand-logo">
-                <h2 css={{ color: "teal"}}>Save Safe</h2>
+                <h2 css={{ color: "teal"}}>SafeSave</h2>
                 </div>
                 <h4>Hello! let's get started</h4>
                 <h6 className="font-weight-light">Sign in to continue.</h6>
