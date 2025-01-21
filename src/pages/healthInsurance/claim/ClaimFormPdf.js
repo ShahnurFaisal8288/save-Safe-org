@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import axios from "axios";
+import axiosInstance from "../../../components/axiosInstance";
 const ClaimFormPdf = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
@@ -14,8 +15,8 @@ const ClaimFormPdf = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/health_insurance/claim/${id}`
+        const response = await axiosInstance.get(
+          `health_insurance/claim/${id}`
         );
 
         setData(response.data); // Set data

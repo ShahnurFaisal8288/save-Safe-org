@@ -4,6 +4,7 @@ import jsPDF from 'jspdf';
 import '../../InsuranceFormPdf.css';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import axiosInstance from '../../components/axiosInstance';
 
 const InsuranceFormPdf = () => {
   const { id } = useParams();
@@ -14,8 +15,8 @@ const InsuranceFormPdf = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/health_insurance/${id}`
+        const response = await axiosInstance.get(
+          `health_insurance/${id}`
         );
         setData(response.data);
         console.log("responseData:",response.data)

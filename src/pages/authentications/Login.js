@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Sidebar from "../../components/Sidebar";
+import axiosInstance from "../../components/axiosInstance";
 
 function Login() {
   // const [sidebarData, setSidebarData] = useState([]);
@@ -25,8 +26,8 @@ function Login() {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
+      const response = await axiosInstance.post(
+        "auth/login",
         {
           email: data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
           phone: !data.emailOrPhone.includes("@") ? data.emailOrPhone : null,

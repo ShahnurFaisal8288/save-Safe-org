@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import axiosInstance from "../../components/axiosInstance";
 
 const ApproveStatus = () => {
   const { id } = useParams(); // Get ID from the URL params
@@ -15,8 +16,8 @@ const ApproveStatus = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/health_insurance/${id}`
+        const response = await axiosInstance.get(
+          `health_insurance/${id}`
         );
         setData(response.data); // Set data
         setLoading(false); // Stop loading
@@ -76,8 +77,8 @@ const ApproveStatus = () => {
       setRemarksError(""); // Reset error message
     }
     try {
-      await axios.put(
-        `http://localhost:8000/api/health_insurance/update/${id}`,
+      await axiosInstance.put(
+        `health_insurance/update/${id}`,
         { status, remarks: status === 3 ? remarks : undefined }
       );
       if (status === 3 && !remarks) {

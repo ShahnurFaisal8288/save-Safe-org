@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
+import axiosInstance from '../../../components/axiosInstance';
 
 const SettledStatus = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const SettledStatus = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:8000/api/health_insurance/claim/${id}`);
+      const response = await axiosInstance.get(`health_insurance/claim/${id}`);
       setData(response.data);
       console.log(response.data);
     }
@@ -21,7 +22,7 @@ const SettledStatus = () => {
 
   const handleAction = async (status_id) => {
     try {
-      await axios.put(`http://localhost:8000/api/claim/update/${id}`, {
+      await axiosInstance.put(`claim/update/${id}`, {
         status_id: status_id,
       });
       navigate("/claimList");

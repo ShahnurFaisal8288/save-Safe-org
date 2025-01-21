@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import { Button } from "react-bootstrap";
 import ExcelExportButton from "./ExcelExportButton";
+import axiosInstance from "../../../components/axiosInstance";
 // import { Button } from '@/components/ui/button';
 // import ExcelExportButton from '@/components/ExcelExportButton';
 
@@ -21,7 +22,7 @@ const PolicyReport = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/projects`);
+        const response = await axiosInstance.get(`projects`);
         setProject(response.data);
       } catch (error) {
         console.error("Error fetching account number:", error.message);
@@ -33,8 +34,8 @@ const PolicyReport = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/insurance/category`
+        const response = await axiosInstance.get(
+          `insurance/category`
         );
         setPolicy(response.data);
       } catch (error) {
@@ -46,7 +47,7 @@ const PolicyReport = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/branch`);
+        const response = await axiosInstance.get(`branch`);
         setBranch(response.data);
         console.log(response.data);
       } catch (error) {
@@ -72,8 +73,8 @@ const PolicyReport = () => {
 // console.log(selectedPolicy);
   const handleSearch = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/policy/information/health_insurance/report?branch_name=${selectedBranch}&projectCode=${selectedProject}&created_from=${fromDate}&created_to=${toDate}`
+      const response = await axiosInstance.get(
+        `policy/information/health_insurance/report?branch_name=${selectedBranch}&projectCode=${selectedProject}&policy_name=${selectedPolicy}&title=${selectedCategory}&created_from=${fromDate}&created_to=${toDate}`
       );
       setPolicyWiseData(response.data.data || []);
       console.log("Search results:", response.data);
@@ -90,6 +91,10 @@ const PolicyReport = () => {
     XLSX.writeFile(workbook, "policy_report.xlsx");
   };
   //excel export
+
+
+  console.log(selectedPolicy)
+  console.log(selectedCategory)
 
   return (
     <>

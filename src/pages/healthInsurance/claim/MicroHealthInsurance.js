@@ -4,6 +4,7 @@ import "../../../MicroHealthInsurance.css";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../../components/axiosInstance";
 
 const MicroHealthInsurance = () => {
   const navigate = useNavigate();
@@ -28,20 +29,12 @@ const MicroHealthInsurance = () => {
   const [backImagePreview, setBackImagePreview] = useState(null);
   const [claimAmount, setClaimAmount] = useState();
 
-  //  useEffect(() => {
-  //   const fetchProjectName = async () => {
-  //     const projectResponse = await axios.get(
-  //       "http://localhost:8000/api/projects"
-  //     );
-  //     setProject(projectResponse.data);
-  //     };
-  //     fetchProjectName();
-  //   }, []);
+  
 
   useEffect(() => {
     const fetchProjectNo = async () => {
-      const projectResponse = await axios.get(
-        "http://localhost:8000/api/projects"
+      const projectResponse = await axiosInstance.get(
+        "projects"
       );
       setProject(projectResponse.data);
       console.log("memberNoResponse :", projectResponse);
@@ -50,8 +43,8 @@ const MicroHealthInsurance = () => {
   }, []);
   useEffect(() => {
     const fetchMemberNo = async () => {
-      const memberNoResponse = await axios.get(
-        "http://localhost:8000/api/client"
+      const memberNoResponse = await axiosInstance.get(
+        "client"
       );
       setMemberNo(memberNoResponse.data);
       console.log("memberNoResponse :", memberNoResponse);
@@ -60,8 +53,8 @@ const MicroHealthInsurance = () => {
   }, []);
   useEffect(() => {
     const fetchTreatmentType = async () => {
-      const treatmentResponse = await axios.get(
-        "http://localhost:8000/api/treatmenttypes"
+      const treatmentResponse = await axiosInstance.get(
+        "treatmenttypes"
       );
       setTreatmentType(treatmentResponse.data);
       console.log("treatmentResponse :", treatmentResponse);
@@ -132,8 +125,8 @@ const MicroHealthInsurance = () => {
 
       try {
         // Pass the account_number as a query parameter in the API request
-        const productResponse = await axios.get(
-          `http://localhost:8000/api/health_insurances/account_number?account_number=${accountNumber}`
+        const productResponse = await axiosInstance.get(
+          `health_insurances/account_number?account_number=${accountNumber}`
         );
 
         // Set the response data to the product state
@@ -206,11 +199,11 @@ const MicroHealthInsurance = () => {
 
     if (treatmentType && insurancePolicyNo) {
       setSelectedTreatment(treatmentTypeId); // Store only `id` in state
-      const url = `http://localhost:8000/api/searchTreatment/typename?type_name=${treatmentType}&insurance_policy_id=${selectedCategoryId}&insurance_policy_no=${insurancePolicyNo}`;
+      const url = `searchTreatment/typename?type_name=${treatmentType}&insurance_policy_id=${selectedCategoryId}&insurance_policy_no=${insurancePolicyNo}`;
       console.log("Request URL:", url);
 
       try {
-        const response = await axios.get(url);
+        const response = await axiosInstance.get(url);
 
         if (response.status === 200) {
           const remainingSumInsured = response.data;
@@ -278,8 +271,8 @@ const MicroHealthInsurance = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/claim/store",
+      const response = await axiosInstance.post(
+        "claim/store",
         formData,
         {
           headers: {

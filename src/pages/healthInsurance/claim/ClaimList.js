@@ -5,6 +5,7 @@ import * as XLSX from "xlsx";
 // import { Button } from "react-bootstrap";
 // import ExcelClaimButton from "./ExcelClaimButton";
 import ExcelClaimButton from "./ExcelClaimButton";
+import axiosInstance from "../../../components/axiosInstance";
 
 const ClaimList = () => {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ const ClaimList = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/projectCode/claim?projectCode=${selectedProject}&created_from=${fromDate}&created_to=${toDate}`
+      const response = await axiosInstance.get(
+        `projectCode/claim?projectCode=${selectedProject}&created_from=${fromDate}&created_to=${toDate}`
       );
       setClaimData(response.data.data || []);
       console.log("Search results:", response.data);
@@ -47,7 +48,7 @@ const ClaimList = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/projects");
+        const response = await axiosInstance.get("projects");
         setProjectData(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Error fetching projects:", error);

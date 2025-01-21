@@ -15,6 +15,7 @@ import axios from "axios";
 import reportWebVitals from "./../../reportWebVitals";
 import useGetCategory from "../../hooks/useGetCategory";
 import Swal from "sweetalert2";
+import axiosInstance from "../../components/axiosInstance";
 
 function InsuranceForm() {
   const navigate = useNavigate();
@@ -417,8 +418,8 @@ function InsuranceForm() {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
 
-      axios
-        .post("http://localhost:8000/api/health_insurance/store", formData, {
+      axiosInstance
+        .post("health_insurance/store", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -490,8 +491,8 @@ function InsuranceForm() {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/collector/${id}/client/information`
+        const response = await axiosInstance.get(
+          `collector/${id}/client/information`
         );
         // console.log("member_name:", response.data); // Log the response
       } catch (error) {
@@ -515,7 +516,7 @@ function InsuranceForm() {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/cardtype");
+        const response = await axiosInstance.get("cardtype");
         setidType(response.data);
         // console.log("response_data", response.data);
       } catch (error) {
@@ -528,8 +529,8 @@ function InsuranceForm() {
 
   useEffect(() => {
     const fetchPostData = async () => {
-      const response = await axios.get(
-        "http://localhost:8000/api/relationdata"
+      const response = await axiosInstance.get(
+        "relationdata"
       );
       setRelation(response.data);
     };

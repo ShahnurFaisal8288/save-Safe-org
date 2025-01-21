@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import "../../InsuranceList.css";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../components/axiosInstance";
 
 const InsuranceList = () => {
   // All useState start
@@ -36,8 +37,8 @@ const InsuranceList = () => {
   const fetchData = async () => {
     try {
       // Fetch projects
-      const projectResponse = await axios.get(
-        "http://localhost:8000/api/projects"
+      const projectResponse = await axiosInstance.get(
+        "projects"
       );
       if (projectResponse.data && Array.isArray(projectResponse.data)) {
         setProject(projectResponse.data);
@@ -46,8 +47,8 @@ const InsuranceList = () => {
       }
 
       // Fetch collectors
-      const poResponse = await axios.get(
-        "http://localhost:8000/api/collectors"
+      const poResponse = await axiosInstance.get(
+        "collectors"
       );
       if (poResponse.data) {
         setPoNo(poResponse.data);
@@ -56,8 +57,8 @@ const InsuranceList = () => {
       }
 
       // Fetch health insurance list
-      const initialData = await axios.get(
-        "http://localhost:8000/api/health_insurance/list"
+      const initialData = await axiosInstance.get(
+        "health_insurance/list"
       );
       if (initialData.data) {
         setFilteredData(initialData.data);
@@ -78,8 +79,8 @@ const InsuranceList = () => {
     const fetchMembers = async () => {
       try {
         if (selectedPo) {
-          const response = await axios.get(
-            `http://localhost:8000/api/collector/${selectedPo}/client/information`
+          const response = await axiosInstance.get(
+            `collector/${selectedPo}/client/information`
           );
           setMemberName(response.data || []);
         }
@@ -138,8 +139,8 @@ const InsuranceList = () => {
     };
 
     try {
-      const response = await axios.get(
-        "http://localhost:8000/api/health_insurance/list/search",
+      const response = await axiosInstance.get(
+        "health_insurance/list/search",
         {
           params: filterParams,
         }

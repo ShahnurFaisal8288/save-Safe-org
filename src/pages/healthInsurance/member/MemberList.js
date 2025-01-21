@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import "../../../index.css";
+import axiosInstance from "../../../components/axiosInstance";
 
 const buttonStyle = {
   color: "white",
@@ -27,7 +28,7 @@ const MemberList = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/client");
+        const response = await axiosInstance.get("client");
 
         // Check if the response contains the data array
         if (response.data && Array.isArray(response.data)) {
