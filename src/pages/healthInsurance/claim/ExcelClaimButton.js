@@ -3,7 +3,10 @@ import { Button } from 'react-bootstrap';
 import * as XLSX from 'xlsx';
 
 const ExcelExportButton = ({ claimData }) => {
-  
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+  };
   const handleExport = () => {
     // Create a new workbook
     const wb = XLSX.utils.book_new();
@@ -62,9 +65,9 @@ const ExcelExportButton = ({ claimData }) => {
           item.region_name || '',
           item.division_name || '',
           item.healthInsurance?.project?.projectTitle || '',
-          item.healthInsurance?.created_at || '',
-          item.date_of_incident || '',
-          item.date_of_incident || '',
+          formatDate(item.healthInsurance?.created_at) || '',
+          formatDate(item.date_of_incident) || '',
+          formatDate(item.date_of_incident) || '',
           item.InsurancePolicy.title || '',
           item.InsurancePolicy?.policy_name || '',
           item.treatmentType?.type_name || '',

@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import "../../InsuranceList.css";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../components/axiosInstance";
+import ExcelEnrolment from "./ExcelEnrolment";
 
 const InsuranceList = () => {
   // All useState start
@@ -183,7 +184,7 @@ const InsuranceList = () => {
     }
   };
 
-  // console.log("selectedPo: ", selectedPo);
+  console.log("currentData: ", currentData);
   return (
     <>
       <style>
@@ -386,6 +387,7 @@ const InsuranceList = () => {
       <div className="content-wrapper">
         <div className="container mt-3">
           <h2 className="title">Health Insurance List</h2>
+        
 
           {/* Project Selection */}
           <div className="section" style={{ marginTop: "50px" }}>
@@ -517,6 +519,9 @@ const InsuranceList = () => {
           {/* Enrollment List */}
           <div className="section card">
             <div className="section-title">Enrollment List</div>
+            <div className="d-flex justify-content-end mb-3">
+                <ExcelEnrolment currentData={currentData} />
+              </div>
             <table className="table">
               <thead>
                 <tr>
@@ -544,9 +549,9 @@ const InsuranceList = () => {
                   <tr key={index}>
                     <td>{item?.enrolment_id}</td>
                     <td>{item?.created_at}</td>
-                    <td>{item?.client.name}</td>
-                    <td>{item?.policy_names}</td>
-                    <td>{item?.statuses}</td>
+                    <td>{item?.clients?.name}</td>
+                    <td>{item?.health_configurations?.policy_name}</td>
+                    <td>{item?.statuses?.status_name}</td>
                     <td>
                       <button
                         className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
@@ -597,12 +602,12 @@ const InsuranceList = () => {
                 </button>
             
                 {/* Next Page */}
-                {/* <button
+                <button
                   className="btn btn-outline-secondary btn-sm"
                   onClick={() => handlePageChange(currentPage + 1)}
                 >
                   {currentPage + 1}
-                </button> */}
+                </button>
             
                 {/* Next Button */}
                 <button

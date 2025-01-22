@@ -13,6 +13,10 @@ const ExcelExportButton = ({
   toDate,
   vo
 }) => {
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+  };
   const handleExport = () => {
     // Create a new workbook
     const wb = XLSX.utils.book_new();
@@ -21,7 +25,7 @@ const ExcelExportButton = ({
     const data = [
       ['', { t: 's', v: '', l: { Target: '/images/Picture3.png', Tooltip: 'BRAC Logo' } }, '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       ['', '', 'Nirvabona Health Insurance Policy Information Report', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-      ['', '', `From ${fromDate || 'DD-MM-YYYY'} To ${toDate || 'DD-MM-YYYY'}`, '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', `From ${formatDate(fromDate) || 'DD-MM-YYYY'} To ${formatDate(toDate) || 'DD-MM-YYYY'}`, '', '', '', '', '', '', '', '', '', '', '', '', ''],
       [''],
       ['', 'Project:', selectedProject, '', '', '', '', '', '', '', '', '', '', '', '', ''],
       ['', 'Branch:', selectedBranch, '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -47,8 +51,8 @@ const ExcelExportButton = ({
           item?.nominee_card_id || '',
           item?.relationships?.data_name || '',
           item?.insurance_tenure || '',
-          item?.created_at || '',
-          new Date(item?.created_at ? new Date(item.created_at).setMonth(new Date(item.created_at).getMonth() + 12) : '').toISOString().slice(0, 10),
+          formatDate(item?.created_at) || '',
+          new Date(formatDate(item?.created_at) ? new Date(item.created_at).setMonth(new Date(item.created_at).getMonth() + 12) : '').toISOString().slice(0, 10),
           item?.premium_amnt || '',
           item?.total_claim_amount || '',
           item?.statuses?.status_name || ''

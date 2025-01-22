@@ -79,6 +79,12 @@ const MemberList = () => {
     }
   }, [sortConfig, filteredData]);
 
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+  };
+
+
   // Pagination calculations
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -86,6 +92,9 @@ const MemberList = () => {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
+
 
   return (
     <div className="content-wrapper">
@@ -140,7 +149,7 @@ const MemberList = () => {
                 <tr key={index}>
                   <td>{item.name}</td>
                   <td>{item.sex}</td>
-                  <td>{item.date_of_birth}</td>
+                  <td>{formatDate(item.date_of_birth)}</td>
                   <td>{item.project_code}</td>
                   <button
                     style={buttonStyle}

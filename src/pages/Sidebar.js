@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import axiosInstance from "../components/axiosInstance";
 
 function Sidebar() {
   const [parentSidebar, setParentSidebar] = useState([]);
@@ -10,7 +11,7 @@ function Sidebar() {
 
   useEffect(() => {
     const fetchParentSidebars = async () => {
-      const response = await axios.get("http://localhost:8000/api/sidebar");
+      const response = await axiosInstance.get("sidebar");
       setParentSidebar(response.data);
       console.log(response.data);
     };

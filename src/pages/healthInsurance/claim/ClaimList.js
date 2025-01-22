@@ -83,6 +83,12 @@ const ClaimList = () => {
       setCurrentPage(pageNum);
     }
   };
+
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+  };
+
   return (
     <>
       <style>
@@ -406,7 +412,7 @@ const ClaimList = () => {
                             {row.treatmentType?.type_name}
                           </td>
                           <td className="border border-pink-500 p-2">
-                            {row.date_of_incident}
+                            {formatDate(row.date_of_incident)}
                           </td>
                           <td className="border border-pink-500 p-2">
                             {row.claim_amount}
@@ -484,12 +490,12 @@ const ClaimList = () => {
                       </button>
 
                       {/* Next Page */}
-                      {/* <button
+                      <button
                       className="btn btn-outline-secondary btn-sm"
                       onClick={() => handlePageChange(currentPage + 1)}
                     >
                       {currentPage + 1}
-                    </button> */}
+                    </button>
 
                       {/* Next Button */}
                       <button

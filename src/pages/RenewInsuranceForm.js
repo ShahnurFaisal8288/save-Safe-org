@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import axiosInstance from "../components/axiosInstance";
 const RenewInsuranceForm = () => {
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ const RenewInsuranceForm = () => {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/projects");
+        const response = await axiosInstance.get("projects");
         setProject(response.data);
       } catch (error) {
         console.error(error);
@@ -53,7 +54,7 @@ const RenewInsuranceForm = () => {
   useEffect(() => {
     const fetchMember = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/client");
+        const response = await axiosInstance.get("client");
         setMember(response.data);
       } catch (error) {
         console.error(error);
@@ -72,8 +73,8 @@ const RenewInsuranceForm = () => {
   useEffect(() => {
     const fetchMember = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8000/api/insurance/category"
+        const response = await axiosInstance.get(
+          "insurance/category"
         );
         setPolicy(response.data);
       } catch (error) {
@@ -259,8 +260,8 @@ const RenewInsuranceForm = () => {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
 
-      axios
-        .post("http://localhost:8000/api/health_insurance/store", formData, {
+      axiosInstance
+        .post("health_insurance/store", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -295,8 +296,8 @@ const RenewInsuranceForm = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/health_insurance/renew?category_id=${selectedCategory}&insurance_policy_id=${selectedPolicy}&orgmemno=${selectedMember}`
+      const response = await axiosInstance.get(
+        `health_insurance/renew?category_id=${selectedCategory}&insurance_policy_id=${selectedPolicy}&orgmemno=${selectedMember}`
       );
       const data = response.data;
       console.log("API Response Data:", data); // Log the API response data

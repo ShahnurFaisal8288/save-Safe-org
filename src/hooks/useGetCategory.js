@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../components/axiosInstance";
 
 const useGetCategory = (id) => {
   const {
@@ -10,8 +11,12 @@ const useGetCategory = (id) => {
   } = useQuery({
     queryKey: ["category"],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:8000/api/insurance/category`);
-      return res.json();
+      const response = await axiosInstance.get('insurance/category', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      return response.data; // Use response.data instead of response.json()
     },
   });
   return [category, refetch];
