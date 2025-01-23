@@ -60,6 +60,10 @@ function Login() {
           response.data.user.email
         );
         localStorage.setItem(
+          "user_id",
+          response.data.user.id
+        );
+        localStorage.setItem(
           "permissions",
           JSON.stringify(response.data.collector.permissions)
         );

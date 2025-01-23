@@ -39,8 +39,7 @@ function Sidebar() {
     };
 
     try {
-      axios
-        .post("http://localhost:8000/api/sidebar/store", formData, {
+      axiosInstance.post("sidebar/store", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

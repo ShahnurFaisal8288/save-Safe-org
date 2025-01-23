@@ -30,7 +30,7 @@ import LTSLoneEntry from "../pages/LTSLoneEntry";
 import ClaimList from "../pages/healthInsurance/claim/ClaimList";
 import ClaimFormPdf from "../pages/healthInsurance/claim/ClaimFormPdf";
 import OfficeTransactions from "../pages/OfficeTransactions";
-import LeaveEntry from "../pages/LeaveEntry";
+// import LeaveEntry from "../pages/LeaveEntry";
 import HandHeld from "../pages/HandHeld";
 import Session from "../pages/Session";
 import ClosingEarnings from "../pages/ClosingEarnings";
@@ -41,6 +41,8 @@ import SettledStatus from "../pages/healthInsurance/settle/SettledStatus";
 import PolicyReport from "../pages/healthInsurance/policyReport/PolicyReport";
 import SettledPdf from "../pages/healthInsurance/settle/SettledPdf";
 import RenewInsuranceForm from "../pages/RenewInsuranceForm";
+import LeaveEntry from "../pages/leaveEntry/LeaveEntry";
+import LeaveEntryList from "../pages/leaveEntry/LeaveEntryList";
 
 
 
@@ -255,6 +257,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/leave-entry">
           <LeaveEntry />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/leave-entry-list", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/leave-entry">
+          <LeaveEntryList />
           </PrivateRoute>
         ),
       },
