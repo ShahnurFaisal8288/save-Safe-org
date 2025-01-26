@@ -17,6 +17,17 @@ const ExcelExportButton = ({
     const options = { day: '2-digit', month: 'short', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-GB', options);
   };
+  const formatDates = (dateString) => {
+    if (!dateString) return '';
+    
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    const formattedDate = new Date(dateString).toLocaleDateString('en-GB', options);
+    
+    const date = new Date(formattedDate);
+    date.setMonth(date.getMonth() + 12);
+    
+    return date.toISOString().slice(0, 10);
+ };
   const handleExport = () => {
     // Create a new workbook
     const wb = XLSX.utils.book_new();
@@ -52,7 +63,7 @@ const ExcelExportButton = ({
           item?.relationships?.data_name || '',
           item?.insurance_tenure || '',
           formatDate(item?.created_at) || '',
-          new Date(formatDate(item?.created_at) ? new Date(item.created_at).setMonth(new Date(item.created_at).getMonth() + 12) : '').toISOString().slice(0, 10),
+          formatDates(item?.created_at) || '',
           item?.premium_amnt || '',
           item?.total_claim_amount || '',
           item?.statuses?.status_name || ''

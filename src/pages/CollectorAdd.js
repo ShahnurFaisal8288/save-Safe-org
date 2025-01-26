@@ -1,6 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const CollectorAdd = () => {
+  const [userId,setUserId] = useState("");
+  const [userName,setUserName] = useState("");
+  const [collectorNumber,setCollectorNumber] = useState("");
+
+  useEffect(() => {
+      const storedSetUserName = localStorage.getItem("user_id");
+  
+      setUserId(storedSetUserName);
+    }, []);
+
+  useEffect(() => {
+    const storeSetUserName = localStorage.getItem("name");
+    setUserName(storeSetUserName);
+  },[]);
+  useEffect(() => {
+    const storeSetCollectorNumber = localStorage.getItem("collector_number");
+    setCollectorNumber(storeSetCollectorNumber);
+  },[]);
+
   return (
     <div className="content-wrapper">
       <div className="container mt-5">
@@ -13,9 +32,17 @@ const CollectorAdd = () => {
               <div className="section">
                 <div className="form-grid row">
                   <div className="col-md-6">
+                    <input
+                        name="user_id"
+                        type="hidden"
+                        value={userId}
+                        className="form-control"
+                        placeholder="User#"
+                     />
                     <div className="form-group">
                       <label>User Name</label>
                       <input
+                        value={userName}
                         type="text"
                         className="form-control"
                         placeholder="User#"
@@ -26,6 +53,7 @@ const CollectorAdd = () => {
                     <div className="form-group">
                       <label>Collector Number</label>
                       <input
+                      value={collectorNumber}
                         type="text"
                         className="form-control"
                         placeholder="Collector#"

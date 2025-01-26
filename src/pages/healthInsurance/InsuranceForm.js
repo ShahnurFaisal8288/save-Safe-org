@@ -707,7 +707,10 @@ function InsuranceForm() {
   //   }
   //   setValidated(true);
   // };
-
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+  };
   console.log("selectedCategoryTitle", selectedCategoryTitle);
   console.log("validateCategory", validateCategory);
   console.log("category", category);
@@ -740,14 +743,14 @@ function InsuranceForm() {
               <div className="mb-3 col-6">
                 <strong className="d-block">Collector ID: {coNo}</strong>
               </div>
-              <div className="mb-3 col-6">
+              {/* <div className="mb-3 col-6">
                 <strong className="d-block">
                   Branch Code: {branchCodeLocal}
                 </strong>
-              </div>
+              </div> */}
               <div className="mb-3 col-6">
                 <strong className="d-block">
-                  Date of Birth: {date_of_birth}
+                  Date of Birth: {formatDate(date_of_birth)}
                 </strong>
               </div>
               <div className="mb-3 col-6">
@@ -772,10 +775,10 @@ function InsuranceForm() {
                 </strong>
               </div>
               <div className="mb-3 col-6">
-                <strong className="d-block">Date In: {date_in}</strong>
+                <strong className="d-block">Date In: {formatDate(date_in)}</strong>
               </div>
               <div className="mb-3 col-6">
-                <strong className="d-block">Date Out: {date_out}</strong>
+                <strong className="d-block">Date Out: {formatDate(date_out)}</strong>
               </div>
             </div>
           </Card.Body>

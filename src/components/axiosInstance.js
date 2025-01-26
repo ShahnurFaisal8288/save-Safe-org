@@ -1,40 +1,60 @@
 import axios from 'axios';
-const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8000/api/',
-  });
-  // Add a request interceptor to include the token in the headers
-axiosInstance.interceptors.request.use(
-    (config) => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+import { jwtDecode } from 'jwt-decode'; // Correct import
 
-  // Add a response interceptor to handle token expiration
-axiosInstance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      if (error.response && error.response.status === 401) {
-        // Token is expired or invalid, log out the user
-        localStorage.removeItem('token');
-        localStorage.removeItem('branch_id');
-        localStorage.removeItem('collector_number');
-        localStorage.removeItem('id');
-        localStorage.removeItem('name');
-        localStorage.removeItem('email');
-        localStorage.removeItem('permissions');
-        localStorage.removeItem('sidebar');
-        window.location.href = '/login'; // Redirect to login page
-      }
-      return Promise.reject(error);
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:8000/api/',
+});
+
+// Check if token is expired
+const isTokenExpired = (token) => {
+  try {
+    const decoded = jwtDecode(token);
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decoded.exp < currentTime;
+  } catch (error) {
+    return true; // Consider token invalid if decoding fails
+  }
+};
+
+// Automatic token expiration check
+const checkTokenExpiration = () => {
+  const token = localStorage.getItem('token');
+  
+  if (token && isTokenExpired(token)) {
+    // Clear all authentication-related local storage
+    const authKeys = [
+      'token', 'branch_id', 'collector_number', 
+      'id', 'name', 'email', 'permissions', 'sidebar'
+    ];
+    
+    authKeys.forEach(key => localStorage.removeItem(key));
+    
+    // Redirect to login page
+    window.location.href = '/';
+  }
+};
+
+// Add request interceptor to check token before each request
+axiosInstance.interceptors.request.use(
+  (config) => {
+    checkTokenExpiration();
+    
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-  );
-export default axiosInstance
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Periodic token expiration check (optional)
+const startTokenExpirationCheck = () => {
+  // Check every 5 minutes
+  setInterval(checkTokenExpiration, 5 * 60 * 1000);
+};
+
+// Call this when your app initializes
+startTokenExpirationCheck();
+
+export default axiosInstance;
