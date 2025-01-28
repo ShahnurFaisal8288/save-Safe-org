@@ -72,8 +72,8 @@ const ExcelEnrolment = ({currentData}) => {
               item.division_name || '',
               item.projects?.projectTitle || '',
               item.health_configurations?.gender || '',
-              '', // BENIFIT_CODE (not provided in the data)
-              item.clients.account_number || '',
+              item.health_configurations?.benefit_code || '',
+              item.health_configurations.organization_code || '',
               item.clients.date_of_birth ? Math.floor((new Date() - new Date(item.clients.date_of_birth).getTime()) / (1000 * 60 * 60 * 24 * 365.25)) : '',
               item.clients.date_of_birth || '',
               formatDate(item.created_at) || '',
