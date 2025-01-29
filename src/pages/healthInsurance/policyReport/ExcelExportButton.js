@@ -11,7 +11,8 @@ const ExcelExportButton = ({
   selectedCategory,
   fromDate,
   toDate,
-  vo
+  totalPremium,
+  totalCount
 }) => {
   const formatDate = (dateString) => {
     const options = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -28,6 +29,8 @@ const ExcelExportButton = ({
     
     return date.toISOString().slice(0, 10);
  };
+
+ 
   const handleExport = () => {
     // Create a new workbook
     const wb = XLSX.utils.book_new();
@@ -78,8 +81,8 @@ const ExcelExportButton = ({
 
     // Add totals at the bottom
     data.push(
-      ['', 'VO Total', '', '', '', '', '', '', '', '', '', 'No. of Premium:', '', 'NNN.NN', '', ''],
-      ['', 'Total', '', '', '', '', '', '', '', '', '', 'No. of Premium:', '', 'NNN.NN', '', '']
+      ['', 'VO Total', '', '', '', '', '', '', '', '', ''],
+      ['', 'Total', totalCount, '', '', '', '', '', '', '', '', 'No. of Premium:', '', totalPremium, '', '']
     );
 
     // Create worksheet

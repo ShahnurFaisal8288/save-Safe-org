@@ -92,10 +92,12 @@ const ExcelExportButton = ({ claimData }) => {
             item.healthInsurance?.nominee_birthdate
             ? Math.floor((new Date() - new Date(item.healthInsurance.nominee_birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
             : '',
-          item.healthInsurance?.nominee_card_id || '',
-          item.healthInsurance?.nominee_card_id || '',
-          item.healthInsurance?.nominee_card_id || '',
-          item.healthInsurance?.nominee_card_id || '',
+            
+            (item.healthInsurance?.nominee_typeof_card_id === 5) ? (item.healthInsurance?.nominee_card_id || '') : '',
+            (item.healthInsurance?.nominee_typeof_card_id === 1) ? (item.healthInsurance?.nominee_card_id || '') : '',
+            (item.healthInsurance?.nominee_typeof_card_id === 3) ? (item.healthInsurance?.nominee_card_id || '') : '',
+            (item.healthInsurance?.nominee_typeof_card_id === 4) ? (item.healthInsurance?.nominee_card_id || '') : '',
+
           item.healthInsurance?.nomineeRelation?.data_name || '',
           item.healthInsurance?.nominee_phone_no || '',
           '',

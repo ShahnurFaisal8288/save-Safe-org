@@ -92,9 +92,14 @@ const PolicyReport = () => {
   };
   //excel export
 
-
-  console.log(selectedPolicy)
-  console.log(selectedCategory)
+  const totalPremium = policyWiseData.reduce(
+    (sum, item) => sum + (item.health_configurations?.premium_installment_amount || 0),
+    0
+  );
+  const totalCount = policyWiseData.length;
+  // console.log(totalCount)
+  // console.log(totalPremium);
+ 
 
   return (
     <>
@@ -517,6 +522,8 @@ body {
                 selectedCategory={selectedCategory}
                 fromDate={fromDate}
                 toDate={toDate}
+                totalPremium={totalPremium}
+                totalCount={totalCount}
               />
             </div>
             <div className="table-container">

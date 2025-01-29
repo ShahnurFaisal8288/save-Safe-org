@@ -34,13 +34,10 @@ const InsuranceList = () => {
 
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  
   const fetchData = async () => {
     try {
       // Fetch projects
-      const projectResponse = await axiosInstance.get(
-        "projects"
-      );
+      const projectResponse = await axiosInstance.get("projects");
       if (projectResponse.data && Array.isArray(projectResponse.data)) {
         setProject(projectResponse.data);
       } else if (projectResponse.data?.error) {
@@ -48,9 +45,7 @@ const InsuranceList = () => {
       }
 
       // Fetch collectors
-      const poResponse = await axiosInstance.get(
-        "collectors"
-      );
+      const poResponse = await axiosInstance.get("collectors");
       if (poResponse.data) {
         setPoNo(poResponse.data);
       } else if (poResponse.data?.error) {
@@ -58,9 +53,7 @@ const InsuranceList = () => {
       }
 
       // Fetch health insurance list
-      const initialData = await axiosInstance.get(
-        "health_insurance/list"
-      );
+      const initialData = await axiosInstance.get("health_insurance/list");
       if (initialData.data) {
         setFilteredData(initialData.data);
       } else if (initialData.data?.error) {
@@ -140,12 +133,9 @@ const InsuranceList = () => {
     };
 
     try {
-      const response = await axiosInstance.get(
-        "health_insurance/list/search",
-        {
-          params: filterParams,
-        }
-      );
+      const response = await axiosInstance.get("health_insurance/list/search", {
+        params: filterParams,
+      });
 
       if (response.data) {
         setFilteredData(response.data); // Success data
@@ -387,7 +377,6 @@ const InsuranceList = () => {
       <div className="content-wrapper">
         <div className="container mt-3">
           <h2 className="title">Health Insurance List</h2>
-        
 
           {/* Project Selection */}
           <div className="section" style={{ marginTop: "50px" }}>
@@ -520,109 +509,118 @@ const InsuranceList = () => {
           <div className="section card">
             <div className="section-title">Enrollment List</div>
             <div className="d-flex justify-content-end mb-3">
-                <ExcelEnrolment currentData={currentData} />
-              </div>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Buffer Id</th>
-                  <th>Date</th>
-                  <th>Member Name</th>
-                  <th>Insurance Product</th>
-                  <th>Status</th>
-                  <th>Enrollment Form</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {errorMessage && (
+              <ExcelEnrolment currentData={currentData} />
+            </div>
+            <div className="table-responsive">
+              <table className="table table-bordered table-striped">
+                <thead className="table-light">
                   <tr>
-                    <td
-                      colSpan="7"
-                      style={{ color: "red", textAlign: "center" }}
-                    >
-                      {errorMessage}
-                    </td>
+                    <th>Buffer Id</th>
+                    <th>Date</th>
+                    <th>Member Name</th>
+                    <th>Insurance Product</th>
+                    <th>Status</th>
+                    <th>Enrollment Form</th>
+                    <th>Action</th>
                   </tr>
-                )}
-                {currentData.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item?.enrolment_id}</td>
-                    <td>{item?.created_at}</td>
-                    <td>{item?.clients?.name}</td>
-                    <td>{item?.health_configurations?.policy_name}</td>
-                    <td>{item?.statuses?.status_name}</td>
-                    <td>
-                      <button
-                        className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
-                        style={{
-                          backgroundColor: "rgb(236, 72, 153) ! important;",
-                        }}
-                        onClick={() =>
-                          navigate(`/insuranceFormPdf/${item.id}`, {
-                            state: { item },
-                          })
-                        }
+                </thead>
+                <tbody>
+                  {errorMessage && (
+                    <tr>
+                      <td
+                        colSpan="7"
+                        className="text-center text-danger fw-bold"
                       >
-                        Download
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
-                        onClick={() =>
-                          navigate(`/approve-insurance-enrollment/${item.id}`, {
-                            state: { item },
-                          })
-                        }
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                        {errorMessage}
+                      </td>
+                    </tr>
+                  )}
+                  {currentData.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item?.enrolment_id}</td>
+                      <td>{item?.created_at}</td>
+                      <td>{item?.clients?.name}</td>
+                      <td>{item?.health_configurations?.policy_name}</td>
+                      <td>{item?.statuses?.status_name}</td>
+                      <td>
+                        <button
+                          className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
+                          style={{
+                            backgroundColor: "rgb(236, 72, 153) ! important;",
+                          }}
+                          onClick={() =>
+                            navigate(`/insuranceFormPdf/${item.id}`, {
+                              state: { item },
+                            })
+                          }
+                        >
+                          Download
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="download-btn text-white bg-blue-500 rounded-md py-1 px-4"
+                          style={{
+                            backgroundColor: "rgb(236, 72, 153) ! important;",
+                          }}
+                          onClick={() =>
+                            navigate(
+                              `/approve-insurance-enrollment/${item.id}`,
+                              {
+                                state: { item },
+                              }
+                            )
+                          }
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
             {/* Pagination Controls */}
             {filteredData.length > 0 && (
               <div className="mt-2 d-flex justify-content-between align-items-center">
-              <div className="d-flex gap-2">
-                {/* Previous Button */}
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="btn btn-outline-secondary btn-sm"
-                >
-                  ◄
-                </button>
-            
-                {/* Current Page */}
-                <button className="btn btn-outline-secondary btn-sm">
-                  {currentPage}
-                </button>
-            
-                {/* Next Page */}
-                <button
-                  className="btn btn-outline-secondary btn-sm"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  {currentPage + 1}
-                </button>
-            
-                {/* Next Button */}
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="btn btn-outline-secondary btn-sm"
-                >
-                  ►
-                </button>
+                <div className="d-flex gap-2">
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="btn btn-outline-secondary btn-sm"
+                  >
+                    ◄
+                  </button>
+
+                  {/* Current Page */}
+                  <button className="btn btn-outline-secondary btn-sm">
+                    {currentPage}
+                  </button>
+
+                  {/* Next Page */}
+                  <button
+                    className="btn btn-outline-secondary btn-sm"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    {currentPage + 1}
+                  </button>
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="btn btn-outline-secondary btn-sm"
+                  >
+                    ►
+                  </button>
+                </div>
+
+                <div>
+                  Showing page {currentPage} of {totalPages}
+                </div>
               </div>
-            
-              <div>
-                Showing page {currentPage} of {totalPages}
-              </div>
-            </div>
             )}
           </div>
 

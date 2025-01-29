@@ -104,9 +104,11 @@ const ExcelEnrolment = ({currentData}) => {
               item.nominee_birthdate
                 ? Math.floor((new Date() - new Date(item.nominee_birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
                 : '',
-              item.nominee_card_id || '',
-              '', // Nominee Birth Certificate (not provided in the data)
-              '', // Nominee Passport no (not provided in the data)
+              (item?.nominee_typeof_card_id === 2) ? (item.nominee_card_id || '') : '',
+              (item?.nominee_typeof_card_id === 1) ? (item.nominee_card_id || '') : '',
+              (item?.nominee_typeof_card_id === 3) ? (item.nominee_card_id || '') : '',
+              (item?.nominee_typeof_card_id === 4) ? (item.nominee_card_id || '') : '',
+             
               '', // Nominee driving license (not provided in the data)
               item.relationships?.data_name || '',
               item.nominee_phone_no || '',
