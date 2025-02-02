@@ -35,9 +35,9 @@ const RenewInsuranceForm = () => {
   const [frontImagePreview, setFrontImagePreview] = useState(null);
   const [backImagePreview, setBackImagePreview] = useState(null);
 
-  console.log(selectedCategory);
-  console.log(selectedPolicy);
-  console.log(selectedMember);
+  // console.log(selectedCategory);
+  // console.log(selectedPolicy);
+  // console.log(selectedMember);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -73,28 +73,28 @@ const RenewInsuranceForm = () => {
   useEffect(() => {
     const fetchMember = async () => {
       try {
-        const response = await axiosInstance.get(
-          "insurance/category"
-        );
+        const response = await axiosInstance.get(`health_insurance/policy/renew?orgmemno=${selectedMember}`);
         setPolicy(response.data);
+        console.log("setPolicy",response.data)
+
       } catch (error) {
         console.error(error);
       }
     };
     fetchMember();
-  }, []);
+  }, [selectedMember,]);
 
   useEffect(() => {
     // Add console.log to debug the values
-    console.log("selectedPolicy:", selectedPolicy);
-    console.log("policy:", policy);
+    // console.log("selectedPolicy:", selectedPolicy);
+    // console.log("policy:", policy);
 
     // Ensure policy is an array and selectedPolicy is a number
     if (Array.isArray(policy) && selectedPolicy) {
       const selected = policy.find(
         (p) => p.insurance_product_id === Number(selectedPolicy)
       );
-      console.log("selected:", selected);
+      // console.log("selected:", selected);
       setSelectedCategories(selected ? selected.category : []);
     }
   }, [selectedPolicy, policy]);
@@ -149,7 +149,7 @@ const RenewInsuranceForm = () => {
       }
     }
   }, [selectedCategory, selectedCategories]);
-  console.log("selectedCategory:", selectedCategory);
+  // console.log("selectedCategory:", selectedCategory);
 
   useEffect(() => {
     if (filterData?.[0]?.nominee_card_id) {
@@ -204,35 +204,53 @@ const RenewInsuranceForm = () => {
 
       formData.append(
         "HealthInsuranceJson",
-        JSON.stringify([{
-          CoNo: event.target.CoNo ? event.target.CoNo.value : "",
-          OrgNo: event.target.OrgNo ? event.target.OrgNo.value : "",
-          OrgMemNo: event.target.OrgMemNo ? event.target.OrgMemNo.value : "",
-          EnrollId: event.target.EnrollId ? event.target.EnrollId.value : "",
-          ProjectCode: event.target.ProjectCode ? event.target.ProjectCode.value : "",
-          AnyDisease: event.target.AnyDisease ? event.target.AnyDisease.value : "",
-          PolicyName: event.target.PolicyName ? event.target.PolicyName.value : "",
-          InsuranceType: event.target.InsuranceType ? event.target.InsuranceType.value : "",
-          Category: event.target.Category ? event.target.Category.value : "",
-          PremiumAmount: event.target.PremiumAmount ? event.target.PremiumAmount.value : "",
-          Duration: event.target.Duration ? event.target.Duration.value : "",
-          Phone: nomineePhone,
-          NomineeName: nomineeName,
-          NomineePhone: nomineePhone,
-          NomineeDOB: nomineeDOB,
-          NomineeIDType: nomineeIDType,
-          NomineeIDIssueDate: event.target.NomineeIDIssueDate ? event.target.NomineeIDIssueDate.value : "",
-          NomineeIDExpiryDate: event.target.NomineeIDExpiryDate ? event.target.NomineeIDExpiryDate.value : "",
-          NomineeIDPlaceOfIssue: event.target.NomineeIDPlaceOfIssue ? event.target.NomineeIDPlaceOfIssue.value : "",
-          NomineeIDNumber: nomineeIDNumber,
-          NomineeRelation: nomineeRelationId,
-        }])
+        JSON.stringify([
+          {
+            CoNo: event.target.CoNo ? event.target.CoNo.value : "",
+            OrgNo: event.target.OrgNo ? event.target.OrgNo.value : "",
+            OrgMemNo: event.target.OrgMemNo ? event.target.OrgMemNo.value : "",
+            EnrollId: event.target.EnrollId ? event.target.EnrollId.value : "",
+            ProjectCode: event.target.ProjectCode
+              ? event.target.ProjectCode.value
+              : "",
+            AnyDisease: event.target.AnyDisease
+              ? event.target.AnyDisease.value
+              : "",
+            PolicyName: event.target.PolicyName
+              ? event.target.PolicyName.value
+              : "",
+            InsuranceType: event.target.InsuranceType
+              ? event.target.InsuranceType.value
+              : "",
+            Category: event.target.Category ? event.target.Category.value : "",
+            PremiumAmount: event.target.PremiumAmount
+              ? event.target.PremiumAmount.value
+              : "",
+            Duration: event.target.Duration ? event.target.Duration.value : "",
+            Phone: nomineePhone,
+            NomineeName: nomineeName,
+            NomineePhone: nomineePhone,
+            NomineeDOB: nomineeDOB,
+            NomineeIDType: nomineeIDType,
+            NomineeIDIssueDate: event.target.NomineeIDIssueDate
+              ? event.target.NomineeIDIssueDate.value
+              : "",
+            NomineeIDExpiryDate: event.target.NomineeIDExpiryDate
+              ? event.target.NomineeIDExpiryDate.value
+              : "",
+            NomineeIDPlaceOfIssue: event.target.NomineeIDPlaceOfIssue
+              ? event.target.NomineeIDPlaceOfIssue.value
+              : "",
+            NomineeIDNumber: nomineeIDNumber,
+            NomineeRelation: nomineeRelationId,
+          },
+        ])
       );
       formData.append("CollectorId", event.target.CollectorId.value);
 
       // console.log("BranchCode:", event.target.BranchCode.value);
       // console.log("Member_name:", event.target.Member_name.value);
-      console.log("HealthInsuranceJson:", formData.get("HealthInsuranceJson"));
+      // console.log("HealthInsuranceJson:", formData.get("HealthInsuranceJson"));
 
       // Ensure file inputs exist and have files
       if (!event.target.Duration) {
@@ -255,7 +273,7 @@ const RenewInsuranceForm = () => {
         event.target.nomineeImageBack.files[0]
       );
 
-      console.log("FormData before Axios request:");
+      // console.log("FormData before Axios request:");
       for (let pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
@@ -300,7 +318,7 @@ const RenewInsuranceForm = () => {
         `health_insurance/renew?category_id=${selectedCategory}&insurance_policy_id=${selectedPolicy}&orgmemno=${selectedMember}`
       );
       const data = response.data;
-      console.log("API Response Data:", data); // Log the API response data
+      // console.log("API Response Data:", data); // Log the API response data
       if (data.length > 0) {
         setFilterData(data[0]);
         setNomineeName(data[0].nominee_name || "");
@@ -314,7 +332,7 @@ const RenewInsuranceForm = () => {
       } else {
         setFilterData(null);
       }
-      console.log("Filter Data:", data); // Log the first item in the response
+      // console.log("Filter Data:", data); // Log the first item in the response
     } catch (error) {
       console.error("Error fetching search results:", error);
       setFilterData(null);
@@ -326,8 +344,6 @@ const RenewInsuranceForm = () => {
       handleSearch();
     }
   }, [selectedCategory, selectedPolicy, selectedMember]);
-
-
 
   const handleFrontImageChange = (e) => {
     const file = e.target.files[0];
@@ -341,7 +357,7 @@ const RenewInsuranceForm = () => {
       setFrontImagePreview(null);
     }
   };
-  
+
   const handleBackImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -666,7 +682,6 @@ body {
               </div>
 
               <div className="form-group">
-              
                 <input
                   name="Duration"
                   type="hidden"
@@ -867,24 +882,24 @@ body {
               <div className="section">
                 <div className="section-header">Nominee Information</div>
                 <div className="form-grid">
-                <div className="form-group">
-  <label>Name</label>
-  <input
-    type="text"
-    value={nomineeName}
-    name="NomineeName"
-    onChange={(e) => setNomineeName(e.target.value)}
-  />
-</div>
-<div className="form-group">
-  <label>Date Of Birth</label>
-  <input
-    type="date"
-    value={nomineeDOB}
-    name="NomineeDOB"
-    onChange={(e) => setNomineeDOB(e.target.value)}
-  />
-</div>
+                  <div className="form-group">
+                    <label>Name</label>
+                    <input
+                      type="text"
+                      value={nomineeName}
+                      name="NomineeName"
+                      onChange={(e) => setNomineeName(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Date Of Birth</label>
+                    <input
+                      type="date"
+                      value={nomineeDOB}
+                      name="NomineeDOB"
+                      onChange={(e) => setNomineeDOB(e.target.value)}
+                    />
+                  </div>
 
                   <div className="form-group">
                     <label>Relationship</label>
@@ -898,41 +913,41 @@ body {
                     <input type="text" value={nomineeRelation} readOnly />
                   </div>
                   <div className="form-group">
-  <label>National ID</label>
-  <input
-    type="text"
-    name="NomineeIDNumber"
-    value={nomineeIDType === 2 ? nomineeIDNumber : ""}
-    onChange={(e) => handleInputChange(e, "nationalID")}
-  />
-</div>
-<div className="form-group">
-  <label>Birth Certificate Number</label>
-  <input
-    type="text"
-    name="NomineeIDNumber"
-    value={nomineeIDType === 1 ? nomineeIDNumber : ""}
-    onChange={(e) => handleInputChange(e, "birthCertificate")}
-  />
-</div>
-<div className="form-group">
-  <label>Passport Number</label>
-  <input
-    type="text"
-    name="NomineeIDNumber"
-    value={nomineeIDType === 3 ? nomineeIDNumber : ""}
-    onChange={(e) => handleInputChange(e, "passport")}
-  />
-</div>
-<div className="form-group">
-  <label>Smart Card ID</label>
-  <input
-    type="text"
-    name="NomineeIDNumber"
-    value={nomineeIDType === 5 ? nomineeIDNumber : ""}
-    onChange={(e) => handleInputChange(e, "smartCard")}
-  />
-</div>
+                    <label>National ID</label>
+                    <input
+                      type="text"
+                      name="NomineeIDNumber"
+                      value={nomineeIDType === 2 ? nomineeIDNumber : ""}
+                      onChange={(e) => handleInputChange(e, "nationalID")}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Birth Certificate Number</label>
+                    <input
+                      type="text"
+                      name="NomineeIDNumber"
+                      value={nomineeIDType === 1 ? nomineeIDNumber : ""}
+                      onChange={(e) => handleInputChange(e, "birthCertificate")}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Passport Number</label>
+                    <input
+                      type="text"
+                      name="NomineeIDNumber"
+                      value={nomineeIDType === 3 ? nomineeIDNumber : ""}
+                      onChange={(e) => handleInputChange(e, "passport")}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Smart Card ID</label>
+                    <input
+                      type="text"
+                      name="NomineeIDNumber"
+                      value={nomineeIDType === 5 ? nomineeIDNumber : ""}
+                      onChange={(e) => handleInputChange(e, "smartCard")}
+                    />
+                  </div>
                   <div className="form-group">
                     <label>Phone</label>
                     <input
@@ -944,61 +959,61 @@ body {
                   </div>
 
                   <div className="form-group">
-  <label>Member's National ID *</label>
-  <div className="upload-grid">
-    <div className="upload-box">
-      <label className="upload-label" htmlFor="frontSide">
-        <div className="file-placeholder">Front Side</div>
-      </label>
-      <input
-        name="nomineeImageFront"
-        type="file"
-        id="frontSide"
-        className="file-input"
-        accept=".jpg,.jpeg,.png,.pdf"
-        onChange={handleFrontImageChange}
-      />
-      {frontImagePreview && (
-        <div className="preview-container">
-          <img
-            src={frontImagePreview}
-            alt="Front ID Preview"
-            className="preview-image"
-            height="100px"
-            width="100px"
-          />
-        </div>
-      )}
-    </div>
-    <div className="upload-box">
-      <label className="upload-label" htmlFor="backSide">
-        <div className="file-placeholder">Back Side</div>
-      </label>
-      <input
-        name="nomineeImageBack"
-        type="file"
-        id="backSide"
-        className="file-input"
-        accept=".jpg,.jpeg,.png,.pdf"
-        onChange={handleBackImageChange}
-      />
-      {backImagePreview && (
-        <div className="preview-container">
-          <img
-            src={backImagePreview}
-            alt="Back ID Preview"
-            className="preview-image"
-            height="100px"
-            width="100px"
-          />
-        </div>
-      )}
-    </div>
-  </div>
-  <small className="error-text">
-    This field is required.
-  </small>
-</div>
+                    <label>Member's National ID *</label>
+                    <div className="upload-grid">
+                      <div className="upload-box">
+                        <label className="upload-label" htmlFor="frontSide">
+                          <div className="file-placeholder">Front Side</div>
+                        </label>
+                        <input
+                          name="nomineeImageFront"
+                          type="file"
+                          id="frontSide"
+                          className="file-input"
+                          accept=".jpg,.jpeg,.png,.pdf"
+                          onChange={handleFrontImageChange}
+                        />
+                        {frontImagePreview && (
+                          <div className="preview-container">
+                            <img
+                              src={frontImagePreview}
+                              alt="Front ID Preview"
+                              className="preview-image"
+                              height="100px"
+                              width="100px"
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div className="upload-box">
+                        <label className="upload-label" htmlFor="backSide">
+                          <div className="file-placeholder">Back Side</div>
+                        </label>
+                        <input
+                          name="nomineeImageBack"
+                          type="file"
+                          id="backSide"
+                          className="file-input"
+                          accept=".jpg,.jpeg,.png,.pdf"
+                          onChange={handleBackImageChange}
+                        />
+                        {backImagePreview && (
+                          <div className="preview-container">
+                            <img
+                              src={backImagePreview}
+                              alt="Back ID Preview"
+                              className="preview-image"
+                              height="100px"
+                              width="100px"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <small className="error-text">
+                      This field is required.
+                    </small>
+                  </div>
                 </div>
 
                 {/* Dynamic Document Upload Section */}

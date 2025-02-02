@@ -26,7 +26,7 @@ function App() {
           style={{
             flexGrow: 1,
             maxWidth: "250px", // Sets a maximum width for the sidebar
-            backgroundColor: "#f8f9fa", // Optional: Sidebar background color
+            backgroundColor: "rgb(24,24,36)", // Optional: Sidebar background color
           }}
         >
           <Sidebar />

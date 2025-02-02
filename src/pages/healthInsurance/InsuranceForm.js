@@ -265,6 +265,13 @@ function InsuranceForm() {
     if (!validateNomineeDOB) {
       valid = false;
       newErrors.validateNomineeDOB = "Please Enter Nominee DOB";
+    } else {
+      // Calculate age and validate if 18 or above
+      const nomineeAge = calculateAge(validateNomineeDOB);
+      if (nomineeAge < 18) {
+        valid = false;
+        newErrors.validateNomineeDOB = "Nominee must be at least 18 years old.";
+      }
     }
 
     // ID Type validation
