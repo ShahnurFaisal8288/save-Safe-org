@@ -59,11 +59,11 @@ const ExcelExportButton = ({ claimData }) => {
     if (claimData && claimData.length > 0) {
       claimData.forEach((item) => {
         data.push([
-          item.healthInsurance?.branch?.branch_name || '',
-          item.healthInsurance?.branch?.branch_code || '',
-          item.area_name || '',
-          item.region_name || '',
-          item.division_name || '',
+          item.healthInsurance?.client?.sectors?.branchs?.branch_name || '',
+          item.healthInsurance?.client?.sectors?.branchs?.branch_code || '',
+          item.healthInsurance?.client?.sectors?.branchs?.areas?.name || '',
+          item.healthInsurance?.client?.sectors?.branchs?.areas?.regions?.name || '',
+          item.healthInsurance?.client?.sectors?.branchs?.areas?.regions?.divisions?.name || '',
           item.healthInsurance?.project?.projectTitle || '',
           formatDate(item.healthInsurance?.created_at) || '',
           formatDate(item.date_of_incident) || '',
