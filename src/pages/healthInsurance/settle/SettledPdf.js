@@ -248,7 +248,7 @@ const age = birthdate
           <div className="row mb-3">
             <div className="col-md-6 mb-3">
               <label className="form-label">বিমাদাবি নম্বর</label>
-              <input type="text" className="form-control" />
+              <input type="text" value={data?.id} className="form-control" />
             </div>
             <div className="col-md-6">
               <label className="form-label">বিমাদাবি ধরন</label>
@@ -270,7 +270,7 @@ const age = birthdate
               <label className="form-label">সর্বোচ্চ বিমাদাবির পরিমাণ</label>
               <input
                 type="text"
-                // value={data?.treatmentType?.type_name}
+                value={data?.InsurancePolicy?.sum_insured}
                 className="form-control"
               />
             </div>

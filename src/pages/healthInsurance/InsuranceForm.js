@@ -393,7 +393,7 @@ function InsuranceForm() {
           },
         ])
       );
-      formData.append("CollectorId", event.target.CollectorId.value);
+      formData.append("EmployeeId", event.target.EmployeeId.value);
 
       // console.log("BranchCode:", event.target.BranchCode.value);
       // console.log("Member_name:", event.target.Member_name.value);
@@ -800,7 +800,7 @@ function InsuranceForm() {
               <Col md={6}>
                 <Form.Group>
                   <Form.Control
-                    type="hidden"
+                    type="text"
                     name="ApiKey"
                     value="api-key"
                     readOnly
@@ -812,7 +812,7 @@ function InsuranceForm() {
               <Col md={6}>
                 <Form.Group>
                   <Form.Control
-                    type="hidden"
+                    type="text"
                     name="BranchCode"
                     value={branchCode || ""} // Ensure it's never undefined
                     onChange={(e) => handleSetBranchCode(e.target.value)}
@@ -823,13 +823,13 @@ function InsuranceForm() {
             </Row>
             <Col md={6}>
               <Form.Group>
-                <Form.Control type="hidden" name="CoNo" value={coNo} readOnly />
+                <Form.Control type="text" name="CoNo" value={coNo} readOnly />
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="hidden"
+                  type="text"
                   name="OrgNo"
                   value="null"
                   readOnly
@@ -839,8 +839,8 @@ function InsuranceForm() {
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="hidden"
-                  name="CollectorId"
+                  type="text"
+                  name="EmployeeId"
                   value={collectorId}
                   readOnly
                 />
@@ -849,7 +849,7 @@ function InsuranceForm() {
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="hidden"
+                  type="text"
                   name="OrgMemNo"
                   value={account_number}
                   readOnly
@@ -859,7 +859,7 @@ function InsuranceForm() {
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="hidden"
+                  type="text"
                   name="EnrollId"
                   onChange={handleSetInsuranceId}
                   value={insuranceId}
@@ -870,7 +870,7 @@ function InsuranceForm() {
             <Col md={6}>
               <Form.Group>
                 <Form.Control
-                  type="hidden"
+                  type="text"
                   name="ProjectCode"
                   value={project_code}
                   readOnly
@@ -886,7 +886,7 @@ function InsuranceForm() {
                     list="user_name_options"
                     name="Member_name"
                     value={name}
-                    type="hidden"
+                    type="text"
                     placeholder="Select or type user name"
                   />
                 </Form.Group>

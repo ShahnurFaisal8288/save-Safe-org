@@ -5,6 +5,7 @@ import "../../InsuranceList.css";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../components/axiosInstance";
 import ExcelEnrolment from "./ExcelEnrolment";
+import HasPermission from "../permissions/HasPermission";
 
 const InsuranceList = () => {
   // All useState start
@@ -45,7 +46,7 @@ const InsuranceList = () => {
       }
 
       // Fetch collectors
-      const poResponse = await axiosInstance.get("collectors");
+      const poResponse = await axiosInstance.get("employees");
       if (poResponse.data) {
         setPoNo(poResponse.data);
       } else if (poResponse.data?.error) {
@@ -74,7 +75,7 @@ const InsuranceList = () => {
       try {
         if (selectedPo) {
           const response = await axiosInstance.get(
-            `collector/${selectedPo}/client/information`
+            `employee/${selectedPo}/client/information`
           );
           setMemberName(response.data || []);
         }
@@ -109,7 +110,7 @@ const InsuranceList = () => {
   const handlePoChange = (event) => {
     const selectedCollectorNumber = event.target.value;
     const selectedItem = poNo.find(
-      (item) => item.collector_number === selectedCollectorNumber
+      (item) => item.employee_number === selectedCollectorNumber
     );
     if (selectedItem) {
       setSelectedPo(selectedItem.id); // Set ID as the selected value
@@ -411,8 +412,8 @@ const InsuranceList = () => {
                   />
                   <datalist id="poList">
                     {poNo.map((item, index) => (
-                      <option key={index} value={item.collector_number}>
-                        {item.collector_number}
+                      <option key={index} value={item.employee_number}>
+                        {item.employee_number}
                       </option>
                     ))}
                   </datalist>
@@ -508,9 +509,12 @@ const InsuranceList = () => {
           {/* Enrollment List */}
           <div className="section card">
             <div className="section-title">Enrollment List</div>
+            <HasPermission page="insurance-list" permission="view-export-button">
             <div className="d-flex justify-content-end mb-3">
               <ExcelEnrolment currentData={currentData} />
             </div>
+            </HasPermission>
+            
             <div className="table-responsive">
               <table className="table table-bordered table-striped">
                 <thead className="table-light">

@@ -41,15 +41,15 @@ function Login() {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem(
           "branch_id",
-          response.data.collector.branch.id
+          response.data.employee.branch.id
         );
         localStorage.setItem(
           "collector_number",
-          response.data.collector.collector_number
+          response.data.employee.employee_number
         );
         localStorage.setItem(
           "id",
-          response.data.collector.id
+          response.data.employee.id
         );
         localStorage.setItem(
           "name",
@@ -65,7 +65,7 @@ function Login() {
         );
         localStorage.setItem(
           "permissions",
-          JSON.stringify(response.data.collector.permissions)
+          JSON.stringify(response.data.employee.permissions)
         );
         localStorage.setItem("sidebar", JSON.stringify(response.data.sidebar));
 

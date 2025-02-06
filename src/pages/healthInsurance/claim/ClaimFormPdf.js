@@ -219,7 +219,7 @@ const ClaimFormPdf = () => {
         <div className="row mb-3">
           <div className="col-md-4 mb-3">
             <label className="form-label">বিমাদাবি নম্বর</label>
-            <input type="text" className="form-control" />
+            <input type="text" value={data?.id} className="form-control" />
           </div>
           <div className="col-md-4">
             <label className="form-label">বিমাদাবি ধরন</label>
@@ -236,7 +236,7 @@ const ClaimFormPdf = () => {
           </div>
           <div className="col-md-4">
             <label className="form-label">সর্বোচ্চ বিমাদাবির পরিমাণ</label>
-            <input type="text" className="form-control" />
+            <input type="text" value={data?.InsurancePolicy?.sum_insured} className="form-control" />
           </div>
           <div className="col-md-4">
             <label className="form-label">বর্তমান বিমাদাবির পরিমাণ</label>

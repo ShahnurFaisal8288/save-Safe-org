@@ -63,7 +63,7 @@ const ExcelExportButton = ({ claimData }) => {
           item.healthInsurance?.client?.sectors?.branchs?.branch_code || '',
           item.healthInsurance?.client?.sectors?.branchs?.areas?.name || '',
           item.healthInsurance?.client?.sectors?.branchs?.areas?.regions?.name || '',
-          item.healthInsurance?.client?.sectors?.branchs?.areas?.regions?.divisions?.name || '',
+          item.healthInsurance?.client?.sectors?.branchs?.areas?.regions?.div?.name || '',
           item.healthInsurance?.project?.projectTitle || '',
           formatDate(item.healthInsurance?.created_at) || '',
           formatDate(item.date_of_incident) || '',
@@ -72,7 +72,7 @@ const ExcelExportButton = ({ claimData }) => {
           item.InsurancePolicy?.policy_name || '',
           item.treatmentType?.type_name || '',
           item.claim_amount || '',
-          '', // Sum Insured Amount (not provided in the data)
+          item.InsurancePolicy?.sum_insured || '', // Sum Insured Amount (not provided in the data)
           '', // Remaining Sum Insured (not provided in the data)
           '', // Number of Claims Paid (not provided in the data)
           item.status?.status_name || '',
@@ -82,13 +82,12 @@ const ExcelExportButton = ({ claimData }) => {
           item.healthInsurance?.client?.name || '',
           item.healthInsurance?.orgmemno || '',
           item.healthInsurance?.contact_no || '',
-          '', // Policy Holder's NID (not provided in the data)
-          '', // Policy Holder's Smart NID (not provided in the data)
-          '', // Policy Holder's Birth Certificate (not provided in the data)
-          '', // Policy Holder's Passport No (not provided in the data)
-          '', // Policy Holder's Driving License (not provided in the data)
+          item.healthInsurance?.client?.nid || '', // Policy Holder's NID (not provided in the data)
+          item.healthInsurance?.client?.smart_card || '', // Policy Holder's Smart NID (not provided in the data)
+          item.healthInsurance?.client?.birth_certificate || '', // Policy Holder's Birth Certificate (not provided in the data)
+          item.healthInsurance?.client?.passport_no || '', // Policy Holder's Passport No (not provided in the data)
+          item.healthInsurance?.client?.driving_license || '', // Policy Holder's Driving License (not provided in the data)
           item.healthInsurance?.nominee_name || '',
-          // item.healthInsurance?.nominee_birthdate || '',
             item.healthInsurance?.nominee_birthdate
             ? Math.floor((new Date() - new Date(item.healthInsurance.nominee_birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
             : '',
@@ -100,7 +99,7 @@ const ExcelExportButton = ({ claimData }) => {
 
           item.healthInsurance?.nomineeRelation?.data_name || '',
           item.healthInsurance?.nominee_phone_no || '',
-          '',
+          item.id || '',
           item.created_at || '',
         ]);
       });

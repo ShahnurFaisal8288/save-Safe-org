@@ -67,9 +67,9 @@ const ExcelEnrolment = ({currentData}) => {
             data.push([
               item.branch?.branch_name || '',
               item.branch?.branch_code || '',
-              item.area_name || '',
-              item.region_name || '',
-              item.division_name || '',
+              item.areas?.name || '',
+              item.regions?.name || '',
+              item.divisions?.name || '',
               item.projects?.projectTitle || '',
               item.health_configurations?.gender || '',
               item.health_configurations?.benefit_code || '',
@@ -86,20 +86,20 @@ const ExcelEnrolment = ({currentData}) => {
               item.orgmemno || '',
               '',
               item.clients.contact_number || '',
-              '', // Sum Insured (IPD) (not provided in the data)
-              '', // Sum Insured (OPD) (not provided in the data)
+              item?.health_configurations?.ipd || '', // Sum Insured (IPD) (not provided in the data)
+              item?.health_configurations?.opd || '', // Sum Insured (OPD) (not provided in the data)
               '', // Sum Insured (Maternity_Normal) (not provided in the data)
-              '', // Sum Insured (Maternity_Cesarian) (not provided in the data)
+              item?.health_configurations?.cesarean_delivery || '', // Sum Insured (Maternity_Cesarian) (not provided in the data)
               '', // Sum Insured (Maternity_Legal_Abortion) (not provided in the data)
-              '', // Sum Insured (Natural Death) (not provided in the data)
-              '', // Sum Insured (Accidental Death) (not provided in the data)
-              '', // Sum Insured (PTD) (not provided in the data)
-              '', // Sum Insured (PPD) (not provided in the data)
-              '', // Policy Holder's NID (not provided in the data)
-              '', // Policy Holder's Smart NID (not provided in the data)
-              '', // Policy Holder's Birth Certificate (not provided in the data)
-              '', // Policy Holder's Passport no (not provided in the data)
-              '', // Policy Holder's driving license (not provided in the data)
+              item?.health_configurations?.natural_death || '', // Sum Insured (Natural Death) (not provided in the data)
+              item?.health_configurations?.accidental_death ||'', // Sum Insured (Accidental Death) (not provided in the data)
+              item?.health_configurations?.permanent_total_disability || '', // Sum Insured (PTD) (not provided in the data)
+              item?.health_configurations?.permanent_partial_disability|| '', // Sum Insured (PPD) (not provided in the data)
+              item.clients?.nid ||'', // Policy Holder's NID (not provided in the data)
+              item.clients?.smart_card||'', // Policy Holder's Smart NID (not provided in the data)
+              item.clients?.birth_certificate || '', // Policy Holder's Birth Certificate (not provided in the data)
+              item?.clients?.passport_no||'', // Policy Holder's Passport no (not provided in the data)
+              item?.clients?.driving_license||'', // Policy Holder's driving license (not provided in the data)
               item.nominee_name || '',
               item.nominee_birthdate
                 ? Math.floor((new Date() - new Date(item.nominee_birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
