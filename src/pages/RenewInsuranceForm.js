@@ -246,7 +246,7 @@ const RenewInsuranceForm = () => {
           },
         ])
       );
-      formData.append("CollectorId", event.target.CollectorId.value);
+      formData.append("EmployeeId", event.target.EmployeeId.value);
 
       // console.log("BranchCode:", event.target.BranchCode.value);
       // console.log("Member_name:", event.target.Member_name.value);
@@ -639,8 +639,8 @@ body {
               <div>
                 {/* <label>Mapped Health Insurance ID</label> */}
                 <input
-                  type="hidden"
-                  name="CollectorId"
+                  type="text"
+                  name="EmployeeId"
                   value={collectorId}
                   readOnly
                 />

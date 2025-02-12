@@ -67,9 +67,9 @@ const ExcelEnrolment = ({currentData}) => {
             data.push([
               item.branch?.branch_name || '',
               item.branch?.branch_code || '',
-              item.areas?.name || '',
-              item.regions?.name || '',
-              item.divisions?.name || '',
+              item.branch?.area_name || '',
+              item.branch?.region_name || '',
+              item.branch?.division_name || '',
               item.projects?.projectTitle || '',
               item.health_configurations?.gender || '',
               item.health_configurations?.benefit_code || '',
@@ -109,7 +109,7 @@ const ExcelEnrolment = ({currentData}) => {
               (item?.nominee_typeof_card_id === 3) ? (item.nominee_card_id || '') : '',
               (item?.nominee_typeof_card_id === 4) ? (item.nominee_card_id || '') : '',
              
-              '', // Nominee driving license (not provided in the data)
+            
               item.relationships?.data_name || '',
               item.nominee_phone_no || '',
             ]);

@@ -156,7 +156,7 @@ const ClaimFormPdf = () => {
           </div>
           <div className="col-md-4 mb-3">
             <label className="form-label">এলাকার নাম</label>
-            <input type="text"  className="form-control" />
+            <input type="text" value={data?.healthInsurance?.branch?.area_name} className="form-control" />
           </div>
           <div className="col-md-4 mb-3">
             <label className="form-label">বিমাগ্রহীতার জন্মতারিখ</label>
@@ -168,12 +168,12 @@ const ClaimFormPdf = () => {
           </div>
           <div className="col-md-4 mb-3">
             <label className="form-label">অঞ্চলের নাম</label>
-            <input type="text" className="form-control" />
+            <input type="text" value={data?.healthInsurance?.branch?.region_name} className="form-control" />
           </div>
           
           <div className="col-md-4">
             <label className="form-label">বিমাগ্রহীতার জাতীয় পরিচয়পত্র নং</label>
-            <input type="text" className="form-control" />
+            <input type="text" value={data?.healthInsurance?.client?.nid} className="form-control" />
           </div>
           <div className="col-md-4 mb-3">
             <label className="form-label">মোবাইল নম্বর</label>
@@ -181,7 +181,7 @@ const ClaimFormPdf = () => {
           </div>
           <div className="col-md-4 mb-3">
             <label className="form-label">ডিভিশনের নাম</label>
-            <input type="text" className="form-control" />
+            <input type="text" value={data?.healthInsurance?.branch?.division_name} className="form-control" />
           </div>
         </div>
   

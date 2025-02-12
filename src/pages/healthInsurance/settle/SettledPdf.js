@@ -180,12 +180,11 @@ const age = birthdate
               </label>
               <input
                 type="text"
-                // value={data?.healthInsurance?.nominee_card_id}
+                value={data?.healthInsurance?.client?.nid}
                 className="form-control"
               />
             </div>
           </div>
-
           {/* Policy Information Section */}
           <h5 className="fw-bold bg-light p-2 border">
             বীমা পলিসি সংক্রান্ত তথ্য

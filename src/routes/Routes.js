@@ -43,6 +43,7 @@ import SettledPdf from "../pages/healthInsurance/settle/SettledPdf";
 import RenewInsuranceForm from "../pages/RenewInsuranceForm";
 import LeaveEntry from "../pages/leaveEntry/LeaveEntry";
 import LeaveEntryList from "../pages/leaveEntry/LeaveEntryList";
+import BranchEntry from "../pages/branch/BranchEntry";
 
 
 
@@ -321,6 +322,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute requiredPermission="/policyReport">
           <PolicyReport />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/branchEntry", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/branchEntry">
+          <BranchEntry />
           </PrivateRoute>
         ),
       },
