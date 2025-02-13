@@ -639,7 +639,7 @@ body {
               <div>
                 {/* <label>Mapped Health Insurance ID</label> */}
                 <input
-                  type="text"
+                  type="hidden"
                   name="EmployeeId"
                   value={collectorId}
                   readOnly

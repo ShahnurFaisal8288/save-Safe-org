@@ -70,40 +70,10 @@ function Sidebar({ data = [] }) {
     <nav className="sidebar sidebar-offcanvas" id="sidebar">
       <ul className="nav">
         {/* Layouts Category */}
-        <li className="nav-item navbar-brand-mini-wrapper">
-          {/* <a className="nav-link navbar-brand brand-logo-mini" href="../../index-2.html">
-            <img src="https://demo.bootstrapdash.com/stellar-admin-new/themes/assets/images/logo-mini.svg" alt="logo" />
-          </a> */}
-        </li>
-
-        {/* <li className="nav-item nav-profile">
-          <a href="#" className="nav-link">
-            <div className="profile-image">
-              <img className="img-xs rounded-circle" src="../../../assets/images/faces/face8.jpg" alt="profile image" />
-              <div className="dot-indicator bg-success" />
-            </div>
-            <div className="text-wrapper">
-              <p className="profile-name">{name}</p>
-              <p className="designation">Administrator</p>
-            </div>
-            <div className="icon-container">
-              <i className="icon-bubbles" />
-              <div className="dot-indicator bg-danger" />
-            </div>
-          </a>
-        </li> */}
 
         <li className="nav-item nav-category">
           <span className="nav-link">Dashboard</span>
         </li>
-
-        {/* <li className="nav-item">
-          <a className="nav-link" href="../../index-2.html">
-            <span className="menu-title">Dashboard</span>
-            <i className="icon-screen-desktop menu-icon" />
-          </a>
-        </li> */}
-
         {/* Dynamic Sidebar Items */}
         {renderSidebarItems(data.length > 0 ? data : sidebars)}
 

@@ -48,6 +48,7 @@ import BranchEntry from "../pages/branch/BranchEntry";
 
 
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -333,6 +334,15 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "/pageWisePermissions", // Child route for the dashboard
+        element: (
+          <PrivateRoute requiredPermission="/pageWisePermissions">
+          <pageWisePermissions />
+          </PrivateRoute>
+        ),
+      },
+     
     ],
   },
 ]);
