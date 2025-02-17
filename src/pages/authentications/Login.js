@@ -64,6 +64,14 @@ function Login() {
           response.data.user.id
         );
         localStorage.setItem(
+          "project_id",
+          response.data.employee.branch.program_id
+        );
+        localStorage.setItem(
+          "acting_domain",
+          JSON.stringify(response.data.user.domain.domain.acting_domain[1])
+        );
+        localStorage.setItem(
           "permissions",
           JSON.stringify(response.data.employee.permissions)
         );
@@ -79,7 +87,7 @@ function Login() {
         // });
         setSidebarData(response.data.sidebar); // Pass sidebar data correctly
         console.log("setSidebarData", sidebarData);
-        navigate("/dashboard");
+        navigate("/domainPage");
         // setSidebarData(response.data.sidebar.element_url);
       } else {
         throw new Error("Unsuccessful login");

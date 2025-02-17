@@ -44,6 +44,7 @@ import RenewInsuranceForm from "../pages/RenewInsuranceForm";
 import LeaveEntry from "../pages/leaveEntry/LeaveEntry";
 import LeaveEntryList from "../pages/leaveEntry/LeaveEntryList";
 import BranchEntry from "../pages/branch/BranchEntry";
+import DomainPage from "../pages/domainPage/DomainPage";
 
 
 
@@ -55,8 +56,8 @@ const router = createBrowserRouter([
     element: <Login />, // Standalone Login route
   },
   {
-    path: "/register",
-    element: <Registraition />, // Standalone Registration route
+    path: "/domainPage",
+    element: <DomainPage />, // Standalone Registration route
   },
   {
     path: "/",
