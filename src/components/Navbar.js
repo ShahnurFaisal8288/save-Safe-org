@@ -48,6 +48,7 @@ const Navbar = () => {
     localStorage.removeItem("user_id"); // Remove token from storage
     localStorage.removeItem("project_id"); // Remove token from storage
     localStorage.removeItem("acting_domain"); // Remove token from storage
+    localStorage.removeItem("primary_domain"); // Remove token from storage
     setIsLoggedIn(false); // Update state
     navigate("/"); // Redirect to login page
   };

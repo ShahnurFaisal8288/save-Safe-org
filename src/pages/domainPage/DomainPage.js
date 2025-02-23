@@ -14,62 +14,87 @@ const DomainPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getDomainData = localStorage.getItem("acting_domain");
-    // Parse the JSON string from localStorage
-    if (getDomainData) {
-      try {
-        const parsedData = JSON.parse(getDomainData);
-        setDomainData(parsedData);
-      } catch (error) {
-        console.error("Error parsing domain data:", error);
-        setDomainData([]);
+    try {
+      // Get both domain data with proper defaults
+      const actingDomainJSON = localStorage.getItem("acting_domain");
+      const primaryDomainJSON = localStorage.getItem("primary_domain");
+      
+      // Try acting_domain first
+      if (actingDomainJSON && actingDomainJSON !== "null") {
+        const actingDomains = JSON.parse(actingDomainJSON);
+        if (Array.isArray(actingDomains) && actingDomains.length > 0) {
+          setDomainData(actingDomains);
+          return; // Exit early if we have valid data
+        }
       }
+      
+      // Fall back to primary_domain if acting_domain failed
+      if (primaryDomainJSON && primaryDomainJSON !== "null") {
+        const primaryDomain = JSON.parse(primaryDomainJSON);
+        if (primaryDomain && primaryDomain.id) {
+          // Valid primary domain found, set it as acting domain too
+          const domainArray = [primaryDomain];
+          localStorage.setItem("acting_domain", JSON.stringify(domainArray));
+          setDomainData(domainArray);
+          return; // Exit early
+        }
+      }
+      
+      // If we get here, neither domain was valid
+      console.log("No valid domain data found");
+      setDomainData([]);
+      
+    } catch (error) {
+      console.error("Error parsing domain data:", error);
+      setDomainData([]);
     }
   }, []);
-
   useEffect(() => {
     const getProjectId = localStorage.getItem("project_id");
     setProjectId(getProjectId);
- },[]);  
- 
- useEffect(() => {
-  const fetchApi = async () => {
-    if (!projectId || !selectedDomain || selectedDomain === "") {
-      console.log('Skipping API call - invalid values:', { projectId, selectedDomain });
-      return;
-    }
+  }, []);
 
-    try {
-      // Log the exact URL being called
-      const url = `acting_domain?program_id=${projectId}&area_id=${selectedDomain}`;
-      console.log('API Request URL:', url);
-      console.log('Parameters:', { projectId, selectedDomain });
-
-      const response = await axiosInstance.get(url);
-      
-      if (response.data && response.data.length === 0) {
-        console.log("No data found for: ", {
-          program_id: projectId,
-          region_id: selectedDomain
+  useEffect(() => {
+    const fetchApi = async () => {
+      if (!projectId || !selectedDomain || selectedDomain === "") {
+        console.log("Skipping API call - invalid values:", {
+          projectId,
+          selectedDomain,
         });
-      } else {
-        console.log("Domain Data:", response.data);
+        return;
       }
-      
-      setDomain(response.data);
-    } catch (error) {
-      console.error("Error fetching domain data:", error);
-    }
-  };
 
-  fetchApi();
-}, [selectedDomain, projectId]);
+      try {
+        // Log the exact URL being called
+        const url = `acting_domain?program_id=${projectId}&area_id=${selectedDomain}&branch_id=${selectedDomain}&region_id=${selectedDomain}&division_id=${selectedDomain}`;
+        console.log("API Request URL:", url);
+        console.log("Parameters:", { projectId, selectedDomain });
+
+        const response = await axiosInstance.get(url);
+
+        if (response.data && response.data.length === 0) {
+          console.log("No data found for: ", {
+            program_id: projectId,
+            region_id: selectedDomain,
+          });
+        } else {
+          console.log("Domain Data:", response.data);
+        }
+
+        setDomain(response.data);
+      } catch (error) {
+        console.error("Error fetching domain data:", error);
+      }
+    };
+
+    fetchApi();
+  }, [selectedDomain, projectId]);
 
   const handleDomainSelection = (e) => {
     setSelectedDomain(e.target.value);
   };
 
-
+  console.log("selectedDomain:", selectedDomain);
   return (
     <div>
       <Container className="py-5">

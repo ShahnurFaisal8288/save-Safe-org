@@ -28,7 +28,7 @@ const MemberList = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axiosInstance.get("client");
+        const response = await axiosInstance.get("domain/clients");
 
         // Check if the response contains the data array
         if (response.data && Array.isArray(response.data)) {

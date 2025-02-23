@@ -26,65 +26,67 @@ function Login() {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.post(
-        "auth/login",
-        {
-          email: data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
-          phone: !data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
-          password: data.password,
-        }
-      );
+      const response = await axiosInstance.post("auth/login", {
+        email: data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
+        phone: !data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
+        password: data.password,
+      });
       console.log("login user", response);
       console.log("Sidebar user..........", response.data.sidebar);
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem(
-          "branch_id",
-          response.data.employee.branch.id
-        );
+        localStorage.setItem("branch_id", response.data.employee.branch.id);
         localStorage.setItem(
           "collector_number",
           response.data.employee.employee_number
         );
-        localStorage.setItem(
-          "id",
-          response.data.employee.id
-        );
-        localStorage.setItem(
-          "name",
-          response.data.user.name
-        );
-        localStorage.setItem(
-          "email",
-          response.data.user.email
-        );
-        localStorage.setItem(
-          "user_id",
-          response.data.user.id
-        );
+        localStorage.setItem("id", response.data.employee.id);
+        localStorage.setItem("name", response.data.user.name);
+        localStorage.setItem("email", response.data.user.email);
+        localStorage.setItem("user_id", response.data.user.id);
         localStorage.setItem(
           "project_id",
           response.data.employee.branch.program_id
         );
-        localStorage.setItem(
-          "acting_domain",
-          JSON.stringify(response.data.user.domain.domain.acting_domain[1])
-        );
+        // localStorage.setItem(
+        //   "primary_domain",
+        //   JSON.stringify(response.data.user.domain.result.primary_area || null)
+        // );
+       // In your login page onSubmit function
+try {
+  // Store primary domain
+  const primaryDomain = response.data?.user?.domain?.primary_area || null;
+  localStorage.setItem("primary_domain", JSON.stringify(primaryDomain));
+
+  // Store acting domain if it exists
+  const actingDomain = response.data?.user?.domain?.acting_domain;
+  if (Array.isArray(actingDomain) && 
+      actingDomain.length > 1 && 
+      Array.isArray(actingDomain[1])) {
+    localStorage.setItem("acting_domain", JSON.stringify(actingDomain[1]));
+  }
+
+  navigate("/domainPage");
+} catch (error) {
+  console.error("Error saving domain data:", error);
+  // Still navigate but log the error
+  navigate("/domainPage");
+}
         localStorage.setItem(
           "permissions",
           JSON.stringify(response.data.employee.permissions)
         );
         localStorage.setItem("sidebar", JSON.stringify(response.data.sidebar));
 
-        // Swal.fire({
-        //   icon: "success",
-        //   title: "Login Successful",
-        //   text: `Welcome back, ${response.data.user.name}!`,
-        //   showConfirmButton: false,
-        //   timer: 2000,
-        //   timerProgressBar: true,
-        // });
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: `Welcome back, ${response.data.user.name}!`,
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
         setSidebarData(response.data.sidebar); // Pass sidebar data correctly
         console.log("setSidebarData", sidebarData);
         navigate("/domainPage");
@@ -93,14 +95,6 @@ function Login() {
         throw new Error("Unsuccessful login");
       }
     } catch (error) {
-      // Swal.fire({
-      //   icon: "error",
-      //   title: "Unauthorized",
-      //   text: "Please Try Again!!!",
-      //   showConfirmButton: false,
-      //   timer: 2000,
-      //   timerProgressBar: true,
-      // });
     } finally {
       setLoading(false);
     }
@@ -114,7 +108,7 @@ function Login() {
             <div className="col-lg-4 mx-auto">
               <div className="auth-form-light text-left p-5">
                 <div className="brand-logo">
-                <h2 css={{ color: "teal"}}>SafeSave</h2>
+                  <h2 css={{ color: "teal" }}>SafeSave</h2>
                 </div>
                 <h4>Hello! let's get started</h4>
                 <h6 className="font-weight-light">Sign in to continue.</h6>
