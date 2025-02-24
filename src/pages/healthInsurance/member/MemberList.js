@@ -33,6 +33,7 @@ const MemberList = () => {
         // Check if the response contains the data array
         if (response.data && Array.isArray(response.data)) {
           setData1(response.data); // Use the nested 'data' array
+          console.log("memberList:",response.data);
         }
       } catch (error) {
         console.error("Error fetching data:", error.message);

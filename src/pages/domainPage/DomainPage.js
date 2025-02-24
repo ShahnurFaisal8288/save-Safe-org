@@ -10,6 +10,7 @@ const DomainPage = () => {
   const [projectId, setProjectId] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedDomain, setSelectedDomain] = useState("");
+  const [place, setPlace] = useState("");
   // const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ const DomainPage = () => {
       // Get both domain data with proper defaults
       const actingDomainJSON = localStorage.getItem("acting_domain");
       const primaryDomainJSON = localStorage.getItem("primary_domain");
+      const place = localStorage.getItem("place");
       
       // Try acting_domain first
       if (actingDomainJSON && actingDomainJSON !== "null") {
@@ -56,6 +58,7 @@ const DomainPage = () => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      // Early return if required values are missing
       if (!projectId || !selectedDomain || selectedDomain === "") {
         console.log("Skipping API call - invalid values:", {
           projectId,
@@ -65,18 +68,51 @@ const DomainPage = () => {
       }
 
       try {
-        // Log the exact URL being called
-        const url = `acting_domain?program_id=${projectId}&area_id=${selectedDomain}&branch_id=${selectedDomain}&region_id=${selectedDomain}&division_id=${selectedDomain}`;
+        // Get the place from localStorage
+        const place = localStorage.getItem("place");
+        
+        // Initialize all parameters with null
+        let areaId = '';
+        let divisionId = '';
+        let regionId = '';
+        let branchId = '';
+        
+        // Set the appropriate parameter based on place value
+        switch(place?.toLowerCase()) {
+          case 'area':
+            areaId = selectedDomain;
+            break;
+          case 'division':
+            divisionId = selectedDomain;
+            break;
+          case 'region':
+            regionId = selectedDomain;
+            break;
+          case 'branch':
+            branchId = selectedDomain;
+            break;
+          default:
+            console.warn('Unknown place type:', place);
+            return;
+        }
+        
+        // Construct URL with all parameters
+        const url = `acting_domain?program_id=${projectId}&area_id=${areaId}&branch_id=${branchId}&region_id=${regionId}&division_id=${divisionId}`;
+        
+        // Log request details
         console.log("API Request URL:", url);
-        console.log("Parameters:", { projectId, selectedDomain });
+        console.log("Parameters:", {
+          program_id: projectId,
+          area_id: areaId,
+          branch_id: branchId,
+          region_id: regionId,
+          division_id: divisionId
+        });
 
         const response = await axiosInstance.get(url);
 
         if (response.data && response.data.length === 0) {
-          console.log("No data found for: ", {
-            program_id: projectId,
-            region_id: selectedDomain,
-          });
+          console.log("No data found for selected domain");
         } else {
           console.log("Domain Data:", response.data);
         }

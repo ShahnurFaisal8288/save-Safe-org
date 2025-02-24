@@ -12,16 +12,48 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Log whenever sidebarData is updated
-    console.log("Updated sidebarData:", sidebarData);
-  }, [sidebarData]); // Dependency on sidebarData
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  // Helper function to safely store data in localStorage
+  const safelyStoreData = (key, value) => {
+    try {
+      if (typeof value === 'object') {
+        localStorage.setItem(key, JSON.stringify(value));
+      } else {
+        localStorage.setItem(key, value);
+      }
+    } catch (error) {
+      console.error(`Error storing ${key}:`, error);
+    }
+  };
+
+  // Helper function to handle domain-related data storage
+  const handleDomainStorage = (response) => {
+    try {
+      // Store place (acting domain type)
+      const place = response?.data?.user?.domain?.acting_domain?.[0] ?? null;
+      safelyStoreData("place", place);
+
+      // Store primary domain
+      const primaryDomain = response?.data?.user?.domain?.primary_area ?? null;
+      safelyStoreData("primary_domain", primaryDomain);
+
+      // Store acting domain
+      const actingDomain = response?.data?.user?.domain?.acting_domain;
+      const domainData = Array.isArray(actingDomain) && 
+                        actingDomain.length > 1 && 
+                        Array.isArray(actingDomain[1]) 
+                        ? actingDomain[1] 
+                        : null;
+      safelyStoreData("acting_domain", domainData);
+    } catch (error) {
+      console.error("Error in domain data storage:", error);
+    }
+  };
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -31,54 +63,29 @@ function Login() {
         phone: !data.emailOrPhone.includes("@") ? data.emailOrPhone : null,
         password: data.password,
       });
-      console.log("login user", response);
-      console.log("Sidebar user..........", response.data.sidebar);
 
       if (response.status === 200) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("branch_id", response.data.employee.branch.id);
-        localStorage.setItem(
-          "collector_number",
-          response.data.employee.employee_number
-        );
-        localStorage.setItem("id", response.data.employee.id);
-        localStorage.setItem("name", response.data.user.name);
-        localStorage.setItem("email", response.data.user.email);
-        localStorage.setItem("user_id", response.data.user.id);
-        localStorage.setItem(
-          "project_id",
-          response.data.employee.branch.program_id
-        );
-        // localStorage.setItem(
-        //   "primary_domain",
-        //   JSON.stringify(response.data.user.domain.result.primary_area || null)
-        // );
-       // In your login page onSubmit function
-try {
-  // Store primary domain
-  const primaryDomain = response.data?.user?.domain?.primary_area || null;
-  localStorage.setItem("primary_domain", JSON.stringify(primaryDomain));
+        // Store basic user data
+        safelyStoreData("token", response.data.token);
+        safelyStoreData("branch_id", response.data.employee.branch.id);
+        safelyStoreData("collector_number", response.data.employee.employee_number);
+        safelyStoreData("id", response.data.employee.id);
+        safelyStoreData("name", response.data.user.name);
+        safelyStoreData("email", response.data.user.email);
+        safelyStoreData("user_id", response.data.user.id);
+        safelyStoreData("project_id", response.data.employee.branch.program_id);
+        
+        // Handle domain-related storage separately
+        handleDomainStorage(response);
+        
+        // Store permissions and sidebar data
+        safelyStoreData("permissions", response.data.employee.permissions);
+        safelyStoreData("sidebar", response.data.sidebar);
 
-  // Store acting domain if it exists
-  const actingDomain = response.data?.user?.domain?.acting_domain;
-  if (Array.isArray(actingDomain) && 
-      actingDomain.length > 1 && 
-      Array.isArray(actingDomain[1])) {
-    localStorage.setItem("acting_domain", JSON.stringify(actingDomain[1]));
-  }
+        // Update sidebar state
+        setSidebarData(response.data.sidebar);
 
-  navigate("/domainPage");
-} catch (error) {
-  console.error("Error saving domain data:", error);
-  // Still navigate but log the error
-  navigate("/domainPage");
-}
-        localStorage.setItem(
-          "permissions",
-          JSON.stringify(response.data.employee.permissions)
-        );
-        localStorage.setItem("sidebar", JSON.stringify(response.data.sidebar));
-
+        // Show success message
         Swal.fire({
           icon: "success",
           title: "Login Successful",
@@ -87,14 +94,19 @@ try {
           timer: 2000,
           timerProgressBar: true,
         });
-        setSidebarData(response.data.sidebar); // Pass sidebar data correctly
-        console.log("setSidebarData", sidebarData);
+
+        // Navigate to domain page
         navigate("/domainPage");
-        // setSidebarData(response.data.sidebar.element_url);
       } else {
         throw new Error("Unsuccessful login");
       }
     } catch (error) {
+      console.error("Login error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: "Please check your credentials and try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -150,9 +162,10 @@ try {
           </div>
         </div>
       </div>
-      {/* <Sidebar data={sidebarData} /> */}
     </div>
   );
 }
+
+
 
 export default Login;
