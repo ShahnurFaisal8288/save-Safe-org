@@ -28,20 +28,22 @@ const MemberList = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axiosInstance.get("domain/clients");
-
-        // Check if the response contains the data array
-        if (response.data && Array.isArray(response.data)) {
-          setData1(response.data); // Use the nested 'data' array
-          console.log("memberList:",response.data);
+        const response = await axiosInstance.get("domain/clients", {
+          headers: {
+            area_id: "1" // Or get this from your app's state/storage
+          }
+        });
+        
+        if (response.data?.clients) {
+          setData1(response.data.clients);
         }
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        console.error("Error:", error.response?.data || error.message);
       }
     };
-
+  
     fetchPostData();
-  }, []); // Empty dependency array means this runs once when the component mounts
+  }, []);
 
   // Search functionality
   useEffect(() => {
