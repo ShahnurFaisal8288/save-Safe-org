@@ -2,7 +2,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode'; // Correct import
 
 const axiosInstance = axios.create({
-  baseURL: 'http://192.168.1.112/api/',
+  baseURL: 'http://192.168.1.112:8000/api/',
   // baseURL: 'http://192.168.1.112:8000/api/',
 });
 
